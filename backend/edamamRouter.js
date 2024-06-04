@@ -13,6 +13,11 @@ router.post('/search', async (req, res) => {
             function(error, response, body) {
             
             if (!error && response.statusCode === 200) {
+                let recipes = [];
+                const jsonData = JSON.parse(body);
+                jsonData.hits.forEach(instance => {
+                    console.log(instance.recipe.label);
+                })
                 res.status(200).json(body);
             } else {
                 res.status(response.statusCode).send('Error searching Edamam');
