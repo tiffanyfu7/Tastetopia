@@ -13,10 +13,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.19",
     "axios": "^1.7.2",
-<<<<<<< HEAD
-=======
     "firebase": "^10.12.2",
->>>>>>> debd89d23b306301af371d2acb0800aef73c80f7
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1"
