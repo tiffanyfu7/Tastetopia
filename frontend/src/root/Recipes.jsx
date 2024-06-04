@@ -30,7 +30,7 @@ export const Recipes = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar searchPlaceholder="Search Tastetopia Recipes..."/>
       <h1>Get a Taste</h1>
       <div className="recipe-cards-container">
         {recipes && recipes.map((recipe, i) => (
