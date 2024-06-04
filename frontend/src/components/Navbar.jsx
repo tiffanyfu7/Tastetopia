@@ -9,10 +9,13 @@ export const Navbar = () => {
         <header>
           <nav>
             <Link to={"/"}>Home</Link>
-            <Link to={"/Profile"}>Profile</Link>
             <Link to={"/Recipes"}>Recipes</Link>
-            <Link to={"/YourCookbook"}>YourCookbook</Link>
           </nav>
+
+          
+            <Link to={"/YourCookbook"}>Your Cookbook</Link>
+            <Link to={"/Profile"}>Profile</Link>
+          
         </header>
       </div>
     </>

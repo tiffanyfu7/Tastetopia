@@ -4,8 +4,8 @@ import { LIGHTGREEN, GREEN } from '../main'
 
 const RecipeCard = ({ recipe }) => {
   return (
-      <div className="recipe-card"
-        style={{ backgroundColor: recipe.createdBy == "user" ? LIGHTGREEN : GREEN }}
+      <div className="recipe-card card"
+        style={{ backgroundColor: recipe.uri != null ? GREEN : LIGHTGREEN }}
       >
         <img className="recipe-card-image" src={recipe.image} />
           <p className="recipe-card-title">{recipe.title}</p>
