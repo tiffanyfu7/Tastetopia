@@ -10,6 +10,10 @@ import { Profile } from "./root/Profile.jsx";
 import { Recipes } from "./root/Recipes.jsx";
 import { YourCookbook } from "./root/YourCookbook.jsx";
 
+export const ORANGE = "#FF9800";
+export const LIGHTGREEN = "#D9EDBF";
+export const GREEN = "#90D26D";
+
 const router = createBrowserRouter([
   {path: "/",
   element: <Homepage/>,
