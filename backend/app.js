@@ -1,22 +1,18 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import OpenAI from 'openai';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import edamamRouter from './edamamRouter.js';
+import openAIRouter from './openAIRouter.js';
 
 const app = express();
 const port = 8000;
 
 dotenv.config();
 
-// const openai = new OpenAI({
-//     apiKey: process.env.OPENAI_API_KEY,
-// });
-
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 app.use('/edamam', edamamRouter);
+app.use('/openai', openAIRouter);
 
 app.get('/hello-world', async (req, res) => {
     try {
