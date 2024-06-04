@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
 import { IoIosSearch } from "react-icons/io";
 
-const SearchBar=({ placeholder })=> {
+const SearchBar=({ placeholder, width })=> {
     const styles= {
         container: {
             display: "flex",
             backgroundColor: "white",
             border: "1px solid black",
             borderRadius: "25px",
-            width: "800px",
+            width: width,
             height: "50px",
-            verticalAlign: "middle"
+            verticalAlign: "middle",
         },
         searchIcon: {
-            margin: "10px 0px 0px 20px"
+            margin: "10px 20px 0px 20px"
         },
         input: {
             background: "transparent",
