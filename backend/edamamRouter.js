@@ -1,5 +1,4 @@
 import express from 'express';
-import Router from 'express';
 import request from 'request';
 import dotenv from 'dotenv';
 
