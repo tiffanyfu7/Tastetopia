@@ -1,0 +1,56 @@
+body{
+    font-family:Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.RecipeBox {
+  background-color: #90d26d;
+  border-radius: 25px;
+  width: 50%;
+  padding: 20px;
+}
+
+.RecipeDetailTextBox {
+  position: relative;
+  overflow: hidden;
+  background-color: #d9edbf;
+  border-radius: 25px;
+  padding: 15px;
+}
+
+.RecipeHeader {
+  width: 100%;
+}
+
+.RecipeImg {
+  width: 250px;
+  border-radius: 10px;
+  float: left;
+}
+
+.RecipeHeaderText {
+  margin-left: 270px;
+}
+
+.HorizontalRecipeText {
+    width:100%;
+    display: inline;
+}
+
+.HealthLabels{
+    display: inline-block;
+    margin-right: 10px;
+    width:40%
+}
+
+.Nutrition{
+    display: inline-block;
+}
+
+.BackButton {
+    background-color: #FF9800;
+    border-radius: 10px;
+    border-width: 0px;
+    font-size: 15px;
+    color: white;
+    margin: 25px;
+}
