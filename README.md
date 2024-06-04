@@ -16,7 +16,7 @@ git clone {repo url}
 ```
 2. Run the frontend code
 ```bash
-cd frontend/SpotifyExtensionApp
+cd frontend
 npm install
 npm install firebase
 npm run dev
