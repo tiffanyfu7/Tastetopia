@@ -5,13 +5,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const router = Router();
+const router = express.Router();
 
-router.get('/search', async (req, res) => {
+router.post('/search', async (req, res) => {
     const q = req.body.q;
-    try {
-        
-        request.get(`https://api.edamam.com/search?q=${q}&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`, 
+    try {    
+        request.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`, 
             function(error, response, body) {
             
             if (!error && response.statusCode === 200) {

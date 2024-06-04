@@ -16,6 +16,7 @@ dotenv.config();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 app.use('/edamam', edamamRouter);
 
 app.get('/hello-world', async (req, res) => {
