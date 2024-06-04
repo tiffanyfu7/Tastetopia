@@ -4,7 +4,7 @@ import { Navbar } from "../components/Navbar";
 export const Homepage = () => {
   return (
     <>
-      <Navbar searchPlaceholder="Search Tastetopia Recipes..."/>
+      <Navbar current="Home" />
       <div>Homepage</div>
     </>
   );

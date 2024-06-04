@@ -4,7 +4,7 @@ import { Navbar } from "../components/Navbar";
 export const YourCookbook = () => {
   return (
       <>
-        <Navbar searchPlaceholder="Search Your Recipes..."/>
+        <Navbar current="YourCookbook"/>
         <div>YourCookbook</div>
       </>
   )
