@@ -4,6 +4,8 @@ import RecipeCard from "../components/RecipeCard";
 import '../styles/Explore.css';
 
 export const Recipes = () => {
+    const [cardClicked, setCardClicked] = useState(false);
+    const [cardIndex, setCardIndex] = useState(null);
 
   //get all recipes from db
   const recipes = [{
@@ -33,6 +35,7 @@ export const Recipes = () => {
       <Navbar />
       <h1>Get a Taste</h1>
       <div className="recipe-cards-container">
+
         {recipes && recipes.map((recipe, i) => (
           <RecipeCard recipe={recipe} key={i} />
         ))}
