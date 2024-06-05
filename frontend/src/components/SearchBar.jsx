@@ -21,7 +21,6 @@ const SearchBar=({ placeholder, width })=> {
             backgroundColor: "white",
             border: "1px solid black",
             borderRadius: "25px",
-            width: width,
             height: "50px",
             verticalAlign: "middle",
         },
@@ -34,7 +33,7 @@ const SearchBar=({ placeholder, width })=> {
             border: "none",
             fontSize: "18px",
             color: "black",
-            width: width,
+            width: "100%",
             height: "35px",
         }
     };
