@@ -8,8 +8,8 @@ import UserNotifications from '../components/UserNotifications';
 export const Profile = () => {
   const { setSearchRequested } = useContext(QueryContext);
 
-  const handleSearchSubmit = () => {
-    setSearchRequested(true);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
   }
 
   // replace with current user info using authcontext

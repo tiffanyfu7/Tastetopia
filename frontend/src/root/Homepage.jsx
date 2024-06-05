@@ -6,8 +6,8 @@ import { QueryContext } from "../components/QueryContext";
 export const Homepage = () => {
   const { setSearchRequested } = useContext(QueryContext);
 
-  const handleSearchSubmit = () => {
-    setSearchRequested(true);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
   }
   
   const lunchRecipe = {
