@@ -9,6 +9,8 @@ import { Homepage } from "./root/Homepage.jsx";
 import { Profile } from "./root/Profile.jsx";
 import { Recipes } from "./root/Recipes.jsx";
 import { YourCookbook } from "./root/YourCookbook.jsx";
+import { CreateRecipe } from "./root/CreateRecipe.jsx";
+
 import { Login } from './root/Login.jsx';
 import { CreateAccount } from './root/CreateAccount.jsx';
 
@@ -34,6 +36,9 @@ const router = createBrowserRouter([
   },
   {path: "/YourCookbook",
   element: <YourCookbook />,
+  },
+  {path: "/CreateRecipe",
+  element: <CreateRecipe />,
   },
 ])
 
