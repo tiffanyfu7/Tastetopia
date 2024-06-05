@@ -33,21 +33,9 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
     }
   };
 
-  const sendMessage = async (message) => {
-    const newMessage = { role: "user", content: message };
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-
-    const response = await axios.post("http://localhost:8000/openai/chat", {
-      messages: updatedMessages,
-      model: "gpt-3.5-turbo",
-    });
-    const assistantResponse = response.data;
-    setMessages((prevMessage) => [...prevMessage, assistantResponse]);
-  };
 
   const handleReviewSubmit = async () => {
-    const newReview = {username: 'user', comment: comment, rating: }
+    const newReview = {username: 'user', comment: comment, rating: rating}
   }
 
 
@@ -183,12 +171,12 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
                     <Rating
                       name="half-rating-read"
                       defaultValue='0'
-                      onChange={(event, newValue) => { setValue(newValue); }}
+                      onChange={(event, newValue) => { setRating(newValue) }}
                     />
                   </p>
                   <div className="CommentBox">
                     
-                    <form onSubmit={ }>
+                    <form>
                       <label>
                       <b>Comment:</b>
                       </label>
