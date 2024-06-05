@@ -13,7 +13,30 @@ router.post('/search', async (req, res) => {
             function(error, response, body) {
             
             if (!error && response.statusCode === 200) {
-                res.status(200).json(body);
+                let recipes = [];
+                const jsonData = JSON.parse(body);
+                jsonData.hits.forEach(instance => {
+                    recipes.push({
+                        'title': instance.recipe.label,
+                        'author': instance.recipe.source,
+                        'image': instance.recipe.image,
+                        'sourceURL': instance.recipe.url,
+                        'uri': instance.recipe.uri,
+                        'totalTime': instance.recipe.totalTime,
+                        'yield': instance.recipe.yield,
+                        'cuisineType': instance.recipe.cuisineType,
+                        'dietLabels': instance.recipe.dietLabels,
+                        'healthLabels': instance.recipe.healthLabels,
+                        'ingredients': instance.recipe.ingredientLines,
+                        'mealType': instance.recipe.mealType,
+                        'dishType': instance.recipe.dishType,
+                        'calories': instance.recipe.calories,
+                        'fat': instance.recipe.digest[0].total,
+                        'carbs': instance.recipe.digest[1].total,
+                        'protein': instance.recipe.digest[2].total
+                    });
+                })
+                res.status(200).json(recipes);
             } else {
                 res.status(response.statusCode).send('Error searching Edamam');
             }

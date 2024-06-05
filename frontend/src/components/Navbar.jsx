@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { QueryContext } from "./QueryContext";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { ORANGE, LIGHTGREEN } from "../main";
 
 export const Navbar = ({ current }) => {
+  const { query, setQuery } = useContext(QueryContext);
+
+  useEffect(() => {
+    if (!query) {
+      setQuery('q=');
+    }
+  }, [])
 
   const styles= {
     navbarContainer: {
@@ -44,10 +52,10 @@ export const Navbar = ({ current }) => {
       <div style={styles.navbarContainer} className="navbarContainer">
         <nav>
           <Link style={current == "Home" ? styles.currentLink : styles.navbarLink} to={"/"}>Home</Link>
-          <Link style={current == "Recipes" ? styles.currentLink : styles.navbarLink} to={"/Recipes"}>Recipes</Link>
-          <Link style={styles.navbarLink} to={"/Recipes"}>
+          <Link style={current == "Recipes" ? styles.currentLink : styles.navbarLink} to={`/Recipes/${query}`}>Recipes</Link>
+          <div style={styles.navbarLink}>
             <SearchBar placeholder="Search Tastropica Recipes..." width="700px"/>
-          </Link>
+          </div>
           <Link style={current == "YourCookbook" ? styles.currentLink : styles.navbarLink} to={"/YourCookbook"}>Your Cookbook</Link>
           <Link style={current == "Profile" ? styles.currentLink : styles.navbarLink} to={"/Profile"}>Profile</Link>
         </nav>
