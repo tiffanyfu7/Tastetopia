@@ -4,8 +4,15 @@ import HomepageCards from "../components/HomepageCards";
 
 export const Homepage = () => {
   
+  const lunchRecipe = {
+
+  }
+
   const dailyLunchRecipe = {};
 
+  const dinnerRecipe = {
+    
+  }
   const dailyDinnerRecipe = {};
 
   const exploreCard = {
