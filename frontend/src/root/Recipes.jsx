@@ -15,7 +15,6 @@ export const Recipes = ({ q }) => {
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
-    console.log(searchRequested);
     if (searchRequested) {
       searchEdamam();
     }
