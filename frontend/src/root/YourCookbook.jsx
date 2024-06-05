@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Navbar } from "../components/Navbar";
 import '../styles/Cookbook.css'
 import { Link } from 'react-router-dom';
 import { IoAddOutline } from 'react-icons/io5';
 import RecipeCard from '../components/RecipeCard';
+import { QueryContext } from '../components/QueryContext';
 
 export const YourCookbook = () => {
 
   //toggle between "Created" and "Saved" recipes
   const [state, setState] = useState("Created");
+  const { setSearchRequested } = useContext(QueryContext);
+
+  const handleSearchSubmit = () => {
+    setSearchRequested(true);
+  }
 
   const createdRecipes = [{
     image: "https://www.motherthyme.com/wp-content/uploads/2017/01/ROASTED-GARLIC-SPAGHETTI-3.jpg",
@@ -76,7 +82,7 @@ export const YourCookbook = () => {
 
   return (
       <>
-        <Navbar current="YourCookbook" />
+        <Navbar current="YourCookbook" onSearchSubmit={handleSearchSubmit}/>
         <div className="page-container cookbook-page">
         
           <div className="profile-info">

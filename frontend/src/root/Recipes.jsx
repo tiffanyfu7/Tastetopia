@@ -1,25 +1,31 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import { Navbar } from "../components/Navbar";
 import RecipeCard from "../components/RecipeCard";
 import { RecipeDetail } from "../components/RecipeDetail";
+import { QueryContext } from "../components/QueryContext";
 import "../styles/Explore.css";
 
 export const Recipes = ({ query }) => {
+  const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const [cardClicked, setCardClicked] = useState(false);
   const [cardIndex, setCardIndex] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   useEffect(() => {
-    console.log(query);
-  }, [query]);
+    if (searchRequested) {
+      searchEdamam();
+      setSearchRequested(false);
+    }
+  }, [searchRequested]);
 
-  const searchEdamam = async (query) => {
+  const searchEdamam = async () => {
     try {
-        const response = await axios.post('http://localhost:8000/edamam/search', {
-            q: query
-        });
-        console.log(response.data);
-        setAPIRecipes(response.data);
+        console.log('searching...');
+        // const response = await axios.post('http://localhost:8000/edamam/search', {
+        //     q: query
+        // });
+        // console.log(response.data);
+        // setAPIRecipes(response.data);
     } catch (error) {
         console.log('Error searching Edamam: ', error);
     }
@@ -63,10 +69,14 @@ export const Recipes = ({ query }) => {
     setSelectedRecipe(null);
   };
 
+  const handleSearchSubmit = () => {
+    setSearchRequested(true);
+  }
+
   return (
     <>
       {/* {console.log("card clicked", cardClicked)} */}
-      <Navbar current="Recipes" />
+      <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit}/>
       <div className="page-container">
         <h1>Get a Taste</h1>
         {cardClicked ? (

@@ -6,7 +6,7 @@ import '../styles/Navbar.css';
 import { useMediaQuery } from '@chakra-ui/react';
 import { IoAddOutline, IoBookOutline, IoHomeOutline, IoPerson, IoSearch, IoSearchOutline } from "react-icons/io5";
 
-const DesktopNav = ({current, query}) => {
+const DesktopNav = ({current, query, onSearchSubmit}) => {
   return (
     <>
       <div className="navbar-container">
@@ -14,7 +14,7 @@ const DesktopNav = ({current, query}) => {
           <Link className={current == "Home" ? "current-link" : "navbar-link"} to={"/"}>Home</Link>
           <Link className={current == "Recipes" ? "current-link" : "navbar-link"} to={`/Recipes/${query}`}>Recipes</Link>
           <div className="navbar-link" id="search-bar">
-            <SearchBar placeholder="Search Tastropica Recipes..."/>
+            <SearchBar placeholder="Search Tastropica Recipes..." onSearchSubmit={onSearchSubmit}/>
           </div>
           <Link className={current == "YourCookbook" ? "current-link" : "navbar-link"} to={"/YourCookbook"}>Your Cookbook</Link>
           <Link className={current == "Profile" ? "current-link" : "navbar-link"} to={"/Profile"}>Profile</Link>
@@ -24,7 +24,7 @@ const DesktopNav = ({current, query}) => {
   );
 }
 
-const MobileNav = ({current, query}) => {
+const MobileNav = ({current, query, onSearchSubmit}) => {
   return (
     <>
       <div className="mobile-navbar-container">
@@ -50,7 +50,7 @@ const MobileNav = ({current, query}) => {
   );
 }
 
-export const Navbar = ({ current }) => {
+export const Navbar = ({ current, onSearchSubmit }) => {
   const { query, setQuery } = useContext(QueryContext);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const Navbar = ({ current }) => {
   
   return (
     <>
-      {isMobile ? <MobileNav current={current} query={query}/> : <DesktopNav current={current} query={query} />}
+      {isMobile ? <MobileNav current={current} query={query} /> : <DesktopNav current={current} query={query} onSearchSubmit={onSearchSubmit} />}
     </>
   );
 };
