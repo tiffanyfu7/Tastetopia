@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar } from "../components/Navbar";
 import HomepageCards from "../components/HomepageCards";
+import { QueryContext } from "../components/QueryContext";
 
 export const Homepage = () => {
+  const { setSearchRequested } = useContext(QueryContext);
+
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
+  }
   
   const lunchRecipe = {
     image: "https://therecipecritic.com/wp-content/uploads/2022/05/blt-1.jpg",
@@ -61,7 +67,7 @@ export const Homepage = () => {
 
   return (
     <>
-      <Navbar current="Home" />
+      <Navbar current="Home" onSearchSubmit={handleSearchSubmit}/>
       <div className="page-container">
         <h1>Welcome to Tastetopia!</h1>
 
