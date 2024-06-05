@@ -6,6 +6,8 @@ import Chatbot from "./Chatbot.jsx";
 export const RecipeDetail = ({ recipe, onBackClick }) => {
   const [chatClicked, setChatClicked] = useState(false);
   const [showReviewBox, setShowReviewBox] = useState(false);
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -30,6 +32,24 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
       return `${value.toFixed(0)}g`;
     }
   };
+
+  const sendMessage = async (message) => {
+    const newMessage = { role: "user", content: message };
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
+
+    const response = await axios.post("http://localhost:8000/openai/chat", {
+      messages: updatedMessages,
+      model: "gpt-3.5-turbo",
+    });
+    const assistantResponse = response.data;
+    setMessages((prevMessage) => [...prevMessage, assistantResponse]);
+  };
+
+  const handleReviewSubmit = async () => {
+    const newReview = {username: 'user', comment: comment, rating: }
+  }
+
 
   return (
     <>
@@ -156,17 +176,44 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
                 justifyContent: "center",
               }}
             >
-              <button
-                className="ReviewButton"
-                onClick={() => setShowReviewBox(true)}
-              >
-                Leave a Review
-              </button>
+              {showReviewBox ? (
+                <div className="ReviewBox">
+                  <p>
+                    <b>Rating: </b>{" "}
+                    <Rating
+                      name="half-rating-read"
+                      defaultValue='0'
+                      onChange={(event, newValue) => { setValue(newValue); }}
+                    />
+                  </p>
+                  <div className="CommentBox">
+                    
+                    <form onSubmit={ }>
+                      <label>
+                      <b>Comment:</b>
+                      </label>
+                      <textarea type='text' onChange={ (e) => setComment(e.target.value)}>
+
+                      </textarea>
+                      <button type='submit' className="ReviewButton">
+                        Post
+                      </button>
+                    </form>
+
+                  </div>
+                </div>
+              ) : (
+                <button
+                  className="ReviewButton"
+                  onClick={() => setShowReviewBox(true)}
+                >
+                  Leave a Review
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        {console.log(chatClicked)}
         <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
           <div className="ChatHeader">
             <h2>Ask Sous Chef Sue!</h2>
