@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { ORANGE, LIGHTGREEN } from "../main";
 
-export const Navbar = ({ current }) => {
+export const Navbar = ({ current, onSearchSubmit }) => {
   const { query, setQuery } = useContext(QueryContext);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export const Navbar = ({ current }) => {
           <Link style={current == "Home" ? styles.currentLink : styles.navbarLink} to={"/"}>Home</Link>
           <Link style={current == "Recipes" ? styles.currentLink : styles.navbarLink} to={`/Recipes/${query}`}>Recipes</Link>
           <div style={styles.navbarLink}>
-            <SearchBar placeholder="Search Tastropica Recipes..." width="700px"/>
+            <SearchBar placeholder="Search Tastropica Recipes..." width="700px" onSearchSubmit={onSearchSubmit}/>
           </div>
           <Link style={current == "YourCookbook" ? styles.currentLink : styles.navbarLink} to={"/YourCookbook"}>Your Cookbook</Link>
           <Link style={current == "Profile" ? styles.currentLink : styles.navbarLink} to={"/Profile"}>Profile</Link>

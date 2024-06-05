@@ -3,12 +3,13 @@ import { IoIosSearch } from "react-icons/io";
 import RecipeSearched from './RecipeSearched';
 import { useNavigate } from 'react-router-dom';
 
-const SearchBar=({ placeholder, width })=> {
+const SearchBar=({ placeholder, width, onSearchSubmit })=> {
     const [input, setInput] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        onSearchSubmit();
         setInput('');
         navigate(`/Recipes/q=${input}`);
     }
