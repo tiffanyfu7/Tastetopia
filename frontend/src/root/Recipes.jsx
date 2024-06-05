@@ -50,22 +50,24 @@ export const Recipes = () => {
   return (
     <>
     {console.log("card clicked", cardClicked)}
-      <Navbar />
-      <h1>Get a Taste</h1>
-      {cardClicked ? (
+      <Navbar current="Recipes" />
+      <div className="page-container">
+        <h1>Get a Taste</h1>
+        {cardClicked ? (
         <RecipeDetail recipe={selectedRecipe} onBackClick={ handleBackClick } />
       ) : (
         <div className="recipe-cards-container">
-          {recipes &&
+            {recipes &&
             recipes.map(
               (recipe, i) => (
-                <RecipeCard
+                  <RecipeCard
                   recipe={recipe}
                   key={i}
                   onClick={() => handleCardClick(recipe)}
-                />
-              )
+                variant="basic"/>
+                )
             )}
+        </div>
         </div>
       )}
     </>

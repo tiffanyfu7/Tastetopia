@@ -5,11 +5,17 @@
 }
 
 h1 {
+  font-size: 40px;
   color: ORANGE;
 }
 
 .card {
   filter: drop-shadow(1px 2px 4px #808080);
+}
+
+.page-container {
+  padding: 10px;
+  margin-top: 65px;
 }
 
 /* :root {
