@@ -69,12 +69,12 @@ export const Homepage = () => {
         <HomepageCards cardInfo={dailyDinnerRecipe} variant="daily" />
       </div>
 
-      <div className="quick-link-container">
-        <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
-        <HomepageCards cardInfo={createCard}  variant="quickLink" />
-        <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
+        <div className="quick-link-container">
+          <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
+          <HomepageCards cardInfo={createCard}  variant="quickLink" />
+          <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
+        </div>
       </div>
-
     </>
   );
 };
