@@ -3,7 +3,7 @@ import { QueryContext } from './QueryContext';
 
 const QueryProvider = ({ children }) => {
     const [query, setQuery] = useState('');
-    const [searchRequested, setSearchRequested] = useState('');
+    const [searchRequested, setSearchRequested] = useState('pasta');
 
     return (
         <QueryContext.Provider value={{ 
