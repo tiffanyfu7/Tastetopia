@@ -38,9 +38,7 @@ export const Homepage = () => {
 
         <div className="quick-link-container">
           <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
-          <Link to={createCard.link}>
-            <HomepageCards cardInfo={createCard} variant="quickLink" />
-          </Link>
+          <HomepageCards cardInfo={createCard} variant="quickLink" />
           <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
         </div>
       </div>
