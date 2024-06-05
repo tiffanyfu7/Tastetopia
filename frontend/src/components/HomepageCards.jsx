@@ -31,18 +31,16 @@ const HomepageCards = ({ cardInfo, variant }) => {
             }
 
             {variant == "daily" &&
-                <Card direction={{ base: 'column', sm: 'row' }} variant='outline'>
-                    <Image objectFit='cover' maxW={{ base: '100%', sm: '200px' }}
-                        src={cardInfo.recipe.image} alt={cardInfo.recipe.title}
-                    />
-                    <Stack>
-                        <CardBody>
-                            <h3>{cardInfo.category}</h3>    
-                            <p>By {cardInfo.recipe.author}</p>
-                             <Rating name="half-rating-read" defaultValue={cardInfo.recipe.rating} precision={0.5} readOnly />
-                        </CardBody>
-                    </Stack>
-                </Card>
+                <div className="daily-card card">
+                    <img className="daily-card-image" src={cardInfo.recipe.image} alt={cardInfo.recipe.title} />
+                    <div className="daily-card-info">
+                        <p>{cardInfo.category}</p>    
+                        <h4>Recipe of The Day</h4>
+                        <h2>{cardInfo.recipe.title}</h2>
+                        <p>By {cardInfo.recipe.author}</p>
+                        <Rating name="half-rating-read" defaultValue={cardInfo.recipe.rating} precision={0.5} readOnly />
+                    </div>
+                </div>
             }
 
             {/* cardInfo = {category: "Lunch", recipe: recipe object} */}
