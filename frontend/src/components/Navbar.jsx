@@ -2,7 +2,53 @@ import React, { useContext, useEffect } from "react";
 import { QueryContext } from "./QueryContext";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
-import { ORANGE, LIGHTGREEN } from "../main";
+import '../styles/Navbar.css';
+import { useMediaQuery } from '@chakra-ui/react';
+import { IoAddOutline, IoBookOutline, IoHomeOutline, IoPerson, IoSearch, IoSearchOutline } from "react-icons/io5";
+
+const DesktopNav = ({current, query, onSearchSubmit}) => {
+  return (
+    <>
+      <div className="navbar-container">
+        <nav>
+          <Link className={current == "Home" ? "current-link" : "navbar-link"} to={"/"}>Home</Link>
+          <Link className={current == "Recipes" ? "current-link" : "navbar-link"} to={`/Recipes/${query}`}>Recipes</Link>
+          <div className="navbar-link" id="search-bar">
+            <SearchBar placeholder="Search Tastropica Recipes..." onSearchSubmit={onSearchSubmit}/>
+          </div>
+          <Link className={current == "YourCookbook" ? "current-link" : "navbar-link"} to={"/YourCookbook"}>Your Cookbook</Link>
+          <Link className={current == "Profile" ? "current-link" : "navbar-link"} to={"/Profile"}>Profile</Link>
+        </nav>
+      </div>
+    </>
+  );
+}
+
+const MobileNav = ({current, query, onSearchSubmit}) => {
+  return (
+    <>
+      <div className="mobile-navbar-container">
+        <nav style={{margin: "auto"}}>
+          <Link className={current == "Home" ? "mobile-current-link" : "mobile-navbar-link"} to={"/"}>
+            <IoHomeOutline size={30} />
+          </Link>
+          <Link className={current == "Recipes" ? "mobile-current-link" : "mobile-navbar-link"} to={`/Recipes/${query}`}>
+            <IoSearch size={30}/>
+          </Link>
+          <Link className={current == "CreateRecipe" ? "mobile-current-link" : "mobile-navbar-link"} to={`/CreateRecipe`}>
+            <IoAddOutline size={43}/>
+          </Link>
+          <Link className={current == "YourCookbook" ? "mobile-current-link" : "mobile-navbar-link"} to={"/YourCookbook"}>
+            <IoBookOutline size={30}/>
+          </Link>
+          <Link className={current == "Profile" ? "mobile-current-link" : "mobile-navbar-link"} to={"/Profile"}>
+            <IoPerson size={30}/>
+          </Link>
+        </nav>
+      </div>
+    </>
+  );
+}
 
 export const Navbar = ({ current, onSearchSubmit }) => {
   const { query, setQuery } = useContext(QueryContext);
@@ -13,53 +59,11 @@ export const Navbar = ({ current, onSearchSubmit }) => {
     }
   }, [])
 
-  const styles= {
-    navbarContainer: {
-      backgroundColor: "white",
-      height: "75px",
-      width: "100%",
-      position: "fixed",
-      top: "0",
-      zIndex: "9999"
-    },
-    navbarLink: {
-      verticalAlign: "middle",
-      padding: "12px 15px 0px 15px",
-      textDecoration: "none",
-      fontWeight: "800",
-      display: "inline-block",
-      color: ORANGE,
-      marginRight: "3%",
-      fontSize: "18px"
-    },
-    currentLink: {
-      verticalAlign: "middle",
-      padding: "10px 15px 10px 15px",
-      textDecoration: "none",
-      fontWeight: "800",
-      display: "inline-block",
-      color: ORANGE,
-      marginTop: "12px",
-      marginRight: "3%",
-      fontSize: "18px",
-      backgroundColor: LIGHTGREEN,
-      borderRadius: "40px",
-    }
-  };
+  const [isMobile] = useMediaQuery("(max-width: 900px)");
   
   return (
     <>
-      <div style={styles.navbarContainer} className="navbarContainer">
-        <nav>
-          <Link style={current == "Home" ? styles.currentLink : styles.navbarLink} to={"/"}>Home</Link>
-          <Link style={current == "Recipes" ? styles.currentLink : styles.navbarLink} to={`/Recipes/${query}`}>Recipes</Link>
-          <div style={styles.navbarLink}>
-            <SearchBar placeholder="Search Tastropica Recipes..." width="700px" onSearchSubmit={onSearchSubmit}/>
-          </div>
-          <Link style={current == "YourCookbook" ? styles.currentLink : styles.navbarLink} to={"/YourCookbook"}>Your Cookbook</Link>
-          <Link style={current == "Profile" ? styles.currentLink : styles.navbarLink} to={"/Profile"}>Profile</Link>
-        </nav>
-      </div>
+      {isMobile ? <MobileNav current={current} query={query} /> : <DesktopNav current={current} query={query} onSearchSubmit={onSearchSubmit} />}
     </>
   );
 };
