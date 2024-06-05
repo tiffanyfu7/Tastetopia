@@ -1,7 +1,6 @@
 import React from "react";
 import { Navbar } from "../components/Navbar";
 import HomepageCards from "../components/HomepageCards";
-import { Link } from "react-router-dom";
 
 export const Homepage = () => {
   
