@@ -10,6 +10,7 @@ export const Navbar = ({ current }) => {
       backgroundColor: "white",
       height: "75px",
       width: "100%",
+      position: "sticky"
     },
     navbarLink: {
       verticalAlign: "middle",

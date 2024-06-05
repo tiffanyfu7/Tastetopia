@@ -1,0 +1,30 @@
+.quick-link-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 50px;
+    overflow-x: scroll;
+    padding: 10px;
+}
+
+.quick-link-card {
+    display: flex;
+    background-color: #90D26D;
+    border-radius: 50px;
+    min-width: 350px;
+    height: 200px;
+}
+
+.quick-link-image {
+    border-top-left-radius: 50px; 
+    border-bottom-left-radius: 50px;
+    object-fit: cover;
+    width: 150px;
+    height: 200px;
+}
+
+.quick-link-info {
+    text-align: center;
+    font-weight: 300;
+    font-size: 28px;
+    padding: 4%;
+}
