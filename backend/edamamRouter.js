@@ -6,6 +6,19 @@ dotenv.config();
 
 const router = express.Router();
 
+// Method to extract a recipe's ID
+const extractRecipeId = (uri) => {
+    const parts = uri.split('#');
+    if (parts.length > 1) {
+        const recipePart = parts[1];
+        
+        if (recipePart.startsWith('recipe_')) {
+            return recipePart.substring(7);
+        }
+    }
+    return null;
+  };
+
 router.post('/search', async (req, res) => {
     const q = req.body.q;
     try {    
@@ -34,7 +47,8 @@ router.post('/search', async (req, res) => {
                         'fat': instance.recipe.digest[0].total,
                         'carbs': instance.recipe.digest[1].total,
                         'protein': instance.recipe.digest[2].total,
-                        'rating': 4.5
+                        'rating': 4.5,
+                        'id': extractRecipeId(instance.recipe.uri),
                     });
                 })
 

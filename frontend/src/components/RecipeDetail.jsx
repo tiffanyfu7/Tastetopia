@@ -1,13 +1,20 @@
-import { React, useState } from "react";
+import { React, useState, useContext, useEffect } from "react";
 import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
+import { RecipeContext } from "./RecipeContext";
+import { QueryContext } from "./QueryContext.jsx";
+import { useNavigate, useParams } from 'react-router-dom';
+import { Navbar } from "./Navbar.jsx";
 
-export const RecipeDetail = ({ recipe, onBackClick }) => {
+export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
   const [showReviewBox, setShowReviewBox] = useState(false);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
+  const { recipe } = useContext(RecipeContext);
+  const { searchRequested, setSearchRequested } = useContext(QueryContext);
+  const navigate = useNavigate();
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -33,14 +40,30 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
     }
   };
 
+  const onBackClick = () => {
+    navigate(`/Recipes/${searchRequested}`);
+  }
+
 
   const handleReviewSubmit = async () => {
     const newReview = {username: 'user', comment: comment, rating: rating}
   }
 
+  // Need to handle fetching the correct recipe on refresh
+  // useEffect(() => {
+  //   if (!recipe) {
+  //     navigate(`/Recipes/${searchRequested}`);
+  //   }
+  // }, []);
+
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
+  }
 
   return (
     <>
+      <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit}/>
+      <br></br>
       <button className="BackButton" onClick={onBackClick}>
         Back
       </button>

@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { QueryProvider } from './components/QueryProvider.jsx'
+import { RecipeProvider } from './components/RecipeProvider.jsx'
 import './index.css'
 
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
@@ -12,7 +13,7 @@ import { Recipes } from "./root/Recipes.jsx";
 import { YourCookbook } from "./root/YourCookbook.jsx";
 import { CreateRecipe } from "./root/CreateRecipe.jsx";
 import RecipeSearched from './components/RecipeSearched.jsx';
-
+import { RecipeDetail } from './components/RecipeDetail.jsx';
 
 export const ORANGE = "#FF9800";
 export const LIGHTGREEN = "#D9EDBF";
@@ -28,6 +29,9 @@ const router = createBrowserRouter([
   {path: "/Recipes/:q",
   element: <RecipeSearched />
   },
+  {path: "/Recipes/:q/:id",
+  element: <RecipeDetail />
+  },
   {path: "/YourCookbook",
   element: <YourCookbook />,
   },
@@ -40,6 +44,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <QueryProvider>
-    <RouterProvider router={router} />
+    <RecipeProvider>
+      <RouterProvider router={router} />
+    </RecipeProvider>
   </QueryProvider>,
 )
