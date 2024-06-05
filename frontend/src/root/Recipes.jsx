@@ -4,12 +4,15 @@ import RecipeCard from "../components/RecipeCard";
 import { RecipeDetail } from "../components/RecipeDetail";
 import { QueryContext } from "../components/QueryContext";
 import "../styles/Explore.css";
+import SearchBar from "../components/SearchBar";
 
 export const Recipes = ({ query }) => {
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const [cardClicked, setCardClicked] = useState(false);
   const [cardIndex, setCardIndex] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  const showTypes = ["All","Vegetarian","<15 Minutes", "Halal", "Mexican"]
 
   useEffect(() => {
     if (searchRequested) {
@@ -78,7 +81,10 @@ export const Recipes = ({ query }) => {
       {/* {console.log("card clicked", cardClicked)} */}
       <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit}/>
       <div className="page-container">
-        <h1>Get a Taste</h1>
+        <h1>Widen Your Culinary Experience</h1>
+
+        {/* <SearchBar />  add a search bar here to display on mobile view*/}
+
         {cardClicked ? (
           <RecipeDetail recipe={selectedRecipe} onBackClick={handleBackClick} />
         ) : (

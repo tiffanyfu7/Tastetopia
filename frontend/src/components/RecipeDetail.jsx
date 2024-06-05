@@ -3,6 +3,9 @@ import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 
 export const RecipeDetail = ({ recipe, onBackClick }) => {
+
+  
+
   return (
     <>
       <button className="BackButton" onClick={ onBackClick }>
