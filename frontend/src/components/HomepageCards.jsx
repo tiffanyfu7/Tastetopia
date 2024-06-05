@@ -21,28 +21,28 @@ const HomepageCards = ({ cardInfo, variant }) => {
     return (
         <>
             {variant == "quickLink" && icon &&
-                <div className="quick-link-card card">
-                    <img className="quick-link-image"src={cardInfo.image} alt={cardInfo.title}/>
-                    <div className="quick-link-info">
-                        <p>{cardInfo.motto}</p>
-                        {icon}
+                <Link className="link" to={cardInfo.link}>
+                    <div className="quick-link-card card">
+                        <img className="quick-link-image"src={cardInfo.image} alt={cardInfo.title}/>
+                        <div className="quick-link-info">
+                            <p>{cardInfo.motto}</p>
+                            {icon}
+                        </div>
                     </div>
-                </div>
+                </Link>
             }
 
             {variant == "daily" &&
-                <Card direction={{ base: 'column', sm: 'row' }} variant='outline'>
-                    <Image objectFit='cover' maxW={{ base: '100%', sm: '200px' }}
-                        src={cardInfo.recipe.image} alt={cardInfo.recipe.title}
-                    />
-                    <Stack>
-                        <CardBody>
-                            <h3>{cardInfo.category}</h3>    
-                            <p>By {cardInfo.recipe.author}</p>
-                             <Rating name="half-rating-read" defaultValue={cardInfo.recipe.rating} precision={0.5} readOnly />
-                        </CardBody>
-                    </Stack>
-                </Card>
+                <div className="daily-card card">
+                    <img className="daily-card-image" src={cardInfo.recipe.image} alt={cardInfo.recipe.title} />
+                    <div className="daily-card-info">
+                        <p>{cardInfo.category}</p>    
+                        <h4>Recipe of The Day</h4>
+                        <h2>{cardInfo.recipe.title}</h2>
+                        <p>By {cardInfo.recipe.author}</p>
+                        <Rating name="half-rating-read" defaultValue={cardInfo.recipe.rating} precision={0.5} readOnly />
+                    </div>
+                </div>
             }
 
             {/* cardInfo = {category: "Lunch", recipe: recipe object} */}
