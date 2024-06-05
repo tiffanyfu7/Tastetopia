@@ -45,9 +45,9 @@ export const Navbar = ({ current }) => {
         <nav>
           <Link style={current == "Home" ? styles.currentLink : styles.navbarLink} to={"/"}>Home</Link>
           <Link style={current == "Recipes" ? styles.currentLink : styles.navbarLink} to={"/Recipes"}>Recipes</Link>
-          <Link style={styles.navbarLink} to={"/Recipes"}>
+          <div style={styles.navbarLink}>
             <SearchBar placeholder="Search Tastropica Recipes..." width="700px"/>
-          </Link>
+          </div>
           <Link style={current == "YourCookbook" ? styles.currentLink : styles.navbarLink} to={"/YourCookbook"}>Your Cookbook</Link>
           <Link style={current == "Profile" ? styles.currentLink : styles.navbarLink} to={"/Profile"}>Profile</Link>
         </nav>

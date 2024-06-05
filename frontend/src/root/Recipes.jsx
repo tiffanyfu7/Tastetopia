@@ -9,6 +9,18 @@ export const Recipes = () => {
   const [cardIndex, setCardIndex] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
+  const searchEdamam = async (query) => {
+    try {
+        const response = await axios.post('http://localhost:8000/edamam/search', {
+            q: query
+        });
+        console.log(response.data);
+        setAPIRecipes(response.data);
+    } catch (error) {
+        console.log('Error searching Edamam: ', error);
+    }
+}
+
   //get all recipes from db
   const recipes = [
     {
