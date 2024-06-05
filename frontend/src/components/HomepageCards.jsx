@@ -21,13 +21,15 @@ const HomepageCards = ({ cardInfo, variant }) => {
     return (
         <>
             {variant == "quickLink" && icon &&
-                <div className="quick-link-card card">
-                    <img className="quick-link-image"src={cardInfo.image} alt={cardInfo.title}/>
-                    <div className="quick-link-info">
-                        <p>{cardInfo.motto}</p>
-                        {icon}
+                <Link className="link" to={cardInfo.link}>
+                    <div className="quick-link-card card">
+                        <img className="quick-link-image"src={cardInfo.image} alt={cardInfo.title}/>
+                        <div className="quick-link-info">
+                            <p>{cardInfo.motto}</p>
+                            {icon}
+                        </div>
                     </div>
-                </div>
+                </Link>
             }
 
             {variant == "daily" &&

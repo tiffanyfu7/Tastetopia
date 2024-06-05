@@ -49,11 +49,11 @@ export const Homepage = () => {
     image: "https://cdn.loveandlemons.com/wp-content/uploads/2022/09/oatmeal-pancakes.jpg",
     title: "Create Recipe",
     motto: "Create a New Recipe",
-    link: "/Create"
+    link: "/CreateRecipe"
   };
 
   const cookbookCard = {
-    image: "https://cdn.loveandlemons.com/wp-content/uploads/2022/09/oatmeal-pancakes.jpg",
+    image: "https://www.cookingclassy.com/wp-content/uploads/2019/11/best-salad-7.jpg",
     title: "Go to Your Cookbook",
     motto: "See Your Recipes",
     link: "/YourCookbook"
@@ -62,18 +62,19 @@ export const Homepage = () => {
   return (
     <>
       <Navbar current="Home" />
-      <h1>Welcome to Tastetopia!</h1>
+      <div className="page-container">
+        <h1>Welcome to Tastetopia!</h1>
 
-      <div className="daily-cards-container">
-        <HomepageCards cardInfo={dailyLunchRecipe} variant="daily" />
-        <HomepageCards cardInfo={dailyDinnerRecipe} variant="daily" />
-      </div>
-
-        <div className="quick-link-container">
-          <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
-          <HomepageCards cardInfo={createCard}  variant="quickLink" />
-          <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
+        <div className="daily-cards-container">
+          <HomepageCards cardInfo={dailyLunchRecipe} variant="daily" />
+          <HomepageCards cardInfo={dailyDinnerRecipe} variant="daily" />
         </div>
+
+          <div className="quick-link-container">
+            <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
+            <HomepageCards cardInfo={createCard}  variant="quickLink" />
+            <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
+          </div>
       </div>
     </>
   );

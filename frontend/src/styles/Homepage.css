@@ -29,6 +29,11 @@
     padding: 4%;
 }
 
+.link {
+    text-decoration: none;
+    color: black;
+}
+
 .daily-cards-container {
     display: grid;
     grid-template-columns: auto auto;
