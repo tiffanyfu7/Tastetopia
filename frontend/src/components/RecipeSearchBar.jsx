@@ -4,15 +4,15 @@ import axios from 'axios';
 const RecipeSearchBar = () => {
     const [query, setQuery] = useState('');
     const [done, setDone] = useState(false);
-    const [fetchedData, setFetchedData] = useState([]);
+    const [apiRecipes, setAPIRecipes] = useState([]);
 
     const searchEdamam = async () => {
         try {
             const response = await axios.post('http://localhost:8000/edamam/search', {
                 q: query
             });
-            const jsonData = JSON.parse(response.data);
-            setFetchedData(jsonData.hits);
+            console.log(response.data);
+            setAPIRecipes(response.data);
         } catch (error) {
             console.log('Error searching Edamam: ', error);
         }
