@@ -33,9 +33,14 @@ router.post('/search', async (req, res) => {
                         'calories': instance.recipe.calories,
                         'fat': instance.recipe.digest[0].total,
                         'carbs': instance.recipe.digest[1].total,
-                        'protein': instance.recipe.digest[2].total
+                        'protein': instance.recipe.digest[2].total,
+                        'rating': 4.5
                     });
                 })
+
+                // Need to consult these recipes with the database to see if any of them
+                // have previous ratings or comments
+
                 res.status(200).json(recipes);
             } else {
                 res.status(response.statusCode).send('Error searching Edamam');

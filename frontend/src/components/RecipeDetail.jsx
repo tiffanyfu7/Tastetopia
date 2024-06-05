@@ -3,6 +3,30 @@ import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 
 export const RecipeDetail = ({ recipe, onBackClick }) => {
+  const formatTotalTime = (totalMinutes) => {
+    if (totalMinutes <= 60) {
+      if (totalMinutes == 0) {
+        return 'Total time not provided.'
+      } else {
+        return `${totalMinutes} minutes`;
+      }
+    } else {
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      return `${hours} ${hours > 1 ? 'hrs' : 'hr'} and ${minutes} mins`;
+    }
+  };
+
+  const formatNutrient = (value) => {
+    if (value === 0) {
+      return "0g";
+    } else if (value < 1) {
+      return "<1g";
+    } else {
+      return `${value.toFixed(0)}g`;
+    }
+  };
+  
   return (
     <>
       <button className="BackButton" onClick={ onBackClick }>
@@ -20,16 +44,13 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
             <h2>{recipe.title}</h2>
             <h4>{recipe.author}</h4>
             <p>
-              <b>Total time:</b> {recipe.totalTime}
+              <b>Total time:</b> {formatTotalTime(recipe.totalTime)} 
             </p>
             <p>
-              <b>Yield:</b>
+              <b>Yield:</b> {recipe.yield}
             </p>
             <p>
-              <b>Full Recipe:</b>
-              <a href="https://www.foodnetwork.com/recipes/food-network-kitchen/baked-feta-pasta-9867689">
-                Food Network
-              </a>
+              <b>Full Recipe:</b> <a href={recipe.sourceURL}> {recipe.author} </a>
             </p>
           </div>
         </div>
@@ -38,13 +59,13 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
           <div className="Ingredients">
             <h4>Ingredients</h4>
             <ul>
-              <li>pasta</li>
-              <li>pasta</li>
-              <li>pasta</li>
+              {(recipe.ingredients).map((ingredient, index) => (
+                <li key={index}>{ingredient}</li>
+              ))}
             </ul>
           </div>
           <p>
-            <b>Preparation:</b>
+            <b>Preparation:</b> <a href={recipe.sourceURL}> {recipe.author} </a>
           </p>
           <div className="HorizontalRecipeText">
             <div className="HealthLabels">
@@ -58,15 +79,10 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
             <div className="Nutrition">
               <h4>Nutrition: </h4>
               <ul>
-                <li>
-                  <b>Calories: </b>450
-                </li>
-                <li>
-                  <b>Calories: </b>450
-                </li>
-                <li>
-                  <b>Calories: </b>450
-                </li>
+                <li><b>Calories:</b> {formatNutrient(recipe.calories)}</li>
+                <li><b>Fat:</b> {formatNutrient(recipe.fat)}</li>
+                <li><b>Carbs:</b> {formatNutrient(recipe.carbs)}</li>
+                <li><b>Protein:</b> {formatNutrient(recipe.protein)}</li>
               </ul>
             </div>
           </div>
