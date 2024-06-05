@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { background } from '@chakra-ui/react';
 import { ORANGE } from '../main';
 
-const SearchBar=({ placeholder, width, onSearchSubmit })=> {
+const SearchBar=({ placeholder, onSearchSubmit })=> {
     const [input, setInput] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSearchSubmit();
+        input ? onSearchSubmit(input) : onSearchSubmit('pasta');
         setInput('');
         navigate(`/Recipes/q=${input}`);
     }

@@ -14,7 +14,7 @@ const DesktopNav = ({current, query, onSearchSubmit}) => {
           <Link className={current == "Home" ? "current-link" : "navbar-link"} to={"/"}>Home</Link>
           <Link className={current == "Recipes" ? "current-link" : "navbar-link"} to={`/Recipes/${query}`}>Recipes</Link>
           <div className="navbar-link" id="search-bar">
-            <SearchBar placeholder="Search Tastropica Recipes..." onSearchSubmit={onSearchSubmit}/>
+            <SearchBar placeholder="Search Tastetopia Recipes..." onSearchSubmit={onSearchSubmit}/>
           </div>
           <Link className={current == "YourCookbook" ? "current-link" : "navbar-link"} to={"/YourCookbook"}>Your Cookbook</Link>
           <Link className={current == "Profile" ? "current-link" : "navbar-link"} to={"/Profile"}>Profile</Link>

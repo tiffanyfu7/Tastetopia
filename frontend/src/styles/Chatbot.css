@@ -1,0 +1,72 @@
+.inboxBackground{
+    background-color: #d9edbf;
+  border-radius: 10px;
+  padding:15px;
+
+}
+
+.yourMsg{
+    margin-left: 30%;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.botMsg {
+    margin-right: 30%;
+}
+
+.message-content {
+    background-color: white;
+    border-radius:20px;
+    padding:10px;
+    margin:5px;
+    white-space: pre-wrap;
+}
+
+.messageArea{
+    max-height: 300px; 
+    overflow-y: auto;
+}
+
+.sender {
+    margin-bottom:0px;
+    margin-right:10px;
+}
+
+
+.bottomBar {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+}
+
+
+
+form {
+    display:flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+input {
+    margin:5px;
+}
+
+.inputField {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-right: 10px; /* Space between input and button */
+}
+
+button {
+    margin: 5px;
+}
+
+button:hover {
+    background-color: #45a049; /* Button hover color */
+}

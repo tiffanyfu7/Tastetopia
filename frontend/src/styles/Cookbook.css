@@ -39,6 +39,10 @@
     font-weight: 600;
 }
 
+.toggle-button:hover {
+    background-color: transparent;
+}
+
 .list-recipes-container {
     margin-top: 30px;
     display: grid;

@@ -6,8 +6,8 @@ import { QueryContext } from "../components/QueryContext";
 export const Homepage = () => {
   const { setSearchRequested } = useContext(QueryContext);
 
-  const handleSearchSubmit = () => {
-    setSearchRequested(true);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
   }
   
   const lunchRecipe = {
@@ -48,7 +48,7 @@ export const Homepage = () => {
     image: "https://richanddelish.com/wp-content/uploads/2022/03/marble-loaf-cake.png",
     title: "Go To Explore",
     motto: "Taste Some New Flavors",
-    link: "/Recipes"
+    link: "/Recipes/q="
   };
 
   const createCard = {

@@ -1,24 +1,35 @@
-body{
-    font-family:Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+body {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.PageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .RecipeBox {
   background-color: #90d26d;
+  flex: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border-radius: 25px;
-  width: 50%;
   padding: 20px;
+  margin: 20px;
 }
 
-.RecipeDetailTextBox {
-  position: relative;
-  overflow: hidden;
-  background-color: #d9edbf;
-  border-radius: 25px;
-  padding: 15px;
+@media screen and (max-width: 1000px) {
+  .RecipeBox {
+    width: 100%;
+  }
+  .PageContainer{
+    flex-direction: column;
+  }
 }
 
 .RecipeHeader {
-  width: 100%;
+  flex: 1;
 }
 
 .RecipeImg {
@@ -31,26 +42,117 @@ body{
   margin-left: 270px;
 }
 
+.RecipeDetailTextBox {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background-color: #d9edbf;
+  border-radius: 25px;
+  padding: 15px;
+}
+
 .HorizontalRecipeText {
-    width:100%;
-    display: inline;
+  display: flex;
 }
 
-.HealthLabels{
-    display: inline-block;
-    margin-right: 10px;
-    width:40%
+.HealthLabels {
+  flex: 1;
+  margin-right: 10px;
+  width: 40%;
 }
 
-.Nutrition{
-    display: inline-block;
+.Nutrition {
+  flex: 1;
+  display: inline-block;
 }
 
 .BackButton {
-    background-color: #FF9800;
-    border-radius: 10px;
-    border-width: 0px;
-    font-size: 15px;
-    color: white;
-    margin: 25px;
+  background-color: #ff9800;
+  border-radius: 10px;
+  border-width: 0px;
+  font-size: 15px;
+  color: white;
+  margin: 25px;
+}
+
+.RecipeHeaderDetails {
+  display: flex;
+  flex-direction: row;
+}
+
+.PicDetails{
+  display: flex;
+  flex-direction: column;
+}
+
+.Ratings {
+  flex: 1;
+}
+
+.DietLabels {
+  flex: 1;
+}
+
+.CollapsedChat {
+  height: 180px;
+  flex: 1;
+  background-color: #90d26d;
+  border-radius: 25px;
+  padding: 20px;
+  margin: 20px 20px 20px 0px;
+}
+
+.ExpandedChat {
+  flex: 1;
+  height: 70%;
+  background-color: #90d26d;
+  border-radius: 25px;
+  padding: 20px;
+  margin: 20px 20px 20px 0px;
+}
+
+
+.buttonContainer {
+  display:flex;
+  justify-content: center;
+}
+
+.chatButton {
+  background-color: #d9edbf;
+  border-radius: 10px;
+  border:none;
+}
+
+.ReviewBox{
+  background-color: #90d26d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 25px;
+  padding: 20px;
+  margin: 20px;
+}
+
+.Comments{
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background-color: #d9edbf;
+  border-radius: 25px;
+  padding: 15px;
+}
+
+.Profile{
+  display: flex;
+  flex-direction: row;
+}
+
+.ReviewButton{
+  background-color: #ff9800;
+  justify-content: center;
+  border-radius: 10px;
+  border-width: 0px;
+  font-size: 15px;
+  color: white;
+  margin: 25px;
 }
