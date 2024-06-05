@@ -1,6 +1,9 @@
 import { React, useState } from "react";
 import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
+import Chatbot from "./Chatbot.jsx"
+
+
 
 export const RecipeDetail = ({ recipe, onBackClick }) => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -99,9 +102,7 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
             </p>
           </div>
           {chatClicked && ( // Use && for brevity
-            <div className="Inbox">
-              <div className="BottomBar"></div>
-            </div>
+            <Chatbot/>
           )}
           {!chatClicked && ( // Use && for brevity
             <div className="buttonContainer">
