@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { IoIosSearch } from "react-icons/io";
 import RecipeSearched from './RecipeSearched';
 import { useNavigate } from 'react-router-dom';
+import { background } from '@chakra-ui/react';
+import { ORANGE } from '../main';
 
 const SearchBar=({ placeholder, width })=> {
     const [input, setInput] = useState('');
@@ -24,26 +26,23 @@ const SearchBar=({ placeholder, width })=> {
             verticalAlign: "middle",
         },
         searchIcon: {
-            margin: "10px 20px 0px 20px"
+            margin: "10px 10px 0px 20px",
+            color: ORANGE
         },
         input: {
             background: "transparent",
             border: "none",
             fontSize: "18px",
             color: "black",
-            width: "700px",
-            height: "50px",
-
-            "&:focus": {
-                outline: "none"
-            }
+            width: width,
+            height: "35px",
         }
     };
 
     return (
-        <div className="container" style={styles.container}>
-            <IoIosSearch className="search-icon" style={styles.searchIcon} size={30} />
-            <form onSubmit={handleSubmit}>
+        <>
+            <form onSubmit={handleSubmit} style={styles.container}>
+                <IoIosSearch className="search-icon" style={styles.searchIcon} size={30} />
                 <input 
                     type='text'
                     placeholder={placeholder}
@@ -52,7 +51,7 @@ const SearchBar=({ placeholder, width })=> {
                     onChange={(e) => setInput(e.target.value)}>
                 </input>
             </form>
-        </div>
+        </>
     )
 }
 

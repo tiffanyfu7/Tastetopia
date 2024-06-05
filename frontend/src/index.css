@@ -23,6 +23,10 @@ h1 {
   margin: 65px 0px 20px 0px;
 }
 
+input:focus{
+  outline: none;
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
