@@ -23,6 +23,18 @@ h1 {
   margin: 65px 0px 20px 0px;
 }
 
+/* for mobile navbar */
+@media (max-width: 900px) {
+  .page-container {
+    padding: 5px;
+    margin: -10px 0px 65px 0px;
+  }
+}
+
+input:focus{
+  outline: none;
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
