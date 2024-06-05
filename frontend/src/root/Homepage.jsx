@@ -32,14 +32,15 @@ export const Homepage = () => {
   return (
     <>
       <Navbar current="Home" />
-      <h1>Welcome to Tastetopia!</h1>
+      <div className="page-container">
+        <h1>Welcome to Tastetopia!</h1>
 
-      <div className="quick-link-container">
-        <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
-        <HomepageCards cardInfo={createCard}  variant="quickLink" />
-        <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
+        <div className="quick-link-container">
+          <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
+          <HomepageCards cardInfo={createCard}  variant="quickLink" />
+          <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
+        </div>
       </div>
-
     </>
   );
 };

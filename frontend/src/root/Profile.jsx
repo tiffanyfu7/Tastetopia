@@ -4,8 +4,10 @@ import { Navbar } from "../components/Navbar";
 export const Profile = () => {
   return (
     <>
-    <Navbar current="Profile"/>
-    <div>Profile</div>
+      <Navbar current="Profile" />
+      <div className="page-container">
+        <div>Profile</div>
+      </div>
   </>
   )
 }

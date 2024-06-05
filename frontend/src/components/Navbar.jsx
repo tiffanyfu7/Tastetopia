@@ -10,7 +10,9 @@ export const Navbar = ({ current }) => {
       backgroundColor: "white",
       height: "75px",
       width: "100%",
-      position: "sticky"
+      position: "fixed",
+      top: "0",
+      zIndex: "9999"
     },
     navbarLink: {
       verticalAlign: "middle",
@@ -29,7 +31,7 @@ export const Navbar = ({ current }) => {
       fontWeight: "800",
       display: "inline-block",
       color: ORANGE,
-      marginTop: "10px",
+      marginTop: "12px",
       marginRight: "3%",
       fontSize: "18px",
       backgroundColor: LIGHTGREEN,
