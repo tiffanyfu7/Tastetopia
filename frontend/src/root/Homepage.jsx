@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar } from "../components/Navbar";
 import HomepageCards from "../components/HomepageCards";
+import { Link } from "react-router-dom";
 
 export const Homepage = () => {
   
@@ -19,7 +20,7 @@ export const Homepage = () => {
     image: "https://cdn.loveandlemons.com/wp-content/uploads/2022/09/oatmeal-pancakes.jpg",
     title: "Create Recipe",
     motto: "Create a New Recipe",
-    link: "/Create"
+    link: "/CreateRecipe"
   };
 
   const cookbookCard = {
@@ -37,7 +38,9 @@ export const Homepage = () => {
 
         <div className="quick-link-container">
           <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
-          <HomepageCards cardInfo={createCard}  variant="quickLink" />
+          <Link to={createCard.link}>
+            <HomepageCards cardInfo={createCard} variant="quickLink" />
+          </Link>
           <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
         </div>
       </div>

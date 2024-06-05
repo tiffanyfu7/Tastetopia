@@ -9,6 +9,8 @@ import { Homepage } from "./root/Homepage.jsx";
 import { Profile } from "./root/Profile.jsx";
 import { Recipes } from "./root/Recipes.jsx";
 import { YourCookbook } from "./root/YourCookbook.jsx";
+import { CreateRecipe } from "./root/CreateRecipe.jsx";
+
 
 export const ORANGE = "#FF9800";
 export const LIGHTGREEN = "#D9EDBF";
@@ -26,6 +28,9 @@ const router = createBrowserRouter([
   },
   {path: "/YourCookbook",
   element: <YourCookbook />,
+  },
+  {path: "/CreateRecipe",
+  element: <CreateRecipe />,
   },
 ])
 

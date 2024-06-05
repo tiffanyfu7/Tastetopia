@@ -1,0 +1,128 @@
+.create-recipe {
+    padding: 20px;
+    background-color: #d9e6d4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin: auto;
+    position: relative;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-section,
+.right-section {
+    width: 45%;
+    padding: 10px;
+}
+
+.photo-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.photo-section button {
+    display: block;
+    margin: auto;
+    font-size: 24px;
+}
+
+.details-section label,
+.ingredients-section label,
+.recipe-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input,
+textarea {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.ingredients-box {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.ingredient-input {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.ingredient-input input {
+    margin-right: 10px;
+    width: calc(50% - 5px);
+}
+
+.ingredient-input .delete-button {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.ingredient-input .delete-button:hover {
+    background-color: #ff1a1a;
+}
+
+.recipe-section textarea {
+    height: 150px;
+    resize: none;
+    overflow-y: auto;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.home-buttons .button {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #ff9800;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.home-buttons .button:hover {
+    background-color: #e68900;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
