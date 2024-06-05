@@ -15,7 +15,7 @@ const RecipeSearched = () => {
 
     return (
         <>
-            <Recipes query={cleanQuery} />
+            <Recipes q={cleanQuery} />
         </>
     )
 }

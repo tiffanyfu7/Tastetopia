@@ -5,8 +5,8 @@ import { QueryContext } from '../components/QueryContext';
 export const Profile = () => {
   const { setSearchRequested } = useContext(QueryContext);
 
-  const handleSearchSubmit = () => {
-    setSearchRequested(true);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
   }
 
   return (

@@ -12,8 +12,8 @@ export const YourCookbook = () => {
   const [state, setState] = useState("Created");
   const { setSearchRequested } = useContext(QueryContext);
 
-  const handleSearchSubmit = () => {
-    setSearchRequested(true);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
   }
 
   const createdRecipes = [{

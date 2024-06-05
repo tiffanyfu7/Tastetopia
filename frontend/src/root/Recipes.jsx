@@ -5,14 +5,15 @@ import { RecipeDetail } from "../components/RecipeDetail";
 import { QueryContext } from "../components/QueryContext";
 import "../styles/Explore.css";
 
-export const Recipes = ({ query }) => {
-  const { searchRequested, setSearchRequested } = useContext(QueryContext);
+export const Recipes = ({ q }) => {
+  const { query, searchRequested, setSearchRequested } = useContext(QueryContext);
   const [cardClicked, setCardClicked] = useState(false);
   const [cardIndex, setCardIndex] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   useEffect(() => {
     if (searchRequested) {
+      console.log(searchRequested);
       searchEdamam();
       setSearchRequested(false);
     }
@@ -69,8 +70,8 @@ export const Recipes = ({ query }) => {
     setSelectedRecipe(null);
   };
 
-  const handleSearchSubmit = () => {
-    setSearchRequested(true);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
   }
 
   return (
