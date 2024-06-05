@@ -37,6 +37,18 @@ input:focus{
   outline: none;
 }
 
+button {
+  border: none;
+  background-color: #FF8E3C;
+  color: white;
+  height: 40px;
+  border-radius: 20px;
+}
+
+button:hover {
+  background-color: #b17144;
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
