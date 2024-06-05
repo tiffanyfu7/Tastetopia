@@ -1,0 +1,62 @@
+.cookbook-page {
+}
+.profile-info {
+    margin: 30px auto 0px auto;
+    width: 300px;
+}
+
+#profile-pic {
+    display: block;
+    margin: 0 auto;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 60px;
+}
+
+#profile-username {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #FF9800;
+}
+
+#create-save-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+#create-new-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FF9800;
+    margin-top: 30px;
+}
+
+.toggle-button {
+    border: none;
+    background: none;
+    color: #FF9800;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.list-recipes-container {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+#create-new-card {
+    margin: 100px 0px 0px 30px;
+    width: 180px;
+    height: 200px;
+}
+
+#create-button {
+    background-color: #D9EDBF;
+    padding: 100px 20px 20px 20px;
+    width: 100px;
+    border-radius: 100px;
+    color: black;
+}
