@@ -1,4 +1,4 @@
-import {React, useState} from "react";
+import { React, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import RecipeCard from "../components/RecipeCard";
 import { RecipeDetail } from "../components/RecipeDetail";
@@ -40,7 +40,7 @@ export const Recipes = () => {
   const handleCardClick = (recipe) => {
     setSelectedRecipe(recipe);
     setCardClicked(true);
-  }
+  };
 
   const handleBackClick = () => {
     setCardClicked(false);
@@ -49,27 +49,26 @@ export const Recipes = () => {
 
   return (
     <>
-    {console.log("card clicked", cardClicked)}
+      {console.log("card clicked", cardClicked)}
       <Navbar current="Recipes" />
       <div className="page-container">
         <h1>Get a Taste</h1>
         {cardClicked ? (
-        <RecipeDetail recipe={selectedRecipe} onBackClick={ handleBackClick } />
-      ) : (
-        <div className="recipe-cards-container">
+          <RecipeDetail recipe={selectedRecipe} onBackClick={handleBackClick} />
+        ) : (
+          <div className="recipe-cards-container">
             {recipes &&
-            recipes.map(
-              (recipe, i) => (
-                  <RecipeCard
+              recipes.map((recipe, i) => (
+                <RecipeCard
                   recipe={recipe}
                   key={i}
                   onClick={() => handleCardClick(recipe)}
-                variant="basic"/>
-                )
-            )}
-        </div>
-        </div>
-      )}
+                  variant="basic"
+                />
+              ))}
+          </div>
+        )}
+      </div>
     </>
   );
 };
