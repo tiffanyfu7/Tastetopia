@@ -16,9 +16,14 @@ router.post('/search', async (req, res) => {
                 let recipes = [];
                 const jsonData = JSON.parse(body);
                 jsonData.hits.forEach(instance => {
-                    console.log(instance.recipe.label);
+                    console.log('title: ', instance.recipe.label);
+                    console.log('author: ', instance.recipe.source);
+                    console.log('image: ', instance.recipe.image);
+                    console.log('source_url: ', instance.recipe.url);
+                    console.log('uri: ', instance.recipe.uri);
+                    console.log('\n\n')
                 })
-                res.status(200).json(body);
+                res.status(200).json(jsonData);
             } else {
                 res.status(response.statusCode).send('Error searching Edamam');
             }
