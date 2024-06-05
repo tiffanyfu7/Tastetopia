@@ -1,7 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IoIosSearch } from "react-icons/io";
+import RecipeSearched from './RecipeSearched';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar=({ placeholder, width })=> {
+    const [input, setInput] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setInput('');
+        navigate(`/Recipes/q=${input}`);
+    }
+    
     const styles= {
         container: {
             display: "flex",
@@ -29,14 +40,18 @@ const SearchBar=({ placeholder, width })=> {
         }
     };
 
-    // useEffect (()=> {console.log(input)}, [input]);
-
     return (
         <div className="container" style={styles.container}>
             <IoIosSearch className="search-icon" style={styles.searchIcon} size={30} />
-            <input type="text" placeholder={placeholder} style={styles.input}>
-            {/* onChange= { (e)=> setInput(e.target.value) } */}
-            </input>
+            <form onSubmit={handleSubmit}>
+                <input 
+                    type='text'
+                    placeholder={placeholder}
+                    style={styles.input}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}>
+                </input>
+            </form>
         </div>
     )
 }

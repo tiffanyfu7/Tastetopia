@@ -1,13 +1,17 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import RecipeCard from "../components/RecipeCard";
 import { RecipeDetail } from "../components/RecipeDetail";
 import "../styles/Explore.css";
 
-export const Recipes = () => {
+export const Recipes = ({ query }) => {
   const [cardClicked, setCardClicked] = useState(false);
   const [cardIndex, setCardIndex] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  useEffect(() => {
+    console.log(query);
+  }, [query]);
 
   const searchEdamam = async (query) => {
     try {
@@ -61,7 +65,7 @@ export const Recipes = () => {
 
   return (
     <>
-      {console.log("card clicked", cardClicked)}
+      {/* {console.log("card clicked", cardClicked)} */}
       <Navbar current="Recipes" />
       <div className="page-container">
         <h1>Get a Taste</h1>
