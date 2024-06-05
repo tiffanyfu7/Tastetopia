@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import edamamRouter from './edamamRouter.js';
 import openAIRouter from './openAIRouter.js';
+import profileRouter from './profileRouter.js';
 
 const app = express();
 const port = 8000;
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/edamam', edamamRouter);
 app.use('/openai', openAIRouter);
+app.use('/profile', profileRouter);
 
 app.get('/hello-world', async (req, res) => {
     try {

@@ -13,6 +13,8 @@ import { YourCookbook } from "./root/YourCookbook.jsx";
 import { CreateRecipe } from "./root/CreateRecipe.jsx";
 import RecipeSearched from './components/RecipeSearched.jsx';
 import { Login } from './root/Login.jsx';
+import { CreateAccount } from './root/CreateAccount.jsx';
+import { UserProvider } from './components/UserContext.jsx';
 
 export const ORANGE = "#FF9800";
 export const LIGHTGREEN = "#D9EDBF";
@@ -21,6 +23,9 @@ export const GREEN = "#90D26D";
 const router = createBrowserRouter([
   {path: "/",
   element: <Login/>,
+  },
+  {path: "/CreateAccount",
+  element: <CreateAccount/>,
   },
   {path: "/Homepage",
   element: <Homepage/>,
@@ -43,8 +48,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <QueryProvider>
-      <RouterProvider router={router} />
-    </QueryProvider>
+    <UserProvider>
+      <QueryProvider>
+        <RouterProvider router={router} />
+      </QueryProvider>
+    </UserProvider>
   </React.StrictMode>,
 )
