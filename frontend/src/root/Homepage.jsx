@@ -19,7 +19,7 @@ export const Homepage = () => {
     image: "https://cdn.loveandlemons.com/wp-content/uploads/2022/09/oatmeal-pancakes.jpg",
     title: "Create Recipe",
     motto: "Create a New Recipe",
-    link: "/CreateRecipe"
+    link: "/Create"
   };
 
   const cookbookCard = {
@@ -37,7 +37,7 @@ export const Homepage = () => {
 
         <div className="quick-link-container">
           <HomepageCards cardInfo={exploreCard}  variant="quickLink" />
-          <HomepageCards cardInfo={createCard} variant="quickLink" />
+          <HomepageCards cardInfo={createCard}  variant="quickLink" />
           <HomepageCards cardInfo={cookbookCard} variant="quickLink" />
         </div>
       </div>
