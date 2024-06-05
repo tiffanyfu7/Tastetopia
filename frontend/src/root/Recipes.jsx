@@ -34,7 +34,7 @@ export const Recipes = () => {
       <h1>Get a Taste</h1>
       <div className="recipe-cards-container">
         {recipes && recipes.map((recipe, i) => (
-          <RecipeCard recipe={recipe} key={i} />
+          <RecipeCard recipe={recipe} key={i} variant="basic"/>
         ))}
       </div>
     </>
