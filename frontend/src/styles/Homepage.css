@@ -3,7 +3,7 @@
     grid-template-columns: auto auto auto;
     gap: 50px;
     overflow-x: scroll;
-    padding: 10px;
+    padding: 5px 8px 20px 8px;
 }
 
 .quick-link-card {
@@ -27,4 +27,44 @@
     font-weight: 300;
     font-size: 28px;
     padding: 4%;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+}
+
+.daily-cards-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 50px;
+    padding: 5px 10px 20px 6px;
+}
+
+@media (max-width: 900px) {
+    .daily-cards-container {
+        grid-template-columns: auto;
+        gap: 20px;
+    }
+}
+
+.daily-card {
+    display: flex;
+    padding: 20px;
+    background-color: #D9EDBF;
+    min-width: 300px;
+    border-radius: 50px;
+    margin-bottom: 30px;
+}
+
+.daily-card-image {
+    height: 250px;
+    width: 200px;
+    object-fit: cover;
+    border-radius: 35px;
+}
+
+.daily-card-info {
+    padding: 20px;
+    line-height: 0.8;
 }

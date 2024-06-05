@@ -1,43 +1,57 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IoIosSearch } from "react-icons/io";
+import RecipeSearched from './RecipeSearched';
+import { useNavigate } from 'react-router-dom';
+import { background } from '@chakra-ui/react';
+import { ORANGE } from '../main';
 
-const SearchBar=({ placeholder, width })=> {
+const SearchBar=({ placeholder, width, onSearchSubmit })=> {
+    const [input, setInput] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSearchSubmit();
+        setInput('');
+        navigate(`/Recipes/q=${input}`);
+    }
+    
     const styles= {
         container: {
             display: "flex",
             backgroundColor: "white",
             border: "1px solid black",
             borderRadius: "25px",
-            width: width,
             height: "50px",
             verticalAlign: "middle",
         },
         searchIcon: {
-            margin: "10px 20px 0px 20px"
+            margin: "10px 10px 0px 20px",
+            color: ORANGE
         },
         input: {
             background: "transparent",
             border: "none",
             fontSize: "18px",
             color: "black",
-            width: "700px",
-            height: "50px",
-
-            "&:focus": {
-                outline: "none"
-            }
+            width: "100%",
+            height: "35px",
         }
     };
 
-    // useEffect (()=> {console.log(input)}, [input]);
-
     return (
-        <div className="container" style={styles.container}>
-            <IoIosSearch className="search-icon" style={styles.searchIcon} size={30} />
-            <input type="text" placeholder={placeholder} style={styles.input}>
-            {/* onChange= { (e)=> setInput(e.target.value) } */}
-            </input>
-        </div>
+        <>
+            <form onSubmit={handleSubmit} style={styles.container}>
+                <IoIosSearch className="search-icon" style={styles.searchIcon} size={30} />
+                <input 
+                    type='text'
+                    placeholder={placeholder}
+                    style={styles.input}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}>
+                </input>
+            </form>
+        </>
     )
 }
 
