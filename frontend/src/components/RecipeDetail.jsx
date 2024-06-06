@@ -5,7 +5,7 @@ import Chatbot from "./Chatbot.jsx";
 import { QueryContext } from "./QueryContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Navbar } from "./Navbar.jsx";
-import axios from 'axios';
+import axios from "axios";
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -14,8 +14,10 @@ export const RecipeDetail = () => {
   const [allReviews, setAllReviews] = useState([]);
   const [rating, setRating] = useState(null);
   const { recipe } = useContext(RecipeContext);
+>>>>>>>>> Temporary merge branch 2
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
+  const recipeId = useParams().id;
 
 
   const formatTotalTime = (totalMinutes) => {
@@ -42,30 +44,43 @@ export const RecipeDetail = () => {
     }
   };
 
+  const fetchReviews = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/recipe/${recipe.id}`
+    );
+    console.log("response", response.data);
+    console.log("reviews", response.data.reviews);
+    setAllReviews(response.data.reviews);
+  };
+
+  // useEffect(() => {
+  //   fetchReviews();
+  // }, []);
+
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     const newReview = { username: "user", comment: comment, rating: rating };
-
     const recipeDocRef = await axios.get("http://localhost:8000/recipe");
     const allRecipes = recipeDocRef.data;
-    
 
     const ids = [];
     allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
     const curRecipeExist = ids.includes(recipe.id);
 
     console.log("allIds", ids);
-    console.log('curRecipeExists?', curRecipeExist)
+    console.log("curRecipeExists?", curRecipeExist);
 
     // if api recipe not present in db
     if (!curRecipeExist) {
       recipe["reviews"] = [newReview]; // add review field
-      recipe["verified"] = null;
+      recipe["verified"] = true;
+      console.log("recipe", recipe);
 
       const newRecipeRef = await axios.post(
         `http://localhost:8000/recipe/`,
         recipe
       );
+      console.log("recipe to post id", recipe.id);
       const newRecipeId = newRecipeRef.data;
       console.log("post recipe response", newRecipeId);
 
@@ -76,15 +91,20 @@ export const RecipeDetail = () => {
       console.log("reviews", response.data.reviews);
       setAllReviews(response.data.reviews);
     } else {
-      const postResponse = await axios.post(
-        `http://localhost:8000/recipe/${recipe.id}`,
-        newReview
-      );
-      console.log("post review on existing recipe response", postResponse.data);
-      setAllReviews(postResponse.data);
+      console.log("recipe.id", recipe.id)
+
+      try{
+        const postResponse = await axios.post(
+          `http://localhost:8000/recipe/${recipe.id}`, newReview
+        );
+        console.log("post review on existing recipe response", postResponse.data);
+        setAllReviews(postResponse.data);
+      } catch(e) {
+        console.error("can't post review on existing recipe", e.message);
+      }
+      
     }
 
-    fetchReviews();
     setRating(0);
     setComment("");
   };
@@ -107,19 +127,33 @@ export const RecipeDetail = () => {
     }
   };
 
-  // Need to handle fetching the correct recipe on refresh
-  // useEffect(() => {
-  //   if (!recipe) {
-  //     navigate(`/Recipes/${searchRequested}`);
-  //   }
-  // }, []);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
+  }
+
+  useEffect(() => {
+    const fetchAPIRecipe = async () => {
+      try {
+        const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+        setRecipe(response.data);
+      } catch (error) {
+        console.log('Error fetching recipe from Edamam: ', error);
+      }
+    }
+    if (recipeId) {
+      fetchAPIRecipe();
+    }
+  }, [recipeId]);
 
   return (
     <>
+      <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit} />
+      <br></br>
       <div className="HeaderButtons">
         <button className="BackButton" onClick={onBackClick}>
           Back
         </button>
+
         <button className="BackButton" onClick={onSaveRecipe}>
           Save Recipe
         </button>
@@ -134,6 +168,7 @@ export const RecipeDetail = () => {
                 src={recipe.image}
                 className="RecipeImg"
               ></img>
+>>>>>>>>> Temporary merge branch 2
 
                 <div className="RecipeHeaderText">
                   <h2>{recipe.title}</h2>
@@ -170,118 +205,124 @@ export const RecipeDetail = () => {
                 </div>
               </div>
 
-            <div className="RecipeDetailTextBox">
-              <div className="Ingredients">
-                <h4>Ingredients</h4>
-                <ul>
-                  {recipe.ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient}</li>
-                  ))}
-                </ul>
-              </div>
-              <p>
-                <b>Preparation:</b>
-              </p>
-              <div className="HorizontalRecipeText">
-                <div className="HealthLabels">
-                  <h4>Health Labels: </h4>
+              <div className="RecipeDetailTextBox">
+                <div className="Ingredients">
+                  <h4>Ingredients</h4>
                   <ul>
-                    {recipe.healthLabels.map((label, index) => (
-                      <li key={index}>{label}</li>
+                    {recipe.ingredients.map((ingredient, index) => (
+                      <li key={index}>{ingredient}</li>
                     ))}
                   </ul>
                 </div>
-                <div className="Nutrition">
-                  <h4>Nutrition: </h4>
-                  <ul>
-                    <li>
-                      <b>Calories:</b> {formatNutrient(recipe.calories)}
-                    </li>
-                    <li>
-                      <b>Fat:</b> {formatNutrient(recipe.fat)}
-                    </li>
-                    <li>
-                      <b>Carbs:</b> {formatNutrient(recipe.carbs)}
-                    </li>
-                    <li>
-                      <b>Protein:</b> {formatNutrient(recipe.protein)}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="ReviewBox">
-            <h2>Reviews</h2>
-            <div className="Comments">
-              <div className="CommentHeader">
-                <div className="Profile">
-                  <img
-                    alt="profilepic"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
-                    width="50px"
-                  ></img>
-                  <p style={{ margin: "5px" }}>@username</p>
-                </div>
-                <Rating
-                  name="half-rating-read"
-                  defaultValue="5"
-                  precision={0.5}
-                  readOnly
-                  className="Ratings"
-                  style={{ marginRight: "5px" }}
-                />
-                <b>Love this recipe!</b>
-              </div>
-              <p>
-                This recipe has been such an amazing pick-me-up and is super
-                easy to make - truly carried me through college
-              </p>
-            </div>
-            <div
-              style={{
-                margin: "5px",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              {showReviewBox ? (
-                <div className="ReviewBox">
-                  <p>
-                    <b>Rating: </b>{" "}
-                    <Rating
-                      name="half-rating-read"
-                      defaultValue='0'
-                      onChange={(event, newValue) => { setRating(newValue) }}
-                    />
-                  </p>
-                  <div className="CommentBox">
-                    
-                    <form>
-                      <label>
-                      <b>Comment:</b>
-                      </label>
-                      <textarea type='text' onChange={ (e) => setComment(e.target.value)}>
-
-                      </textarea>
-                      <button type='submit' className="ReviewButton">
-                        Post
-                      </button>
-                    </form>
-
+                <p>
+                  <b>Preparation:</b>
+                </p>
+                <div className="HorizontalRecipeText">
+                  <div className="HealthLabels">
+                    <h4>Health Labels: </h4>
+                    <ul>
+                      {recipe.healthLabels.map((label, index) => (
+                        <li key={index}>{label}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="Nutrition">
+                    <h4>Nutrition: </h4>
+                    <ul>
+                      <li>
+                        <b>Calories:</b> {formatNutrient(recipe.calories)}
+                      </li>
+                      <li>
+                        <b>Fat:</b> {formatNutrient(recipe.fat)}
+                      </li>
+                      <li>
+                        <b>Carbs:</b> {formatNutrient(recipe.carbs)}
+                      </li>
+                      <li>
+                        <b>Protein:</b> {formatNutrient(recipe.protein)}
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              ) : (
-                <button
-                  className="ReviewButton"
-                  onClick={() => setShowReviewBox(true)}
-                >
-                  Leave a Review
-                </button>
-              )}
+              </div>
+            </div>
+            <div className="ReviewBox">
+              <h2>Reviews</h2>
+              {allReviews &&
+                allReviews.map((eachReview, index) => (
+                  <>
+                    <div className="Comments">
+                      <div className="CommentHeader">
+                        <div className="Profile">
+                          <img
+                            alt="profilepic"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
+                            width="50px"
+                          ></img>
+                          <p style={{ margin: "5px" }}>
+                            @{eachReview.username}
+                          </p>
+                        </div>
+                        <Rating
+                          name="half-rating-read"
+                          defaultValue={eachReview.rating}
+                          precision={0.5}
+                          readOnly
+                          className="Ratings"
+                          style={{ marginRight: "5px" }}
+                        />
+                        <b>Love this recipe!</b>
+                      </div>
+                      <p key={index}>{eachReview.comment}</p>
+                    </div>
+                  </>
+                ))}
+
+              <div
+                style={{
+                  margin: "5px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {showReviewBox ? (
+                  <div className="ReviewBox">
+                    <p>
+                      <b>Rating: </b>{" "}
+                      <Rating
+                        name="half-rating-read"
+                        defaultValue={0}
+                        onChange={(newValue) => {
+                          setRating(newValue);
+                        }}
+                      />
+                    </p>
+                    <div className="CommentBox">
+                      <form onSubmit={handleReviewSubmit}>
+                        <label>
+                          <b>Comment:</b>
+                        </label>
+                        <textarea
+                          type="text"
+                          onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
+                        <button type="submit" className="ReviewButton">
+                          Post
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    className="ReviewButton"
+                    onClick={() => setShowReviewBox(true)}
+                  >
+                    Leave a Review
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
           <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
             <div className="ChatHeader">
@@ -304,7 +345,9 @@ export const RecipeDetail = () => {
             )}
           </div>
         </div>
-      : ''}
+      ) : (
+        ""
+      )}
     </>
   );
 };

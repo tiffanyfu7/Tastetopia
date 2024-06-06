@@ -5,6 +5,7 @@ import fileUpload from 'express-fileupload';
 import edamamRouter from './edamamRouter.js';
 import openAIRouter from './openAIRouter.js';
 import recipeRouter from './recipeRouter.js';
+import recipeRouter from './recipeRouter.js';
 import profileRouter from './profileRouter.js';
 
 dotenv.config();
@@ -28,7 +29,7 @@ app.get('/hello-world', async (req, res) => {
     } catch (e) {
         res.status(400).send(e);
     }
-}) 
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
