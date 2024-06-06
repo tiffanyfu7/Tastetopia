@@ -3,9 +3,12 @@ import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
 import { QueryContext } from "./QueryContext.jsx";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { Navbar } from "./Navbar.jsx";
-import axios from "axios";
+import axios from 'axios';
+
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -33,6 +36,7 @@ export const RecipeDetail = () => {
     }
   };
 
+
   const formatNutrient = (value) => {
     if (value === 0) {
       return "0g";
@@ -43,313 +47,251 @@ export const RecipeDetail = () => {
     }
   };
 
-  const fetchReviews = async () => {
-    const response = await axios.get(
-      `http://localhost:8000/recipe/${recipe.id}`
-    );
-    console.log("response", response.data);
-    console.log("reviews", response.data.reviews);
-    setAllReviews(response.data.reviews);
-  };
-
-  // useEffect(() => {
-  //   fetchReviews();
-  // }, []);
-
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
-    const newReview = { username: "user", comment: comment, rating: rating };
-    const recipeDocRef = await axios.get("http://localhost:8000/recipe");
-    const allRecipes = recipeDocRef.data;
-
-    const ids = [];
-    allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
-    const curRecipeExist = ids.includes(recipe.id);
-
-    console.log("allIds", ids);
-    console.log("curRecipeExists?", curRecipeExist);
-
-    // if api recipe not present in db
-    if (!curRecipeExist) {
-      recipe["reviews"] = [newReview]; // add review field
-      recipe["verified"] = true;
-      console.log("recipe", recipe);
-
-      const newRecipeRef = await axios.post(
-        `http://localhost:8000/recipe/`,
-        recipe
-      );
-      console.log("recipe to post id", recipe.id);
-      const newRecipeId = newRecipeRef.data;
-      console.log("post recipe response", newRecipeId);
-
-      const response = await axios.get(
-        `http://localhost:8000/recipe/${newRecipeId}`
-      );
-      console.log("response", response.data);
-      console.log("reviews", response.data.reviews);
-      setAllReviews(response.data.reviews);
-    } else {
-      console.log("recipe.id", recipe.id)
-
-      try{
-        const postResponse = await axios.post(
-          `http://localhost:8000/recipe/${recipe.id}`, newReview
-        );
-        console.log("post review on existing recipe response", postResponse.data);
-        setAllReviews(postResponse.data);
-      } catch(e) {
-        console.error("can't post review on existing recipe", e.message);
-      }
-      
-    }
-
-    setRating(0);
-    setComment("");
-  };
 
   const onBackClick = () => {
-    navigate(`/Recipes/${searchRequested}`);
-  };
+    navigate(-1);
+  }
 
-  const onSaveRecipe = async () => {
-    const allRecipes = await axios.get(`http://localhost:8000/recipe/`);
-    const querySnapshot = allRecipes.where("id", "==", recipe.id);
 
-    // if api recipe not present in db
-    if (querySnapshot.isEmpty()) {
-      const newRecipeId = await axios.post(
-        `http://localhost:8000/recipe/`,
-        recipe
-      );
-      console.log("post recipe response", newRecipeId);
-    }
-  };
+
+
+  const handleReviewSubmit = async () => {
+    const newReview = { username: 'user', comment: comment, rating: rating }
+  }
+
 
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
   }
 
+
   useEffect(() => {
-    const fetchAPIRecipe = async () => {
+    const fetchRecipe = async () => {
       try {
-        const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
-        setRecipe(response.data);
+        const recipeDoc = doc(db, 'Recipe', recipeId);
+        const recipeData = await getDoc(recipeDoc);
+        if (recipeData.exists()) {
+          setRecipe(recipeData.data());
+        } else {
+          const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+          setRecipe(response.data);
+        }
       } catch (error) {
-        console.log('Error fetching recipe from Edamam: ', error);
+        console.log('Error fetching recipe: ', error);
       }
-    }
+    };
+
+
     if (recipeId) {
-      fetchAPIRecipe();
+      fetchRecipe();
     }
   }, [recipeId]);
+
 
   return (
     <>
       <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit} />
       <br></br>
-      {recipe ? (
-        <div>
-          <div className="HeaderButtons">
-            
-            <button className="BackButton" onClick={onBackClick}>
-              Back
-            </button>
+      <button className="BackButton" onClick={onBackClick}>
+        Back
+      </button>
+      {recipe ?
+        <div className="PageContainer">
+          <div className="LeftSide">
+            <div className="RecipeBox">
+              <div className="RecipeHeader">
+                <img
+                  alt={recipe.title}
+                  src={recipe.image}
+                  className="RecipeImg"
+                ></img>
 
-            <button className="BackButton" onClick={onSaveRecipe}>
-              Save Recipe
-            </button>
-          </div>
 
-          <div className="PageContainer">
-            <div className="LeftSide">
-              <div className="RecipeBox">
-                <div className="RecipeHeader">
-                  <img
-                    alt={recipe.title}
-                    src={recipe.image}
-                    className="RecipeImg"
-                  ></img>
+                <div className="RecipeHeaderText">
+                  <h2>{recipe.title}</h2>
+                  <h4>{recipe.author}</h4>
+                  <p>
+                    <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
+                  </p>
+                  <p>
+                    <b>Yield:</b> {recipe.yield}
+                  </p>
+                  {recipe.sourceURL && (
+                    <p>
+                      <b>Full Recipe:</b>
+                      <a href={recipe.sourceURL}>{recipe.author}</a>
+                    </p>
+                  )}
+                </div>
+              </div>
 
-                    <div className="RecipeHeaderText">
-                      <h2>{recipe.title}</h2>
-                      <h4>{recipe.author}</h4>
-                      <p>
-                        <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
-                      </p>
-                      <p>
-                        <b>Yield:</b>
-                        {recipe.yield}
-                      </p>
-                      <p>
-                        <b>Full Recipe:</b>
-                        <a href={recipe.sourceURL}>{recipe.author}</a>
-                      </p>
-                    </div>
+
+              <div className="RecipeHeaderDetails">
+                <div className="Rating">
+                  <Rating
+                    name="half-rating-read"
+                    defaultValue={recipe.rating}
+                    precision={0.5}
+                    readOnly
+                    className="Ratings"
+                  />
+                  <p>5 from 43 reviews</p>
+                </div>
+
+
+                <div className="DietLabels">
+                  <b>Diet labels: </b>
+                  {recipe.dietLabels}
+                </div>
+              </div>
+
+
+              <div className="RecipeDetailTextBox">
+                <div className="Ingredients">
+                  <h4>Ingredients</h4>
+                  <ul>
+                    {recipe.ingredients.map((ingredient, index) => (
+                      <li key={index}>{ingredient}</li>
+                    ))}
+                  </ul>
+                </div>
+                {recipe.instructions && (
+                  <>
+                    <p><b>Preparation:</b></p>
+                    <ol>
+                      {recipe.instructions.map((instruction, index) => (
+                        <li key={index}>{instruction}</li>
+                      ))}
+                    </ol>
+                  </>
+                )}
+                <div className="HorizontalRecipeText">
+                  <div className="HealthLabels">
+                    <h4>Health Labels: </h4>
+                    <ul>
+                      {recipe.healthLabels.map((label, index) => (
+                        <li key={index}>{label}</li>
+                      ))}
+                    </ul>
                   </div>
-
-                  <div className="RecipeHeaderDetails">
-                    <div className="Rating">
+                  <div className="Nutrition">
+                    <h4>Nutrition: </h4>
+                    <ul>
+                      <li>
+                        <b>Calories:</b> {formatNutrient(recipe.calories)}
+                      </li>
+                      <li>
+                        <b>Fat:</b> {formatNutrient(recipe.fat)}
+                      </li>
+                      <li>
+                        <b>Carbs:</b> {formatNutrient(recipe.carbs)}
+                      </li>
+                      <li>
+                        <b>Protein:</b> {formatNutrient(recipe.protein)}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="ReviewBox">
+              <h2>Reviews</h2>
+              <div className="Comments">
+                <div className="CommentHeader">
+                  <div className="Profile">
+                    <img
+                      alt="profilepic"
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
+                      width="50px"
+                    ></img>
+                    <p style={{ margin: "5px" }}>@username</p>
+                  </div>
+                  <Rating
+                    name="half-rating-read"
+                    defaultValue={5}
+                    precision={0.5}
+                    readOnly
+                    className="Ratings"
+                    style={{ marginRight: "5px" }}
+                  />
+                  <b>Love this recipe!</b>
+                </div>
+                <p>
+                  This recipe has been such an amazing pick-me-up and is super
+                  easy to make - truly carried me through college
+                </p>
+              </div>
+              <div
+                style={{
+                  margin: "5px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {showReviewBox ? (
+                  <div className="ReviewBox">
+                    <p>
+                      <b>Rating: </b>{" "}
                       <Rating
                         name="half-rating-read"
-                        defaultValue={recipe.rating}
-                        precision={0.5}
-                        readOnly
-                        className="Ratings"
+                        defaultValue={0}
+                        onChange={(event, newValue) => { setRating(newValue) }}
                       />
-                      <p>5 from 43 reviews</p>
-                    </div>
-
-                    <div className="DietLabels">
-                      <b>Diet labels: </b>
-                      {recipe.dietLabels}
-                    </div>
-                  </div>
-
-                  <div className="RecipeDetailTextBox">
-                    <div className="Ingredients">
-                      <h4>Ingredients</h4>
-                      <ul>
-                        {recipe.ingredients.map((ingredient, index) => (
-                          <li key={index}>{ingredient}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <p>
-                      <b>Preparation:</b>
                     </p>
-                    <div className="HorizontalRecipeText">
-                      <div className="HealthLabels">
-                        <h4>Health Labels: </h4>
-                        <ul>
-                          {recipe.healthLabels.map((label, index) => (
-                            <li key={index}>{label}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="Nutrition">
-                        <h4>Nutrition: </h4>
-                        <ul>
-                          <li>
-                            <b>Calories:</b> {formatNutrient(recipe.calories)}
-                          </li>
-                          <li>
-                            <b>Fat:</b> {formatNutrient(recipe.fat)}
-                          </li>
-                          <li>
-                            <b>Carbs:</b> {formatNutrient(recipe.carbs)}
-                          </li>
-                          <li>
-                            <b>Protein:</b> {formatNutrient(recipe.protein)}
-                          </li>
-                        </ul>
-                      </div>
+                    <div className="CommentBox">
+
+
+                      <form>
+                        <label>
+                          <b>Comment:</b>
+                        </label>
+                        <textarea type='text' onChange={(e) => setComment(e.target.value)}>
+
+
+                        </textarea>
+                        <button type='submit' className="ReviewButton">
+                          Post
+                        </button>
+                      </form>
+
+
                     </div>
                   </div>
-                </div>
-                <div className="ReviewBox">
-                  <h2>Reviews</h2>
-                  {allReviews &&
-                    allReviews.map((eachReview, index) => (
-                      <>
-                        <div className="Comments">
-                          <div className="CommentHeader">
-                            <div className="Profile">
-                              <img
-                                alt="profilepic"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
-                                width="50px"
-                              ></img>
-                              <p style={{ margin: "5px" }}>
-                                @{eachReview.username}
-                              </p>
-                            </div>
-                            <Rating
-                              name="half-rating-read"
-                              defaultValue={eachReview.rating}
-                              precision={0.5}
-                              readOnly
-                              className="Ratings"
-                              style={{ marginRight: "5px" }}
-                            />
-                            <b>Love this recipe!</b>
-                          </div>
-                          <p key={index}>{eachReview.comment}</p>
-                        </div>
-                      </>
-                    ))}
-
-                  <div
-                    style={{
-                      margin: "5px",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
+                ) : (
+                  <button
+                    className="ReviewButton"
+                    onClick={() => setShowReviewBox(true)}
                   >
-                    {showReviewBox ? (
-                      <div className="ReviewBox">
-                        <p>
-                          <b>Rating: </b>{" "}
-                          <Rating
-                            name="half-rating-read"
-                            defaultValue={0}
-                            onChange={(newValue) => {
-                              setRating(newValue);
-                            }}
-                          />
-                        </p>
-                        <div className="CommentBox">
-                          <form onSubmit={handleReviewSubmit}>
-                            <label>
-                              <b>Comment:</b>
-                            </label>
-                            <textarea
-                              type="text"
-                              onChange={(e) => setComment(e.target.value)}
-                            ></textarea>
-                            <button type="submit" className="ReviewButton">
-                              Post
-                            </button>
-                          </form>
-                        </div>
-                      </div>
-                    ) : (
-                      <button
-                        className="ReviewButton"
-                        onClick={() => setShowReviewBox(true)}
-                      >
-                        Leave a Review
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
-                <div className="ChatHeader">
-                  <h2>Ask Sous Chef Sue!</h2>
-                  <p>
-                    Have any questions about the ingredients, recipe, or more? Ask
-                    Sue, our OpenAI Chatbot.
-                  </p>
-                </div>
-                {chatClicked && <Chatbot />}
-                {!chatClicked && (
-                  <div className="buttonContainer">
-                    <button
-                      className="chatButton"
-                      onClick={() => setChatClicked(true)}
-                    >
-                      Start Chatting
-                    </button>
-                  </div>
+                    Leave a Review
+                  </button>
                 )}
               </div>
+            </div>
+          </div>
+
+
+          <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
+            <div className="ChatHeader">
+              <h2>Ask Sous Chef Sue!</h2>
+              <p>
+                Have any questions about the ingredients, recipe, or more? Ask
+                Sue, our OpenAI Chatbot.
+              </p>
+            </div>
+            {chatClicked && <Chatbot />}
+            {!chatClicked && (
+              <div className="buttonContainer">
+                <button
+                  className="chatButton"
+                  onClick={() => setChatClicked(true)}
+                >
+                  Start Chatting
+                </button>
+              </div>
+            )}
           </div>
         </div>
-      ) : (
-        ""
-      )}
+        : ''}
     </>
   );
 };
