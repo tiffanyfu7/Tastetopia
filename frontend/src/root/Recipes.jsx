@@ -1,13 +1,11 @@
 import { React, useState, useEffect, useContext } from "react";
 import { Navbar } from "../components/Navbar";
 import RecipeCard from "../components/RecipeCard";
-import { RecipeDetail } from "../components/RecipeDetail";
 import { QueryContext } from "../components/QueryContext";
 import { RecipeContext } from "../components/RecipeContext";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../styles/Explore.css";
-import SearchBar from "../components/SearchBar";
 
 export const Recipes = () => {
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
@@ -43,7 +41,6 @@ export const Recipes = () => {
   const handleCardClick = (recipe) => {
     setRecipe(recipe);
     navigate(`/Recipes/${searchRequested}/${recipe.id}`);
-
     // setCardClicked(true);
   };
 
@@ -58,16 +55,9 @@ export const Recipes = () => {
 
   return (
     <>
-      {/* {console.log("card clicked", cardClicked)} */}
       <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit}/>
       <div className="page-container">
         <h1>Widen Your Culinary Experience</h1>
-
-        {/* <SearchBar />  add a search bar here to display on mobile view*/}
-
-        {/* {cardClicked ? (
-          <RecipeDetail recipe={selectedRecipe} onBackClick={handleBackClick} />
-        ) : ( */}
         <div className="recipe-cards-container">
           {recipes &&
             recipes.map((recipe, i) => (
@@ -80,7 +70,6 @@ export const Recipes = () => {
             ))
           }
         </div>
-        {/* )} */}
       </div>
     </>
   );
