@@ -32,9 +32,29 @@ router.get("/", async (req,res) => {
     }
 })
 
+router.get("/:id", async (req,res) => {
+    try{
+        const recipeId = req.params.id
+        let docToFetch = null;
+        try{
+           docToFetch = await getDoc(doc(db, "Recipe", recipeId));
+        
+        } catch (e) {
+            console.log("can't get specific recipe", e.message)
+        }
+        
+        res.status(200).json(docToFetch)  
+    } catch(e) {
+        console.error(e.message)
+        res.status(400).json({error: "Error fetching recipe data"})  
+    }
+})
+
+
 router.post("/", async (req,res) => {
     try{
         const recipeToAdd = req.body
+        console.log("recipeToAdd", recipeToAdd);
         const recipeId = req.body.id;
         const docRef = await setDoc(doc(db, "Recipe", recipeId), recipeToAdd);
 

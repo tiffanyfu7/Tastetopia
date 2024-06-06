@@ -18,7 +18,6 @@ export const RecipeDetail = () => {
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
 
-
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
       if (totalMinutes == 0) {
@@ -43,30 +42,43 @@ export const RecipeDetail = () => {
     }
   };
 
+  // const fetchReviews = async () => {
+  //   const response = await axios.get(
+  //     `http://localhost:8000/recipe/${recipe.id}`
+  //   );
+  //   console.log("response", response.data);
+  //   console.log("reviews", response.data.reviews);
+  //   setAllReviews(response.data.reviews);
+  // };
+
+  // useEffect(() => {
+  //   fetchReviews();
+  // }, []);
+
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     const newReview = { username: "user", comment: comment, rating: rating };
-
     const recipeDocRef = await axios.get("http://localhost:8000/recipe");
     const allRecipes = recipeDocRef.data;
-    
 
     const ids = [];
     allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
     const curRecipeExist = ids.includes(recipe.id);
 
     console.log("allIds", ids);
-    console.log('curRecipeExists?', curRecipeExist)
+    console.log("curRecipeExists?", curRecipeExist);
 
     // if api recipe not present in db
     if (!curRecipeExist) {
       recipe["reviews"] = [newReview]; // add review field
       recipe["verified"] = null;
+      console.log("recipe", recipe);
 
       const newRecipeRef = await axios.post(
         `http://localhost:8000/recipe/`,
         recipe
       );
+      console.log("recipe to post id", recipe.id);
       const newRecipeId = newRecipeRef.data;
       console.log("post recipe response", newRecipeId);
 
@@ -85,7 +97,6 @@ export const RecipeDetail = () => {
       setAllReviews(postResponse.data);
     }
 
-    fetchReviews();
     setRating(0);
     setComment("");
   };
@@ -214,38 +225,34 @@ export const RecipeDetail = () => {
           </div>
           <div className="ReviewBox">
             <h2>Reviews</h2>
-            <div className="Comments">
-              <div className="CommentHeader">
-                <div className="Profile">
+            {allReviews &&
+              allReviews.map((eachReview, index) => (
+                <>
+                  <div className="Comments">
+                    <div className="CommentHeader">
+                      <div className="Profile">
+                        <img
+                          alt="profilepic"
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
+                          width="50px"
+                        ></img>
+                        <p style={{ margin: "5px" }}>@{eachReview.username}</p>
+                      </div>
+                      <Rating
+                        name="half-rating-read"
+                        defaultValue={eachReview.rating}
+                        precision={0.5}
+                        readOnly
+                        className="Ratings"
+                        style={{ marginRight: "5px" }}
+                      />
+                      <b>Love this recipe!</b>
+                    </div>
+                    <p key={index}>{eachReview.comment}</p>
+                  </div>
+                </>
+              ))}
 
-                  
-                  <img
-                    alt="profilepic"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
-                    width="50px"
-                  ></img>
-                  <p style={{ margin: "5px" }}>@username</p>
-                </div>
-                <Rating
-                  name="half-rating-read"
-                  defaultValue={5}
-                  precision={0.5}
-                  readOnly
-                  className="Ratings"
-                  style={{ marginRight: "5px" }}
-                />
-                <b>Love this recipe!</b>
-              </div>
-              <p>
-                This recipe has been such an amazing pick-me-up and is super
-                easy to make - truly carried me through college
-              </p>
-            </div>
-            {allReviews.map((eachReview) => (
-              <>
-              
-              </>
-            ))}
             <div
               style={{
                 margin: "5px",
@@ -260,7 +267,7 @@ export const RecipeDetail = () => {
                     <Rating
                       name="half-rating-read"
                       defaultValue={0}
-                      onChange={(event, newValue) => {
+                      onChange={(newValue) => {
                         setRating(newValue);
                       }}
                     />
