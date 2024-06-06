@@ -17,7 +17,46 @@ const extractRecipeId = (uri) => {
         }
     }
     return null;
-  };
+};
+
+router.post('/fetch/:id', async (req, res) => {
+    const recipeId = req.params.id;
+    try {
+        request.get(`https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`,
+            function (error, response, body) {
+
+            if (!error && response.statusCode === 200) {
+                const data = JSON.parse(body);
+                const recipe = {
+                    'title': data.recipe.label,
+                    'author': data.recipe.source,
+                    'image': data.recipe.image,
+                    'sourceURL': data.recipe.url,
+                    'uri': data.recipe.uri,
+                    'totalTime': data.recipe.totalTime,
+                    'yield': data.recipe.yield,
+                    'cuisineType': data.recipe.cuisineType,
+                    'dietLabels': data.recipe.dietLabels,
+                    'healthLabels': data.recipe.healthLabels,
+                    'ingredients': data.recipe.ingredientLines,
+                    'mealType': data.recipe.mealType,
+                    'dishType': data.recipe.dishType,
+                    'calories': data.recipe.calories,
+                    'fat': data.recipe.digest[0].total,
+                    'carbs': data.recipe.digest[1].total,
+                    'protein': data.recipe.digest[2].total,
+                    'rating': 4.5,
+                    'id': recipeId,    
+                };
+                res.status(200).json(recipe);
+            } else {
+                res.status(400).send(error);
+            }
+        });
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 
 router.post('/search', async (req, res) => {
     const q = req.body.q;

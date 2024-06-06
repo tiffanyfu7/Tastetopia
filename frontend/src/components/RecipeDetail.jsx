@@ -2,11 +2,10 @@ import { React, useState, useContext, useEffect } from "react";
 import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
-import { RecipeContext } from "./RecipeContext";
 import { QueryContext } from "./QueryContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Navbar } from "./Navbar.jsx";
-import axios from "axios";
+import axios from 'axios';
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -14,9 +13,10 @@ export const RecipeDetail = () => {
   const [comment, setComment] = useState("");
   const [allReviews, setAllReviews] = useState([]);
   const [rating, setRating] = useState(null);
-  const { recipe } = useContext(RecipeContext);
+  const [recipe, setRecipe] = useState(null);
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
+  const recipeId = useParams().id;
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -132,55 +132,56 @@ export const RecipeDetail = () => {
         <button className="BackButton" onClick={onBackClick}>
           Back
         </button>
-        <button className="BackButton" onClick={onSaveRecipe}>
+      {recipe ? 
+          <button className="BackButton" onClick={onSaveRecipe}>
           Save Recipe
         </button>
       </div>
 
       <div className="PageContainer">
-        <div className="LeftSide">
-          <div className="RecipeBox">
-            <div className="RecipeHeader">
-              <img
-                alt={recipe.title}
-                src={recipe.image}
-                className="RecipeImg"
-              ></img>
+          <div className="LeftSide">
+            <div className="RecipeBox">
+              <div className="RecipeHeader">
+                <img
+                  alt={recipe.title}
+                  src={recipe.image}
+                  className="RecipeImg"
+                ></img>
 
-              <div className="RecipeHeaderText">
-                <h2>{recipe.title}</h2>
-                <h4>{recipe.author}</h4>
-                <p>
-                  <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
-                </p>
-                <p>
-                  <b>Yield:</b>
-                  {recipe.yield}
-                </p>
-                <p>
-                  <b>Full Recipe:</b>
-                  <a href={recipe.sourceURL}>{recipe.author}</a>
-                </p>
-              </div>
-            </div>
-
-            <div className="RecipeHeaderDetails">
-              <div className="Rating">
-                <Rating
-                  name="half-rating-read"
-                  defaultValue={recipe.rating}
-                  precision={0.5}
-                  readOnly
-                  className="Ratings"
-                />
-                <p>5 from 43 reviews</p>
+                <div className="RecipeHeaderText">
+                  <h2>{recipe.title}</h2>
+                  <h4>{recipe.author}</h4>
+                  <p>
+                    <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
+                  </p>
+                  <p>
+                    <b>Yield:</b>
+                    {recipe.yield}
+                  </p>
+                  <p>
+                    <b>Full Recipe:</b>
+                    <a href={recipe.sourceURL}>{recipe.author}</a>
+                  </p>
+                </div>
               </div>
 
-              <div className="DietLabels">
-                <b>Diet labels: </b>
-                {recipe.dietLabels}
+              <div className="RecipeHeaderDetails">
+                <div className="Rating">
+                  <Rating
+                    name="half-rating-read"
+                    defaultValue={recipe.rating}
+                    precision={0.5}
+                    readOnly
+                    className="Ratings"
+                  />
+                  <p>5 from 43 reviews</p>
+                </div>
+
+                <div className="DietLabels">
+                  <b>Diet labels: </b>
+                  {recipe.dietLabels}
+                </div>
               </div>
-            </div>
 
             <div className="RecipeDetailTextBox">
               <div className="Ingredients">
@@ -299,27 +300,28 @@ export const RecipeDetail = () => {
           </div>
         </div>
 
-        <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
-          <div className="ChatHeader">
-            <h2>Ask Sous Chef Sue!</h2>
-            <p>
-              Have any questions about the ingredients, recipe, or more? Ask
-              Sue, our OpenAI Chatbot.
-            </p>
-          </div>
-          {chatClicked && <Chatbot />}
-          {!chatClicked && (
-            <div className="buttonContainer">
-              <button
-                className="chatButton"
-                onClick={() => setChatClicked(true)}
-              >
-                Start Chatting
-              </button>
+          <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
+            <div className="ChatHeader">
+              <h2>Ask Sous Chef Sue!</h2>
+              <p>
+                Have any questions about the ingredients, recipe, or more? Ask
+                Sue, our OpenAI Chatbot.
+              </p>
             </div>
-          )}
+            {chatClicked && <Chatbot />}
+            {!chatClicked && (
+              <div className="buttonContainer">
+                <button
+                  className="chatButton"
+                  onClick={() => setChatClicked(true)}
+                >
+                  Start Chatting
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      : ''}
     </>
   );
 };

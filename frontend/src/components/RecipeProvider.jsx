@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RecipeContext } from './RecipeContext';
+import { RecipeContext } from './RecipeContext.jsx';
 
 const RecipeProvider = ({ children }) => {
     const [recipe, setRecipe] = useState([]);
