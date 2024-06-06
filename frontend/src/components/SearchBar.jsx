@@ -11,7 +11,7 @@ const SearchBar=({ placeholder, onSearchSubmit })=> {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        input ? onSearchSubmit(input) : onSearchSubmit('pasta');
+        input ? onSearchSubmit(input) : onSearchSubmit('q=');
         setInput('');
         navigate(`/Recipes/q=${input}`);
     }

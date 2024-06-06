@@ -4,7 +4,43 @@ import { db } from "./firebase.js";
 import { collection, getDocs, updateDoc, doc, setDoc, addDoc, deleteDoc, getDoc } from "firebase/firestore";
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+router.get('/get-all', async (req, res) => {
+    try {
+        request.get('http://localhost:8000/explore/get-user-recipes', function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                const userRecipes = JSON.parse(body);
+                // console.log(userRecipes);
+
+                request.get('http://localhost:8000/explore/get-default', function (error, response, body) {
+                    if (!error && response.statusCode === 200) {
+                        const defaultAPIRecipes = JSON.parse(body);
+                        const allRecipes = [...userRecipes, ...defaultAPIRecipes];
+                        const shuffledRecipes = shuffleArray(allRecipes);
+
+                        res.status(200).send(shuffledRecipes);
+                    } else {
+                        res.status(400).send(error);
+                    }
+                });
+
+            } else {
+                res.status(400).send(error);
+            }
+        });
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+router.get('/get-user-recipes', async (req, res) => {
     try {
         // Fetch all user-created recipes from the database
         request.get('http://localhost:8000/recipe', function (error, response, body) {
@@ -31,6 +67,19 @@ const extractRecipeId = (uri) => {
     }
     return null;
 };
+
+router.get('/get-default', async (req, res) => {
+    try {
+        request.get('http://localhost:8000/recipe', function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                const filteredRecipes = JSON.parse(body).filter((recipe) => recipe.default === true);
+                res.status(200).send(filteredRecipes);
+            }
+        });
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 
 router.post('/set-default', async (req, res) => {
     const defaultData = [];
