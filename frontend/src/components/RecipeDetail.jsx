@@ -18,14 +18,6 @@ export const RecipeDetail = () => {
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
 
-  const fetchReviews = async () => {
-    const response = await axios.get(
-      `http://localhost:8000/recipe/${recipe.id}`
-    );
-    console.log("response", response.data);
-    console.log("reviews", response.data.reviews);
-    setAllReviews(response.data.reviews);
-  };
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -55,28 +47,42 @@ export const RecipeDetail = () => {
     e.preventDefault();
     const newReview = { username: "user", comment: comment, rating: rating };
 
-    const docRef = await axios.get("http://localhost:8000/recipe");
-    const allRecipes = docRef.data
-    console.log("allRecipes", allRecipes);
+    const recipeDocRef = await axios.get("http://localhost:8000/recipe");
+    const allRecipes = recipeDocRef.data;
+    
 
+    const ids = [];
+    allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
+    const curRecipeExist = ids.includes(recipe.id);
 
-    const ids = []
-    const allIds = allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
-    const curRecipeExist = allIds.includes(recipe.id)
-
+    console.log("allIds", ids);
+    console.log('curRecipeExists?', curRecipeExist)
 
     // if api recipe not present in db
     if (!curRecipeExist) {
-      recipe['reviews'] = {username: 'user', rating: 5, comment: ''} // add review field
-      const newRecipeRef = await axios.post(`http://localhost:8000/recipe/`, recipe);
-      const newRecipeId = newRecipeRef.data
+      recipe["reviews"] = [newReview]; // add review field
+      recipe["verified"] = null;
+
+      const newRecipeRef = await axios.post(
+        `http://localhost:8000/recipe/`,
+        recipe
+      );
+      const newRecipeId = newRecipeRef.data;
       console.log("post recipe response", newRecipeId);
 
-      const response = await axios.post(`http://localhost:8000/recipe/${newRecipeId}}`, newReview);
-      console.log("post review on new recipe response", response);
+      const response = await axios.get(
+        `http://localhost:8000/recipe/${newRecipeId}`
+      );
+      console.log("response", response.data);
+      console.log("reviews", response.data.reviews);
+      setAllReviews(response.data.reviews);
     } else {
-      const response = await axios.post(`http://localhost:8000/recipe/${recipe.id}}`, newReview );
-      console.log("post review on existing recipe response", response);
+      const postResponse = await axios.post(
+        `http://localhost:8000/recipe/${recipe.id}`,
+        newReview
+      );
+      console.log("post review on existing recipe response", postResponse.data);
+      setAllReviews(postResponse.data);
     }
 
     fetchReviews();
@@ -99,13 +105,8 @@ export const RecipeDetail = () => {
         recipe
       );
       console.log("post recipe response", newRecipeId);
-
-
-    } 
-
-    
-
-  }
+    }
+  };
 
   // Need to handle fetching the correct recipe on refresh
   // useEffect(() => {
@@ -120,7 +121,7 @@ export const RecipeDetail = () => {
         <button className="BackButton" onClick={onBackClick}>
           Back
         </button>
-        <button className="BackButton" onClick={ onSaveRecipe }>
+        <button className="BackButton" onClick={onSaveRecipe}>
           Save Recipe
         </button>
       </div>
@@ -216,6 +217,8 @@ export const RecipeDetail = () => {
             <div className="Comments">
               <div className="CommentHeader">
                 <div className="Profile">
+
+                  
                   <img
                     alt="profilepic"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
@@ -238,6 +241,11 @@ export const RecipeDetail = () => {
                 easy to make - truly carried me through college
               </p>
             </div>
+            {allReviews.map((eachReview) => (
+              <>
+              
+              </>
+            ))}
             <div
               style={{
                 margin: "5px",

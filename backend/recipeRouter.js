@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { db } from "./firebase.js";
-import { collection, getDocs, updateDoc, doc, addDoc, deleteDoc, getDoc } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc, setDoc, addDoc, deleteDoc, getDoc } from "firebase/firestore";
 
 dotenv.config();
 const router = express.Router();
@@ -10,10 +10,10 @@ const router = express.Router();
 router.get("/", async (req,res) => {
     try{
         const ret = []
-        try{
-            const allRecipes = await getDocs(collection(db, "Recipe"));
 
-                    
+        try{
+           const allRecipes = await getDocs(collection(db, "Recipe"));
+                 
         allRecipes.forEach((recipe) => {
             ret.push({
                 id: recipe.id,
@@ -22,10 +22,9 @@ router.get("/", async (req,res) => {
         })
         
         } catch (e) {
-            console.log("can't post recipes", e.message)
+            console.log("can't get recipes", e.message)
         }
         
-
         res.status(200).json(ret)  
     } catch(e) {
         console.error(e.message)
@@ -36,9 +35,10 @@ router.get("/", async (req,res) => {
 router.post("/", async (req,res) => {
     try{
         const recipeToAdd = req.body
-        const docRef = await addDoc(collection(db, "Recipe"), recipeToAdd);
+        const recipeId = req.body.id;
+        const docRef = await setDoc(doc(db, "Recipe", recipeId), recipeToAdd);
 
-    
+        console.log("recipeId and docRef.id", recipeId, docRef.id)
         res.status(200).json(docRef.id)
     } catch (e) {
         console.error("post new recipe error", e.message)
@@ -55,6 +55,7 @@ router.post("/:id", async (req,res) => {
         console.log('curRecipe', curRecipe.data());
 
         const curReviews = curRecipe.data().reviews;
+        console.log("curReviews", curReviews)
 
         const review = {
             username: req.body.username,
@@ -62,13 +63,19 @@ router.post("/:id", async (req,res) => {
             comment: req.body.comment
         }
         const newReviews = [...curReviews, review]
+        console.log('new reviews', newReviews)
 
 
-        await updateDoc(doc(db, "Recipe", docId), {
-            reviews: newReviews
-        });
+        try{
+            await updateDoc(doc(db, "Recipe", docId), {
+                reviews: newReviews
+            });
+    
+        } catch(e) {
+            console.log("can't update recipes", e.message);
+        }
 
-        res.status(200).json({message: "updated reviews sucessfully"})
+        res.status(200).json(newReviews);
     } catch (e) {
         console.error("post by recipe id error", e.message)
         res.status(400).json({error: "Error updating recipe reviews"})  
