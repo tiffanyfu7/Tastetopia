@@ -5,7 +5,6 @@ import fileUpload from 'express-fileupload';
 import edamamRouter from './edamamRouter.js';
 import openAIRouter from './openAIRouter.js';
 import recipeRouter from './recipeRouter.js';
-import recipeRouter from './recipeRouter.js';
 import profileRouter from './profileRouter.js';
 
 dotenv.config();
