@@ -3,17 +3,21 @@ import { Navbar } from "../components/Navbar";
 import RecipeCard from "../components/RecipeCard";
 import { RecipeDetail } from "../components/RecipeDetail";
 import { QueryContext } from "../components/QueryContext";
+import { RecipeContext } from "../components/RecipeContext";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../styles/Explore.css";
 import SearchBar from "../components/SearchBar";
 
-export const Recipes = ({ q }) => {
+export const Recipes = () => {
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
+  const { setRecipe } = useContext(RecipeContext);
   const [cardClicked, setCardClicked] = useState(false);
   const [cardIndex, setCardIndex] = useState(null);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  // const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [apiRecipes, setAPIRecipes] = useState([]);
   const [recipes, setRecipes] = useState([]);
+  const navigate = useNavigate();
 
   const showTypes = ["All","Vegetarian","<15 Minutes", "Halal", "Mexican"]
 
@@ -36,43 +40,17 @@ export const Recipes = ({ q }) => {
     }
 }
 
-  //get all recipes from db
-  // const recipes = [
-  //   {
-  //     image:
-  //       "https://lifeloveandgoodfood.com/wp-content/uploads/2022/07/Spaghetti-and-Meatballs-Hero-2-1200x1200-1-500x375.jpg",
-  //     title: "Classic Spaghetti and Meatbalss with Creamy Tomato Sauce",
-  //     author: "Edaman",
-  //     rating: 4.5,
-  //     totalTime: 30,
-  //     cuisineType: ["Italian"],
-  //     dietLabels: [""],
-  //     healthLabels: ["Gluten-Free"],
-  //     uri: "somestring",
-  //   },
-  //   {
-  //     image:
-  //       "https://www.nutmegnanny.com/wp-content/uploads/2022/06/green-goddess-salad-11.jpg",
-  //     title: "Green Goddess Salad with Homemade Caesar Dressing",
-  //     author: "Karen Smith",
-  //     rating: 4.0,
-  //     totalTime: 15,
-  //     cuisine: "American",
-  //     dietLabels: ["Low-Fat"],
-  //     healthLabels: ["Vegetarian"],
-  //     uri: null,
-  //   },
-  // ];
-
   const handleCardClick = (recipe) => {
-    setSelectedRecipe(recipe);
-    setCardClicked(true);
+    setRecipe(recipe);
+    navigate(`/Recipes/${searchRequested}/${recipe.id}`);
+
+    // setCardClicked(true);
   };
 
-  const handleBackClick = () => {
-    setCardClicked(false);
-    setSelectedRecipe(null);
-  };
+  // const handleBackClick = () => {
+  //   setCardClicked(false);
+  //   setSelectedRecipe(null);
+  // };
 
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
@@ -87,21 +65,22 @@ export const Recipes = ({ q }) => {
 
         {/* <SearchBar />  add a search bar here to display on mobile view*/}
 
-        {cardClicked ? (
+        {/* {cardClicked ? (
           <RecipeDetail recipe={selectedRecipe} onBackClick={handleBackClick} />
-        ) : (
-          <div className="recipe-cards-container">
-            {recipes &&
-              recipes.map((recipe, i) => (
-                <RecipeCard
-                  recipe={recipe}
-                  key={i}
-                  onClick={() => handleCardClick(recipe)}
-                  variant="basic"
-                />
-              ))}
-          </div>
-        )}
+        ) : ( */}
+        <div className="recipe-cards-container">
+          {recipes &&
+            recipes.map((recipe, i) => (
+              <RecipeCard
+                recipe={recipe}
+                key={i}
+                onClick={() => handleCardClick(recipe)}
+                variant="basic"
+              />
+            ))
+          }
+        </div>
+        {/* )} */}
       </div>
     </>
   );

@@ -26,7 +26,7 @@ const SearchBar=({ placeholder, onSearchSubmit })=> {
             verticalAlign: "middle",
         },
         searchIcon: {
-            margin: "10px 10px 0px 20px",
+            margin: "10px 5px 0px 20px",
             color: ORANGE
         },
         input: {
@@ -35,22 +35,24 @@ const SearchBar=({ placeholder, onSearchSubmit })=> {
             fontSize: "18px",
             color: "black",
             width: "100%",
-            height: "35px",
+            height: "25px",
         }
     };
 
     return (
         <>
-            <form onSubmit={handleSubmit} style={styles.container}>
+            <div style={styles.container}>
                 <IoIosSearch className="search-icon" style={styles.searchIcon} size={30} />
-                <input 
-                    type='text'
-                    placeholder={placeholder}
-                    style={styles.input}
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}>
-                </input>
-            </form>
+                <form onSubmit={handleSubmit}>
+                    <input 
+                        type='text'
+                        placeholder={placeholder}
+                        style={styles.input}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}>
+                    </input>
+                </form>
+            </div>
         </>
     )
 }
