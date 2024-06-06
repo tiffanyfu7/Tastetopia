@@ -5,6 +5,7 @@ import fileUpload from 'express-fileupload';
 import edamamRouter from './edamamRouter.js';
 import openAIRouter from './openAIRouter.js';
 import profileRouter from './profileRouter.js';
+import createRecipeRouter from './createRecipeRouter.js';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(fileUpload());
 app.use('/edamam', edamamRouter);
 app.use('/openai', openAIRouter);
 app.use('/profile', profileRouter);
+app.use('/createRecipe', createRecipeRouter);
 
 app.get('/hello-world', async (req, res) => {
     try {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '../firebase';
+import axios from 'axios';
 import '../styles/CreateRecipe.css';
 
 export const CreateRecipe = () => {
@@ -43,38 +42,51 @@ export const CreateRecipe = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
+        let imageUrl = null;
+        if (image) {
+            const formData = new FormData();
+            formData.append('image', image);
+    
+            try {
+                const response = await axios.post('http://localhost:8000/createRecipe/uploadImage', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                imageUrl = response.data.imageUrl;
+            } catch (error) {
+                console.error('Error uploading image: ', error);
+                return;
+            }
+        }
+    
+        const recipeData = {
+            title,
+            author,
+            image: imageUrl,
+            totalTime: Number(totalTime),
+            yield: Number(yieldAmount),
+            cuisineType: cuisineType.split(',').map(type => type.trim()),
+            dietLabels: dietLabels.split(',').map(label => label.trim()),
+            healthLabels: healthLabels.split(',').map(label => label.trim()),
+            ingredients: ingredients.map(ingredient => `${ingredient.name}: ${ingredient.quantity}`),
+            instructions: instructions.split('.').map(instr => instr.trim()),
+            calories: Number(calories),
+            fat: Number(fat),
+            carbs: Number(carbs),
+            protein: Number(protein),
+            avgRating: 0,
+            reviews: {},
+            uri: null,
+            verified: false,
+        };
+    
         try {
-            const recipeData = {
-                title,
-                author,
-                image: image ? URL.createObjectURL(image) : null,
-                totalTime: Number(totalTime),
-                yield: Number(yieldAmount),
-                cuisineType: cuisineType.split(',').map(type => type.trim()),
-                dietLabels: dietLabels.split(',').map(label => label.trim()),
-                healthLabels: healthLabels.split(',').map(label => label.trim()),
-                ingredients: ingredients.map(ingredient => `${ingredient.name}: ${ingredient.quantity}`),
-                instructions: instructions.split('.').map(instr => instr.trim()),
-                calories: Number(calories),
-                fat: Number(fat),
-                carbs: Number(carbs),
-                protein: Number(protein),
-                avgRating: 0,
-                reviews: {},
-                uri: null,
-                verified: false,
-            };
-
-            const recipeRef = await addDoc(collection(db, 'Recipe'), recipeData);
-
-            console.log('Recipe submitted:', recipeData);
-
-            const userRef = doc(db, 'Users', 'currentUsername');
-            await updateDoc(userRef, {
-                createdRecipes: arrayUnion(recipeRef.id)
-            });
-
+            const recipeResponse = await axios.post('http://localhost:8000/createRecipe/new', recipeData);
+    
+            console.log('Recipe submitted:', recipeResponse.data);
+    
             setTitle('');
             setAuthor('');
             setImage(null);
@@ -89,12 +101,62 @@ export const CreateRecipe = () => {
             setFat('');
             setCarbs('');
             setProtein('');
-
+    
             navigate('/YourCookbook');
         } catch (error) {
             console.error('Error adding document: ', error);
         }
     };
+
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();
+
+    //     try {
+    //         const recipeData = {
+    //             title,
+    //             author,
+    //             image: image ? URL.createObjectURL(image) : null,
+    //             totalTime: Number(totalTime),
+    //             yield: Number(yieldAmount),
+    //             cuisineType: cuisineType.split(',').map(type => type.trim()),
+    //             dietLabels: dietLabels.split(',').map(label => label.trim()),
+    //             healthLabels: healthLabels.split(',').map(label => label.trim()),
+    //             ingredients: ingredients.map(ingredient => `${ingredient.name}: ${ingredient.quantity}`),
+    //             instructions: instructions.split('.').map(instr => instr.trim()),
+    //             calories: Number(calories),
+    //             fat: Number(fat),
+    //             carbs: Number(carbs),
+    //             protein: Number(protein),
+    //             avgRating: 0,
+    //             reviews: {},
+    //             uri: null,
+    //             verified: false,
+    //         };
+
+    //         const response = await axios.post('http://localhost:8000/api/recipe/create', recipeData);
+    //         console.log('Recipe submitted:', recipeData);
+
+    //         setTitle('');
+    //         setAuthor('');
+    //         setImage(null);
+    //         setTotalTime('');
+    //         setYieldAmount('');
+    //         setCuisineType('');
+    //         setDietLabels('');
+    //         setHealthLabels('');
+    //         setIngredients([{ name: '', quantity: '' }]);
+    //         setInstructions('');
+    //         setCalories('');
+    //         setFat('');
+    //         setCarbs('');
+    //         setProtein('');
+
+    //         navigate('/YourCookbook');
+    //     } catch (error) {
+    //         console.error('Error adding document: ', error);
+    //     }
+    // };
+
 
     return (
         <div className="create-recipe-container">
