@@ -92,7 +92,6 @@ export const RecipeDetail = () => {
   return (
     <>
       <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit} />
-      <br></br>
       <button className="BackButton" onClick={onBackClick}>
         Back
       </button>
@@ -109,8 +108,8 @@ export const RecipeDetail = () => {
 
 
                 <div className="RecipeHeaderText">
-                  <h2>{recipe.title}</h2>
-                  <h4>{recipe.author}</h4>
+                  <h2 style={{textAlign: "left", color: "black"}}>{recipe.title}</h2>
+                  <h4>By {recipe.author}</h4>
                   <p>
                     <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
                   </p>
@@ -122,7 +121,12 @@ export const RecipeDetail = () => {
                       <b>Full Recipe:</b>
                       <a href={recipe.sourceURL}>{recipe.author}</a>
                     </p>
+                    
                   )}
+                  <div className="DietLabels">
+                    <b>Diet labels: </b>
+                    {recipe.dietLabels}
+                  </div>
                 </div>
               </div>
 
@@ -136,14 +140,11 @@ export const RecipeDetail = () => {
                     readOnly
                     className="Ratings"
                   />
-                  <p>5 from 43 reviews</p>
+                  <p style={{margin: "0px 0px 20px 25px"}}>5 from 43 reviews</p>
                 </div>
 
 
-                <div className="DietLabels">
-                  <b>Diet labels: </b>
-                  {recipe.dietLabels}
-                </div>
+                
               </div>
 
 
