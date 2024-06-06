@@ -2,12 +2,16 @@ import { React, useState } from "react";
 import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
+import axios from "axios";
 
-export const RecipeDetail = ({ recipe, onBackClick }) => {
+export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
   const [showReviewBox, setShowReviewBox] = useState(false);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
+  const { recipe } = useContext(RecipeContext);
+  const { searchRequested, setSearchRequested } = useContext(QueryContext);
+  const navigate = useNavigate();
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -32,18 +36,42 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
       return `${value.toFixed(0)}g`;
     }
   };
+  const sendMessage = async (message) => {
+    const newMessage = { role: "user", content: message };
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
 
+    const response = await axios.post("http://localhost:8000/openai/chat", {
+      messages: updatedMessages,
+      model: "gpt-3.5-turbo",
+    });
+    const assistantResponse = response.data;
+    setMessages((prevMessage) => [...prevMessage, assistantResponse]);
+  };
 
   const handleReviewSubmit = async () => {
-    const newReview = {username: 'user', comment: comment, rating: rating}
-  }
+    const newReview = { username: "user", comment: comment, rating: rating };
 
+    const response = await axios.post("http://localhost:8000/recipe/");
+  };
+
+  const onBackClick = () => {
+    navigate(`/Recipes/${searchRequested}`);
+  };
+
+  // Need to handle fetching the correct recipe on refresh
+  // useEffect(() => {
+  //   if (!recipe) {
+  //     navigate(`/Recipes/${searchRequested}`);
+  //   }
+  // }, []);
 
   return (
     <>
       <button className="BackButton" onClick={onBackClick}>
         Back
       </button>
+
       <div className="PageContainer">
         <div className="LeftSide">
           <div className="RecipeBox">
@@ -170,24 +198,25 @@ export const RecipeDetail = ({ recipe, onBackClick }) => {
                     <b>Rating: </b>{" "}
                     <Rating
                       name="half-rating-read"
-                      defaultValue='0'
-                      onChange={(event, newValue) => { setRating(newValue) }}
+                      defaultValue="0"
+                      onChange={(event, newValue) => {
+                        setRating(newValue);
+                      }}
                     />
                   </p>
                   <div className="CommentBox">
-                    
                     <form>
                       <label>
-                      <b>Comment:</b>
+                        <b>Comment:</b>
                       </label>
-                      <textarea type='text' onChange={ (e) => setComment(e.target.value)}>
-
-                      </textarea>
-                      <button type='submit' className="ReviewButton">
+                      <textarea
+                        type="text"
+                        onChange={(e) => setComment(e.target.value)}
+                      ></textarea>
+                      <button type="submit" className="ReviewButton">
                         Post
                       </button>
                     </form>
-
                   </div>
                 </div>
               ) : (
