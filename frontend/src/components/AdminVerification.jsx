@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const AdminVerification = () => {
     const [recipes, setRecipes] = useState(null);
-    const { navigate } = useNavigate();
+    const navigate = useNavigate();
 
     const fetchRecipes = async () => {
         const response = await axios.get("http://localhost:8000/recipe");
@@ -18,7 +18,7 @@ const AdminVerification = () => {
     }, []);
 
     const handleCardClick = (recipe) => {
-        //navigate(`/Recipes/${recipe.id}`);
+        navigate(`/Recipes/${recipe.id}`);
     };
 
     return (
