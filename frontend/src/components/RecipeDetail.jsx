@@ -42,14 +42,14 @@ export const RecipeDetail = () => {
     }
   };
 
-  // const fetchReviews = async () => {
-  //   const response = await axios.get(
-  //     `http://localhost:8000/recipe/${recipe.id}`
-  //   );
-  //   console.log("response", response.data);
-  //   console.log("reviews", response.data.reviews);
-  //   setAllReviews(response.data.reviews);
-  // };
+  const fetchReviews = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/recipe/${recipe.id}`
+    );
+    console.log("response", response.data);
+    console.log("reviews", response.data.reviews);
+    setAllReviews(response.data.reviews);
+  };
 
   // useEffect(() => {
   //   fetchReviews();
@@ -71,7 +71,7 @@ export const RecipeDetail = () => {
     // if api recipe not present in db
     if (!curRecipeExist) {
       recipe["reviews"] = [newReview]; // add review field
-      recipe["verified"] = null;
+      recipe["verified"] = true;
       console.log("recipe", recipe);
 
       const newRecipeRef = await axios.post(
@@ -89,12 +89,18 @@ export const RecipeDetail = () => {
       console.log("reviews", response.data.reviews);
       setAllReviews(response.data.reviews);
     } else {
-      const postResponse = await axios.post(
-        `http://localhost:8000/recipe/${recipe.id}`,
-        newReview
-      );
-      console.log("post review on existing recipe response", postResponse.data);
-      setAllReviews(postResponse.data);
+      console.log("recipe.id", recipe.id)
+
+      try{
+        const postResponse = await axios.post(
+          `http://localhost:8000/recipe/${recipe.id}`, newReview
+        );
+        console.log("post review on existing recipe response", postResponse.data);
+        setAllReviews(postResponse.data);
+      } catch(e) {
+        console.error("can't post review on existing recipe", e.message);
+      }
+      
     }
 
     setRating(0);
@@ -119,12 +125,23 @@ export const RecipeDetail = () => {
     }
   };
 
-  // Need to handle fetching the correct recipe on refresh
-  // useEffect(() => {
-  //   if (!recipe) {
-  //     navigate(`/Recipes/${searchRequested}`);
-  //   }
-  // }, []);
+  const handleSearchSubmit = (query) => {
+    setSearchRequested(query);
+  }
+
+  useEffect(() => {
+    const fetchAPIRecipe = async () => {
+      try {
+        const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+        setRecipe(response.data);
+      } catch (error) {
+        console.log('Error fetching recipe from Edamam: ', error);
+      }
+    }
+    if (recipeId) {
+      fetchAPIRecipe();
+    }
+  }, [recipeId]);
 
   return (
     <>
