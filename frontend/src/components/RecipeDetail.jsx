@@ -72,7 +72,6 @@ export const RecipeDetail = () => {
         if (recipeData.exists()) {
           setRecipe(recipeData.data());
         } else {
-          // If the document doesn't exist in Firestore, it might be an API recipe
           const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
           setRecipe(response.data);
         }
