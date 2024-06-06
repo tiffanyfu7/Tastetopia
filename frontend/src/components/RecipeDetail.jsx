@@ -4,8 +4,11 @@ import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
 import { QueryContext } from "./QueryContext.jsx";
 import { useNavigate, useParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { Navbar } from "./Navbar.jsx";
 import axios from 'axios';
+
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -16,6 +19,7 @@ export const RecipeDetail = () => {
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
   const recipeId = useParams().id;
+
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -31,6 +35,7 @@ export const RecipeDetail = () => {
     }
   };
 
+
   const formatNutrient = (value) => {
     if (value === 0) {
       return "0g";
@@ -41,41 +46,56 @@ export const RecipeDetail = () => {
     }
   };
 
+
   const onBackClick = () => {
-    navigate(`/Recipes/${searchRequested}`);
+    navigate(-1);
   }
+
+
 
 
   const handleReviewSubmit = async () => {
-    const newReview = {username: 'user', comment: comment, rating: rating}
+    const newReview = { username: 'user', comment: comment, rating: rating }
   }
+
 
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
   }
 
+
   useEffect(() => {
-    const fetchAPIRecipe = async () => {
+    const fetchRecipe = async () => {
       try {
-        const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
-        setRecipe(response.data);
+        const recipeDoc = doc(db, 'Recipe', recipeId);
+        const recipeData = await getDoc(recipeDoc);
+        if (recipeData.exists()) {
+          setRecipe(recipeData.data());
+        } else {
+          // If the document doesn't exist in Firestore, it might be an API recipe
+          const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+          setRecipe(response.data);
+        }
       } catch (error) {
-        console.log('Error fetching recipe from Edamam: ', error);
+        console.log('Error fetching recipe: ', error);
       }
-    }
+    };
+
+
     if (recipeId) {
-      fetchAPIRecipe();
+      fetchRecipe();
     }
   }, [recipeId]);
 
+
   return (
     <>
-      <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit}/>
+      <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit} />
       <br></br>
       <button className="BackButton" onClick={onBackClick}>
         Back
       </button>
-      {recipe ? 
+      {recipe ?
         <div className="PageContainer">
           <div className="LeftSide">
             <div className="RecipeBox">
@@ -86,6 +106,7 @@ export const RecipeDetail = () => {
                   className="RecipeImg"
                 ></img>
 
+
                 <div className="RecipeHeaderText">
                   <h2>{recipe.title}</h2>
                   <h4>{recipe.author}</h4>
@@ -93,15 +114,17 @@ export const RecipeDetail = () => {
                     <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
                   </p>
                   <p>
-                    <b>Yield:</b>
-                    {recipe.yield}
+                    <b>Yield:</b> {recipe.yield}
                   </p>
-                  <p>
-                    <b>Full Recipe:</b>
-                    <a href={recipe.sourceURL}>{recipe.author}</a>
-                  </p>
+                  {recipe.sourceURL && (
+                    <p>
+                      <b>Full Recipe:</b>
+                      <a href={recipe.sourceURL}>{recipe.author}</a>
+                    </p>
+                  )}
                 </div>
               </div>
+
 
               <div className="RecipeHeaderDetails">
                 <div className="Rating">
@@ -115,11 +138,13 @@ export const RecipeDetail = () => {
                   <p>5 from 43 reviews</p>
                 </div>
 
+
                 <div className="DietLabels">
                   <b>Diet labels: </b>
                   {recipe.dietLabels}
                 </div>
               </div>
+
 
               <div className="RecipeDetailTextBox">
                 <div className="Ingredients">
@@ -130,9 +155,16 @@ export const RecipeDetail = () => {
                     ))}
                   </ul>
                 </div>
-                <p>
-                  <b>Preparation:</b>
-                </p>
+                {recipe.instructions && (
+                  <>
+                    <p><b>Preparation:</b></p>
+                    <ol>
+                      {recipe.instructions.map((instruction, index) => (
+                        <li key={index}>{instruction}</li>
+                      ))}
+                    </ol>
+                  </>
+                )}
                 <div className="HorizontalRecipeText">
                   <div className="HealthLabels">
                     <h4>Health Labels: </h4>
@@ -207,18 +239,21 @@ export const RecipeDetail = () => {
                       />
                     </p>
                     <div className="CommentBox">
-                      
+
+
                       <form>
                         <label>
-                        <b>Comment:</b>
+                          <b>Comment:</b>
                         </label>
-                        <textarea type='text' onChange={ (e) => setComment(e.target.value)}>
+                        <textarea type='text' onChange={(e) => setComment(e.target.value)}>
+
 
                         </textarea>
                         <button type='submit' className="ReviewButton">
                           Post
                         </button>
                       </form>
+
 
                     </div>
                   </div>
@@ -233,6 +268,7 @@ export const RecipeDetail = () => {
               </div>
             </div>
           </div>
+
 
           <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
             <div className="ChatHeader">
@@ -255,7 +291,7 @@ export const RecipeDetail = () => {
             )}
           </div>
         </div>
-      : ''}
+        : ''}
     </>
   );
 };

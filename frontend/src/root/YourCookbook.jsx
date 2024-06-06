@@ -1,21 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Navbar } from "../components/Navbar";
 import '../styles/Cookbook.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoAddOutline } from 'react-icons/io5';
 import RecipeCard from '../components/RecipeCard';
 import { QueryContext } from '../components/QueryContext';
 import { fetchCreatedRecipes } from '../components/fetchRecipes';
 import { UserContext } from '../components/UserContext';
+import { RecipeContext } from "../components/RecipeContext.jsx";
 import axios from 'axios';
 
 export const YourCookbook = () => {
     const [state, setState] = useState("Created");
+    const { setRecipe } = useContext(RecipeContext);
     const { setSearchRequested } = useContext(QueryContext);
     const [createdRecipes, setCreatedRecipes] = useState([]);
     const [savedRecipes, setSavedRecipes] = useState([]);
     const { user } = useContext(UserContext);
     const [userData, setUserData] = useState(null);
+    const navigate = useNavigate();
 
     const fetchUser = async () => {
         const response = await axios.get(`http://localhost:8000/profile/user/${user.uid}`)
@@ -38,6 +41,10 @@ export const YourCookbook = () => {
 
     const handleSearchSubmit = () => {
         setSearchRequested(true);
+    };
+
+    const handleCardClick = (recipeId) => {
+        navigate(`/RecipeDetail/${recipeId}`);
     };
 
     return (
@@ -73,14 +80,24 @@ export const YourCookbook = () => {
                                 <p id="create-new-text">Create New Recipe</p>
                             </div>
                             {createdRecipes.map((recipe) => (
-                                <RecipeCard key={recipe.id} recipe={recipe} variant="basic" />
+                                <RecipeCard 
+                                    key={recipe.id} 
+                                    recipe={recipe} 
+                                    variant="basic"
+                                    onClick={() => handleCardClick(recipe.id)}
+                                />
                             ))}
                         </div>
                     }
                     {state === "Saved" &&
                         <div className="list-recipes-container">
                             {savedRecipes.map((recipe) => (
-                                <RecipeCard key={recipe.id} recipe={recipe} variant="basic" />
+                                <RecipeCard 
+                                    key={recipe.id} 
+                                    recipe={recipe} 
+                                    variant="basic"
+                                    onClick={() => handleCardClick(recipe.id)}
+                                />
                             ))}
                         </div>
                     }
