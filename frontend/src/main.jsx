@@ -51,13 +51,11 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <UserProvider>
-      <QueryProvider>
-        <RecipeProvider>
-          <RouterProvider router={router} />
-        </RecipeProvider>
-      </QueryProvider>
-    </UserProvider>
-  </React.StrictMode>,
+  <UserProvider>
+    <QueryProvider>
+      <RecipeProvider>
+        <RouterProvider router={router} />
+      </RecipeProvider>
+    </QueryProvider>
+  </UserProvider>
 )
