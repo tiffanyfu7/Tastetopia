@@ -4,6 +4,7 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import edamamRouter from './edamamRouter.js';
 import openAIRouter from './openAIRouter.js';
+import recipeRouter from './recipeRouter.js';
 import profileRouter from './profileRouter.js';
 import recipeRouter from './recipeRouter.js';
 import exploreRouter from './exploreRouter.js';
@@ -19,6 +20,7 @@ app.use(fileUpload());
 
 app.use('/edamam', edamamRouter);
 app.use('/openai', openAIRouter);
+app.use('/recipe', recipeRouter);
 app.use('/profile', profileRouter);
 app.use('/recipe', recipeRouter);
 app.use('/explore', exploreRouter);

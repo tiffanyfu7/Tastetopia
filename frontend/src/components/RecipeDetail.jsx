@@ -8,14 +8,16 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Navbar } from "./Navbar.jsx";
 import axios from 'axios';
+import { RecipeContext } from "./RecipeContext.jsx";
 
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
   const [showReviewBox, setShowReviewBox] = useState(false);
   const [comment, setComment] = useState("");
-  const [rating, setRating] = useState(0);
-  const [recipe, setRecipe] = useState(null);
+  const [allReviews, setAllReviews] = useState([]);
+  const [rating, setRating] = useState(null);
+  const { recipe } = useContext(RecipeContext);
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
   const recipeId = useParams().id;
