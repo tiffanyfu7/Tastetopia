@@ -5,7 +5,7 @@ import Chatbot from "./Chatbot.jsx";
 import { QueryContext } from "./QueryContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Navbar } from "./Navbar.jsx";
-import axios from 'axios';
+import axios from "axios";
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -128,17 +128,19 @@ export const RecipeDetail = () => {
 
   return (
     <>
+      <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit} />
+      <br></br>
       <div className="HeaderButtons">
         <button className="BackButton" onClick={onBackClick}>
           Back
         </button>
-      {recipe ? 
-          <button className="BackButton" onClick={onSaveRecipe}>
+
+        <button className="BackButton" onClick={onSaveRecipe}>
           Save Recipe
         </button>
       </div>
-
-      <div className="PageContainer">
+      {recipe ? (
+        <div className="PageContainer">
           <div className="LeftSide">
             <div className="RecipeBox">
               <div className="RecipeHeader">
@@ -183,122 +185,124 @@ export const RecipeDetail = () => {
                 </div>
               </div>
 
-            <div className="RecipeDetailTextBox">
-              <div className="Ingredients">
-                <h4>Ingredients</h4>
-                <ul>
-                  {recipe.ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient}</li>
-                  ))}
-                </ul>
-              </div>
-              <p>
-                <b>Preparation:</b>
-              </p>
-              <div className="HorizontalRecipeText">
-                <div className="HealthLabels">
-                  <h4>Health Labels: </h4>
+              <div className="RecipeDetailTextBox">
+                <div className="Ingredients">
+                  <h4>Ingredients</h4>
                   <ul>
-                    {recipe.healthLabels.map((label, index) => (
-                      <li key={index}>{label}</li>
+                    {recipe.ingredients.map((ingredient, index) => (
+                      <li key={index}>{ingredient}</li>
                     ))}
                   </ul>
                 </div>
-                <div className="Nutrition">
-                  <h4>Nutrition: </h4>
-                  <ul>
-                    <li>
-                      <b>Calories:</b> {formatNutrient(recipe.calories)}
-                    </li>
-                    <li>
-                      <b>Fat:</b> {formatNutrient(recipe.fat)}
-                    </li>
-                    <li>
-                      <b>Carbs:</b> {formatNutrient(recipe.carbs)}
-                    </li>
-                    <li>
-                      <b>Protein:</b> {formatNutrient(recipe.protein)}
-                    </li>
-                  </ul>
+                <p>
+                  <b>Preparation:</b>
+                </p>
+                <div className="HorizontalRecipeText">
+                  <div className="HealthLabels">
+                    <h4>Health Labels: </h4>
+                    <ul>
+                      {recipe.healthLabels.map((label, index) => (
+                        <li key={index}>{label}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="Nutrition">
+                    <h4>Nutrition: </h4>
+                    <ul>
+                      <li>
+                        <b>Calories:</b> {formatNutrient(recipe.calories)}
+                      </li>
+                      <li>
+                        <b>Fat:</b> {formatNutrient(recipe.fat)}
+                      </li>
+                      <li>
+                        <b>Carbs:</b> {formatNutrient(recipe.carbs)}
+                      </li>
+                      <li>
+                        <b>Protein:</b> {formatNutrient(recipe.protein)}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="ReviewBox">
-            <h2>Reviews</h2>
-            {allReviews &&
-              allReviews.map((eachReview, index) => (
-                <>
-                  <div className="Comments">
-                    <div className="CommentHeader">
-                      <div className="Profile">
-                        <img
-                          alt="profilepic"
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
-                          width="50px"
-                        ></img>
-                        <p style={{ margin: "5px" }}>@{eachReview.username}</p>
+            <div className="ReviewBox">
+              <h2>Reviews</h2>
+              {allReviews &&
+                allReviews.map((eachReview, index) => (
+                  <>
+                    <div className="Comments">
+                      <div className="CommentHeader">
+                        <div className="Profile">
+                          <img
+                            alt="profilepic"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
+                            width="50px"
+                          ></img>
+                          <p style={{ margin: "5px" }}>
+                            @{eachReview.username}
+                          </p>
+                        </div>
+                        <Rating
+                          name="half-rating-read"
+                          defaultValue={eachReview.rating}
+                          precision={0.5}
+                          readOnly
+                          className="Ratings"
+                          style={{ marginRight: "5px" }}
+                        />
+                        <b>Love this recipe!</b>
                       </div>
+                      <p key={index}>{eachReview.comment}</p>
+                    </div>
+                  </>
+                ))}
+
+              <div
+                style={{
+                  margin: "5px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {showReviewBox ? (
+                  <div className="ReviewBox">
+                    <p>
+                      <b>Rating: </b>{" "}
                       <Rating
                         name="half-rating-read"
-                        defaultValue={eachReview.rating}
-                        precision={0.5}
-                        readOnly
-                        className="Ratings"
-                        style={{ marginRight: "5px" }}
+                        defaultValue={0}
+                        onChange={(newValue) => {
+                          setRating(newValue);
+                        }}
                       />
-                      <b>Love this recipe!</b>
+                    </p>
+                    <div className="CommentBox">
+                      <form onSubmit={handleReviewSubmit}>
+                        <label>
+                          <b>Comment:</b>
+                        </label>
+                        <textarea
+                          type="text"
+                          onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
+                        <button type="submit" className="ReviewButton">
+                          Post
+                        </button>
+                      </form>
                     </div>
-                    <p key={index}>{eachReview.comment}</p>
                   </div>
-                </>
-              ))}
-
-            <div
-              style={{
-                margin: "5px",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              {showReviewBox ? (
-                <div className="ReviewBox">
-                  <p>
-                    <b>Rating: </b>{" "}
-                    <Rating
-                      name="half-rating-read"
-                      defaultValue={0}
-                      onChange={(newValue) => {
-                        setRating(newValue);
-                      }}
-                    />
-                  </p>
-                  <div className="CommentBox">
-                    <form onSubmit={handleReviewSubmit}>
-                      <label>
-                        <b>Comment:</b>
-                      </label>
-                      <textarea
-                        type="text"
-                        onChange={(e) => setComment(e.target.value)}
-                      ></textarea>
-                      <button type="submit" className="ReviewButton">
-                        Post
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  className="ReviewButton"
-                  onClick={() => setShowReviewBox(true)}
-                >
-                  Leave a Review
-                </button>
-              )}
+                ) : (
+                  <button
+                    className="ReviewButton"
+                    onClick={() => setShowReviewBox(true)}
+                  >
+                    Leave a Review
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
           <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
             <div className="ChatHeader">
@@ -321,7 +325,9 @@ export const RecipeDetail = () => {
             )}
           </div>
         </div>
-      : ''}
+      ) : (
+        ""
+      )}
     </>
   );
 };
