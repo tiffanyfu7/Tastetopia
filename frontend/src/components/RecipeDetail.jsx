@@ -216,8 +216,6 @@ export const RecipeDetail = () => {
             <div className="Comments">
               <div className="CommentHeader">
                 <div className="Profile">
-
-                  
                   <img
                     alt="profilepic"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
@@ -227,7 +225,7 @@ export const RecipeDetail = () => {
                 </div>
                 <Rating
                   name="half-rating-read"
-                  defaultValue={5}
+                  defaultValue="5"
                   precision={0.5}
                   readOnly
                   className="Ratings"
@@ -240,11 +238,6 @@ export const RecipeDetail = () => {
                 easy to make - truly carried me through college
               </p>
             </div>
-            {allReviews.map((eachReview) => (
-              <>
-              
-              </>
-            ))}
             <div
               style={{
                 margin: "5px",
@@ -258,25 +251,24 @@ export const RecipeDetail = () => {
                     <b>Rating: </b>{" "}
                     <Rating
                       name="half-rating-read"
-                      defaultValue={0}
-                      onChange={(event, newValue) => {
-                        setRating(newValue);
-                      }}
+                      defaultValue='0'
+                      onChange={(event, newValue) => { setRating(newValue) }}
                     />
                   </p>
                   <div className="CommentBox">
-                    <form onSubmit={handleReviewSubmit}>
+                    
+                    <form>
                       <label>
-                        <b>Comment:</b>
+                      <b>Comment:</b>
                       </label>
-                      <textarea
-                        type="text"
-                        onChange={(e) => setComment(e.target.value)}
-                      ></textarea>
-                      <button type="submit" className="ReviewButton">
+                      <textarea type='text' onChange={ (e) => setComment(e.target.value)}>
+
+                      </textarea>
+                      <button type='submit' className="ReviewButton">
                         Post
                       </button>
                     </form>
+
                   </div>
                 </div>
               ) : (

@@ -4,7 +4,6 @@ import { QueryContext } from '../components/QueryContext';
 import '../styles/Profile.css'
 import AdminVerification from '../components/AdminVerification';
 import UserNotifications from '../components/UserNotifications';
-import { useRadioGroupContext } from '@chakra-ui/react';
 import { UserContext } from '../components/UserContext.jsx';
 import axios from 'axios';
 
@@ -13,9 +12,12 @@ export const Profile = () => {
   const { user } = useContext(UserContext);
   const [userData, setUserData] = useState(null);
 
+  //Guy's Doc ID for Testing
+  const testid = "YOw23Mz104aya7OEouj34VqGanY2";
+
   const fetchUser = async () => {
-    const response = await axios.get(`http://localhost:8000/profile/user/${user.uid}`)
-    console.log("hello", response.data);
+    const response = await axios.get(`http://localhost:8000/profile/user/${testid}`)
+    // const response = await axios.get(`http://localhost:8000/profile/user/${user.uid}`)
     setUserData(response.data);
   }
 

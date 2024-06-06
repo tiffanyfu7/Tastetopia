@@ -1,8 +1,8 @@
 .profile-page {
     margin-top: 100px;
-    padding: 10px;
+    padding: 7px;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
     gap: 50px;
 }
 
@@ -19,11 +19,26 @@
     text-align: center;
     border-radius: 40px;
     filter: drop-shadow(1px 2px 4px #808080);
+    max-height: 350px;
 }
 
 .side-panel {
-    background-color: #D9EDBF;
-    padding:  0px 30px 10px 40px;
+    background-color: #90D26D;
+    padding:  0px 20px 10px 20px;
     border-radius: 40px;
     filter: drop-shadow(1px 2px 4px #808080);
+}
+
+.title {
+    margin-left: 10px;
+}
+.verify-cards-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 600px) {
+    .verify-cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
