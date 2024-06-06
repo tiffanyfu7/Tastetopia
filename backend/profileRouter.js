@@ -43,6 +43,36 @@ router.post('/create', async (req, res) => {
     }
 });
 
+//Endpoint to make guest user
+router.post('/create-guest', async (req, res) => {
+    const { uid } = req.body;
+
+    if (!uid) {
+        return res.status(400).send('Missing required fields');
+    }
+
+    try {
+        const userData = {
+            uid,
+            email: "Guest",
+            name: "Guest",
+            bio: "Add a bio...",
+            savedRecipes: [],
+            createdRecipes: [],
+            isAdmin: false,
+            profilePictureUrl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+        };
+
+        const userDocRef = doc(db, "Users", uid);
+        await setDoc(userDocRef, userData);
+
+        res.status(200).send(userData);
+    } catch (error) {
+        console.error("Error creating anonymous user profile:", error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 // Endpoint for getting user profile data
 router.get('/user/:uid', async (req, res) => {
     const { uid } = req.params;

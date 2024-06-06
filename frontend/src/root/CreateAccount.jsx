@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import axios from "axios";
+import "../styles/Login.css";
 
 export const CreateAccount = () => {
     const [email, setEmail] = useState("");
@@ -66,7 +67,7 @@ export const CreateAccount = () => {
                 </div>
                 {error && <div className='error-message'>{error}</div>}
                 <div>
-                    <p>Already have an account? <button onClick={() => navigate('/')}>Login</button></p>
+                    <p>Already have an account? <button className='text-button' onClick={() => navigate('/')}>Login</button></p>
                 </div>
             </div>
         </div>

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInAnonymously } from "firebase/auth";
 import { auth } from "../firebase";
 import axios from "axios";
 import { useUser } from "../components/UserContext";
+import "../styles/Login.css";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
@@ -21,7 +22,25 @@ export const Login = () => {
         setError("");
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const userResponse = await axios.get(`/profile/user/${userCredential.user.uid}`);
+            // const userResponse = await axios.get(`/profile/user/${userCredential.user.uid}`);
+            setUser({ uid: userCredential.user.uid });
+            navigate('/homepage');
+        } catch (error) {
+            setError(error.message);
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loginAsGuest = async () => {
+        setLoading(true);
+        setError("");
+        try {
+            const userCredential = await signInAnonymously(auth);
+            const userResponse = await axios.post('http://localhost:8000/profile/create-guest', {
+                uid: userCredential.user.uid
+            });
             setUser({ uid: userCredential.user.uid });
             navigate('/homepage');
         } catch (error) {
@@ -43,13 +62,12 @@ export const Login = () => {
                     <input value={password} type='password' placeholder='Password' onChange={handleChangePassword} />
                 </div>
                 <div className='login-option'>
-                    <button className='login-button' onClick={login} disabled={loading}>
-                        {loading ? "Logging in..." : "LOGIN"}
-                    </button>
+                    <button className='login-button' onClick={login}> Login </button>
                 </div>
                 {error && <div className='error-message'>{error}</div>}
                 <div>
-                    <p>Don't have an account? <button onClick={() => navigate('/CreateAccount')}>Create account</button></p>
+                    <p>Don't have an account? <button className='text-button' onClick={() => navigate('/CreateAccount')}> Create Account </button></p>
+                    <p><button className='text-button' onClick={loginAsGuest}>Login as Guest</button></p>
                 </div>
             </div>
         </div>

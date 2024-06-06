@@ -1,0 +1,95 @@
+/* Login.css */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.login-main {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+.login-main-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login-boxes input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login-option {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-button {
+    padding: 10px;
+    width: 100%;
+    border: none;
+    background-color: #FF9800;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #4caf50;
+    
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.text-button {
+    background: none;
+    border: none;
+    color: #FF9800;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 0;
+}
+
+.text-button:hover {
+    text-decoration: underline;
+    background: none;
+
+}
+
+p {
+    margin: 10px 0;
+    font-size: 16px;
+}
