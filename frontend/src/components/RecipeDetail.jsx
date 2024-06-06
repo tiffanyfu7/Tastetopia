@@ -8,6 +8,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Navbar } from "./Navbar.jsx";
 import axios from 'axios';
+import { RecipeContext } from "./RecipeContext.jsx";
 
 
 export const RecipeDetail = () => {

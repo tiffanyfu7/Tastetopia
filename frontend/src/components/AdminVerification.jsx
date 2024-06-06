@@ -18,7 +18,7 @@ const AdminVerification = () => {
     }, []);
 
     const handleCardClick = (recipe) => {
-        navigate(`/Recipes/${recipe.id}`);
+        navigate(`/RecipeDetail/${recipe.id}`);
     };
 
     return (
