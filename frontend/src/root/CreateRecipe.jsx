@@ -62,6 +62,8 @@ export const CreateRecipe = () => {
                 protein: Number(protein),
                 avgRating: 0,
                 reviews: {},
+                uri: null,
+                verified: false,
             };
 
             const recipeRef = await addDoc(collection(db, 'Recipe'), recipeData);

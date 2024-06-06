@@ -176,7 +176,7 @@ export const RecipeDetail = () => {
                   </div>
                   <Rating
                     name="half-rating-read"
-                    defaultValue="5"
+                    defaultValue={5}
                     precision={0.5}
                     readOnly
                     className="Ratings"
@@ -202,7 +202,7 @@ export const RecipeDetail = () => {
                       <b>Rating: </b>{" "}
                       <Rating
                         name="half-rating-read"
-                        defaultValue='0'
+                        defaultValue={0}
                         onChange={(event, newValue) => { setRating(newValue) }}
                       />
                     </p>
