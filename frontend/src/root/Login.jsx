@@ -22,7 +22,7 @@ export const Login = () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const userResponse = await axios.get(`/profile/user/${userCredential.user.uid}`);
-            setUser({ ...userResponse.data, uid: userCredential.user.uid });
+            setUser({ uid: userCredential.user.uid });
             navigate('/homepage');
         } catch (error) {
             setError(error.message);

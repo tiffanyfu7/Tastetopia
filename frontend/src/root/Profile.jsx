@@ -4,6 +4,8 @@ import { QueryContext } from '../components/QueryContext';
 import '../styles/Profile.css'
 import AdminVerification from '../components/AdminVerification';
 import UserNotifications from '../components/UserNotifications';
+import { useRadioGroupContext } from '@chakra-ui/react';
+import { UserContext } from '../components/UserContext.jsx';
 
 export const Profile = () => {
   const { setSearchRequested } = useContext(QueryContext);
@@ -12,17 +14,19 @@ export const Profile = () => {
     setSearchRequested(query);
   }
 
+  const { user } = useContext(UserContext);
+  console.log(user);
   // replace with current user info using authcontext
-  const user = {
-    username: "Admin",
-    bio: "Hi! I'm Guy Fieri, Admin of Tastetopia",
-    isAdmin: true,
-    img: "https://s.yimg.com/ny/api/res/1.2/UFEmshGURUmfNITX1KC5qw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTU1NQ--/https://media.zenfs.com/en/homerun/feed_manager_auto_publish_494/3163b5d7bf142b93a00ed75f49b6951c",
-  }
+  // const user = {
+  //   username: "Admin",
+  //   bio: "Hi! I'm Guy Fieri, Admin of Tastetopia",
+  //   isAdmin: true,
+  //   img: "https://s.yimg.com/ny/api/res/1.2/UFEmshGURUmfNITX1KC5qw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTU1NQ--/https://media.zenfs.com/en/homerun/feed_manager_auto_publish_494/3163b5d7bf142b93a00ed75f49b6951c",
+  // }
 
   return (
     <>
-      <Navbar current="Profile" onSearchSubmit={handleSearchSubmit}/>
+      <Navbar current="Profile" onSearchSubmit={handleSearchSubmit} />
       <div className="page-container profile-page">
 
         <div className="profile-info-card">
