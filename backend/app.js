@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/edamam', edamamRouter);
 app.use('/openai', openAIRouter);
-app.use('/recipe', openAIRouter);
+app.use('/recipe', recipeRouter);
 
 app.get('/hello-world', async (req, res) => {
     try {

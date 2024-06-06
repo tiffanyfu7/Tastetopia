@@ -4,7 +4,7 @@ import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
 import { RecipeContext } from "./RecipeContext";
 import { QueryContext } from "./QueryContext.jsx";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 import { Navbar } from "./Navbar.jsx";
 import axios from "axios";
 
@@ -12,10 +12,20 @@ export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
   const [showReviewBox, setShowReviewBox] = useState(false);
   const [comment, setComment] = useState("");
-  const [rating, setRating] = useState(0);
+  const [allReviews, setAllReviews] = useState([]);
+  const [rating, setRating] = useState(null);
   const { recipe } = useContext(RecipeContext);
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
+
+  const fetchReviews = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/recipe/${recipe.id}`
+    );
+    console.log("response", response.data);
+    console.log("reviews", response.data.reviews);
+    setAllReviews(response.data.reviews);
+  };
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -40,28 +50,62 @@ export const RecipeDetail = () => {
       return `${value.toFixed(0)}g`;
     }
   };
-  const sendMessage = async (message) => {
-    const newMessage = { role: "user", content: message };
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
 
-    const response = await axios.post("http://localhost:8000/openai/chat", {
-      messages: updatedMessages,
-      model: "gpt-3.5-turbo",
-    });
-    const assistantResponse = response.data;
-    setMessages((prevMessage) => [...prevMessage, assistantResponse]);
-  };
-
-  const handleReviewSubmit = async () => {
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
     const newReview = { username: "user", comment: comment, rating: rating };
 
-    const response = await axios.post("http://localhost:8000/recipe/");
+    const docRef = await axios.get("http://localhost:8000/recipe");
+    const allRecipes = docRef.data
+    console.log("allRecipes", allRecipes);
+
+
+    const ids = []
+    const allIds = allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
+    const curRecipeExist = allIds.includes(recipe.id)
+
+
+    // if api recipe not present in db
+    if (!curRecipeExist) {
+      recipe['reviews'] = {username: 'user', rating: 5, comment: ''} // add review field
+      const newRecipeRef = await axios.post(`http://localhost:8000/recipe/`, recipe);
+      const newRecipeId = newRecipeRef.data
+      console.log("post recipe response", newRecipeId);
+
+      const response = await axios.post(`http://localhost:8000/recipe/${newRecipeId}}`, newReview);
+      console.log("post review on new recipe response", response);
+    } else {
+      const response = await axios.post(`http://localhost:8000/recipe/${recipe.id}}`, newReview );
+      console.log("post review on existing recipe response", response);
+    }
+
+    fetchReviews();
+    setRating(0);
+    setComment("");
   };
 
   const onBackClick = () => {
     navigate(`/Recipes/${searchRequested}`);
   };
+
+  const onSaveRecipe = async () => {
+    const allRecipes = await axios.get(`http://localhost:8000/recipe/`);
+    const querySnapshot = allRecipes.where("id", "==", recipe.id);
+
+    // if api recipe not present in db
+    if (querySnapshot.isEmpty()) {
+      const newRecipeId = await axios.post(
+        `http://localhost:8000/recipe/`,
+        recipe
+      );
+      console.log("post recipe response", newRecipeId);
+
+
+    } 
+
+    
+
+  }
 
   // Need to handle fetching the correct recipe on refresh
   // useEffect(() => {
@@ -72,9 +116,14 @@ export const RecipeDetail = () => {
 
   return (
     <>
-      <button className="BackButton" onClick={onBackClick}>
-        Back
-      </button>
+      <div className="HeaderButtons">
+        <button className="BackButton" onClick={onBackClick}>
+          Back
+        </button>
+        <button className="BackButton" onClick={ onSaveRecipe }>
+          Save Recipe
+        </button>
+      </div>
 
       <div className="PageContainer">
         <div className="LeftSide">
@@ -176,7 +225,7 @@ export const RecipeDetail = () => {
                 </div>
                 <Rating
                   name="half-rating-read"
-                  defaultValue="5"
+                  defaultValue={5}
                   precision={0.5}
                   readOnly
                   className="Ratings"
@@ -202,14 +251,14 @@ export const RecipeDetail = () => {
                     <b>Rating: </b>{" "}
                     <Rating
                       name="half-rating-read"
-                      defaultValue="0"
+                      defaultValue={0}
                       onChange={(event, newValue) => {
                         setRating(newValue);
                       }}
                     />
                   </p>
                   <div className="CommentBox">
-                    <form>
+                    <form onSubmit={handleReviewSubmit}>
                       <label>
                         <b>Comment:</b>
                       </label>
