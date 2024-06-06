@@ -2,7 +2,7 @@ import { React, useState, useEffect, useContext } from "react";
 import { Navbar } from "../components/Navbar";
 import RecipeCard from "../components/RecipeCard";
 import { QueryContext } from "../components/QueryContext";
-import { RecipeContext } from "../components/RecipeContext";
+import { RecipeContext } from "../components/RecipeContext.jsx";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../styles/Explore.css";
