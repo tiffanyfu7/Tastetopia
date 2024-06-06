@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { useUser } from "../components/UserContext"; 
+import axios from "axios";
+import { useUser } from "../components/UserContext";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
@@ -20,8 +21,8 @@ export const Login = () => {
         setError("");
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            // Do something with the userCredential if needed
-            setUser(userCredential.user); // Set user in the context
+            const userResponse = await axios.get(`/profile/user/${userCredential.user.uid}`);
+            setUser({ ...userResponse.data, uid: userCredential.user.uid });
             navigate('/homepage');
         } catch (error) {
             setError(error.message);
@@ -47,7 +48,9 @@ export const Login = () => {
                     </button>
                 </div>
                 {error && <div className='error-message'>{error}</div>}
-                {/* Add a link to the registration page if needed */}
+                <div>
+                    <p>Don't have an account? <button onClick={() => navigate('/CreateAccount')}>Create account</button></p>
+                </div>
             </div>
         </div>
     );

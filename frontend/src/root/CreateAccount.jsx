@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import axios from 'axios';
-import { useUser } from "../components/UserContext";
+import axios from "axios";
 
 export const CreateAccount = () => {
     const [email, setEmail] = useState("");
@@ -13,52 +12,33 @@ export const CreateAccount = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const setUser = useUser();
-    
+
     const handleChangeEmail = (event) => setEmail(event.target.value);
     const handleChangePassword = (event) => setPassword(event.target.value);
     const handleChangeName = (event) => setName(event.target.value);
-    const handleProfilePictureChange = (event) => setProfilePicture(event.target.files[0]);
+    const handleChangeProfilePicture = (event) => setProfilePicture(event.target.files[0]);
 
-    const uploadProfilePicture = async () => {
-        const formData = new FormData();
-        formData.append('profilePicture', profilePicture);
-
-        const response = await axios.post('/profile/upload-profile-picture', formData);
-
-        if (response.status !== 200) {
-            throw new Error('Failed to upload profile picture');
-        }
-
-        return response.data.url;
-    };
-
-    const signUp = async () => {
+    const createAccount = async () => {
         setLoading(true);
         setError("");
         try {
-            const profilePictureURL = profilePicture ? await uploadProfilePicture() : null;
-
-            const response = await axios.post('/profile/register', {
-                email,
-                password,
-                name,
-                profilePictureURL,
-            });
-
-            if (response.status !== 200) {
-                throw new Error('Failed to register');
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const formData = new FormData();
+            formData.append("uid", userCredential.user.uid);
+            formData.append("email", email);
+            formData.append("name", name);
+            formData.append("bio", "Add a bio...");
+            formData.append("savedRecipes", []);
+            formData.append("createdRecipes", []);
+            if (profilePicture) {
+                formData.append("profilePicture", profilePicture);
             }
 
-            const { uid } = response.data;
+            await axios.post('http://localhost:8000/profile/create', formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
 
-            // Sign in the user
-            await signInWithEmailAndPassword(auth, email, password);
-
-            // Fetch user data from backend
-            const userResponse = await axios.get(`/profile/user/${uid}`);
-            setUser({ ...userResponse.data, uid });
-            navigate('/login');
+            navigate('/');
         } catch (error) {
             setError(error.message);
             console.log(error);
@@ -68,25 +48,25 @@ export const CreateAccount = () => {
     };
 
     return (
-        <div className='signup-body'>
-            <div className='signup-main'>
-                <div className='signup-main-header'>
+        <div className='login-body'>
+            <div className='login-main'>
+                <div className='login-main-header'>
                     <h1>Create Account</h1>
                 </div>
-                <div className='signup-boxes'>
+                <div className='login-boxes'>
                     <input value={name} placeholder='Name' onChange={handleChangeName} />
                     <input value={email} placeholder='Email' onChange={handleChangeEmail} />
                     <input value={password} type='password' placeholder='Password' onChange={handleChangePassword} />
-                    <input type='file' onChange={handleProfilePictureChange} />
+                    <input type='file' onChange={handleChangeProfilePicture} />
                 </div>
-                <div className='signup-option'>
-                    <button className='signup-button' onClick={signUp} disabled={loading}>
-                        {loading ? "Signing up..." : "SIGN UP"}
+                <div className='login-option'>
+                    <button className='login-button' onClick={createAccount} disabled={loading}>
+                        {loading ? "Creating account..." : "Create Account"}
                     </button>
                 </div>
                 {error && <div className='error-message'>{error}</div>}
                 <div>
-                    <p>Already have an account? <button onClick={() => navigate('/login')}>Log in</button></p>
+                    <p>Already have an account? <button onClick={() => navigate('/')}>Login</button></p>
                 </div>
             </div>
         </div>

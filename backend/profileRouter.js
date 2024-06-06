@@ -1,55 +1,64 @@
 import express from 'express';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { v4 as uuidv4 } from 'uuid';
-import { db, storage } from './firebase';
+import { db, storage } from './firebase.js';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
-    const { email, password, name, profilePictureURL } = req.body;
+// Endpoint for creating a user profile
+router.post('/create', async (req, res) => {
+    const { uid, email, name, bio, savedRecipes, createdRecipes} = req.body;
+    const profilePicture = req.files?.profilePicture;
+
+    if (!uid || !email || !name) {
+        return res.status(400).send('Missing required fields');
+    }
 
     try {
-        const uid = uuidv4();
-        await setDoc(doc(db, 'users', uid), {
+        let profilePictureUrl = '';
+        if (profilePicture) {
+            const storageRef = ref(storage, `profilePictures/${uid}`);
+            await uploadBytes(storageRef, profilePicture.data);
+            profilePictureUrl = await getDownloadURL(storageRef);
+        }
+
+        const userData = {
+            uid,
             email,
             name,
-            profilePictureURL,
-        });
-        res.status(200).json({ uid });
+            bio: bio || "Add a bio...",
+            savedRecipes: savedRecipes || [],
+            createdRecipes: createdRecipes || [],
+            isAdmin: false,
+            profilePictureUrl
+        };
+
+        const userDocRef = doc(db, "Users", uid);
+        await setDoc(userDocRef, userData);
+
+        res.status(200).send('User profile created successfully');
     } catch (error) {
-        res.status(500).json({ error: 'Failed to register user' });
+        console.error("Error creating user profile:", error);
+        res.status(500).send('Internal server error');
     }
 });
 
-router.post('/upload-profile-picture', async (req, res) => {
-    const profilePicture = req.files.profilePicture;
-    const fileName = `${uuidv4()}_${profilePicture.name}`;
-    const storageRef = ref(storage, `profilePictures/${fileName}`);
-
-    try {
-        const snapshot = await uploadBytes(storageRef, profilePicture.data);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        res.status(200).json({ url: downloadURL });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to upload profile picture' });
-    }
-});
-
+// Endpoint for getting user profile data
 router.get('/user/:uid', async (req, res) => {
-    const uid = req.params.uid;
+    const { uid } = req.params;
 
     try {
-        const docRef = doc(db, 'users', uid);
-        const docSnap = await getDoc(docRef);
+        const userDocRef = doc(db, "Users", uid);
+        const userDoc = await getDoc(userDocRef);
 
-        if (docSnap.exists()) {
-            res.status(200).json(docSnap.data());
-        } else {
-            res.status(404).json({ error: 'User not found' });
+        if (!userDoc.exists()) {
+            return res.status(404).send('User not found');
         }
+
+        res.status(200).json(userDoc.data());
     } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve user data' });
+        console.error("Error getting user profile:", error);
+        res.status(500).send('Internal server error');
     }
 });
 
