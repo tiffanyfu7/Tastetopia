@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
 import { QueryProvider } from './components/QueryProvider.jsx'
 import { RecipeProvider } from './components/RecipeProvider.jsx'
 import './index.css'
@@ -45,6 +44,9 @@ const router = createBrowserRouter([
   },
   {path: "/CreateRecipe",
   element: <CreateRecipe />,
+  },
+  {path: "/RecipeDetail/:id",
+  element: <RecipeDetail />
   },
 ])
 
