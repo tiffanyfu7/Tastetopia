@@ -2,14 +2,11 @@ import { React, useState, useContext, useEffect } from "react";
 import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
-<<<<<<< HEAD
-import axios from "axios";
-=======
 import { RecipeContext } from "./RecipeContext";
 import { QueryContext } from "./QueryContext.jsx";
 import { useNavigate, useParams } from 'react-router-dom';
 import { Navbar } from "./Navbar.jsx";
->>>>>>> main
+import axios from "axios";
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -48,7 +45,6 @@ export const RecipeDetail = () => {
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
 
-<<<<<<< HEAD
     const response = await axios.post("http://localhost:8000/openai/chat", {
       messages: updatedMessages,
       model: "gpt-3.5-turbo",
@@ -56,17 +52,10 @@ export const RecipeDetail = () => {
     const assistantResponse = response.data;
     setMessages((prevMessage) => [...prevMessage, assistantResponse]);
   };
-=======
-  const onBackClick = () => {
-    navigate(`/Recipes/${searchRequested}`);
-  }
-
->>>>>>> main
 
   const handleReviewSubmit = async () => {
     const newReview = { username: "user", comment: comment, rating: rating };
 
-<<<<<<< HEAD
     const response = await axios.post("http://localhost:8000/recipe/");
   };
 
@@ -74,26 +63,15 @@ export const RecipeDetail = () => {
     navigate(`/Recipes/${searchRequested}`);
   };
 
-=======
->>>>>>> main
   // Need to handle fetching the correct recipe on refresh
   // useEffect(() => {
   //   if (!recipe) {
   //     navigate(`/Recipes/${searchRequested}`);
   //   }
   // }, []);
-<<<<<<< HEAD
-=======
-
-  const handleSearchSubmit = (query) => {
-    setSearchRequested(query);
-  }
->>>>>>> main
 
   return (
     <>
-      <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit}/>
-      <br></br>
       <button className="BackButton" onClick={onBackClick}>
         Back
       </button>
