@@ -49,8 +49,9 @@ router.post('/fetch/:id', async (req, res) => {
                     'id': recipeId,    
                 };
                 res.status(200).json(recipe);
+            } else {
+                res.status(400).send(error);
             }
-
         });
     } catch (e) {
         res.status(400).send(e);
