@@ -46,7 +46,8 @@ router.get('/get-all', async (req, res) => {
     try {
         request.get('http://localhost:8000/explore/get-user-recipes', function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                const userRecipes = JSON.parse(body);
+                const jsonData = JSON.parse(body);
+                const userRecipes = jsonData.filter((recipe) => recipe.verified === true);
                 // console.log(userRecipes);
 
                 request.get('http://localhost:8000/explore/get-default', function (error, response, body) {
