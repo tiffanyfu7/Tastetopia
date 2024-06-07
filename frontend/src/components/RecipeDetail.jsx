@@ -256,11 +256,47 @@ export const RecipeDetail = () => {
           <div className="LeftSide">
             <div className="RecipeBox">
               <div className="RecipeHeader">
+                <div className="PicAndStar">
                 <img
                   alt={recipe.title}
                   src={recipe.image}
                   className="RecipeImg"
                 ></img>
+                <div className="Rating">
+                  {avgRating ? (
+                    <>
+                      <Rating
+                        name="simple-controlled"
+                        value={Number(avgRating)}
+                        precision={0.1}
+                        readOnly
+                        className="Ratings"
+                        style={{marginRight:"20px", justifyContent:"center"}}
+                      />
+                      <p style={{ margin: "0px 0px", padding: "0px" }}>
+                        { `${avgRating} from ${numReviews} reviews`}
+                      </p>
+                    </>
+                  ) : 
+                  (<>
+                      <Rating
+                        name="simple-controlled"
+                        value={0}
+                        precision={0.1}
+                        readOnly
+                        className="Ratings"
+                        style={{marginRight:"20px"}}
+                      />
+                      <p style={{ margin: "0px 0px", padding: "0px" }}>
+                        {"0 from 0"}
+                      </p>
+                      <p style={{ margin: "0px 0px", padding: "0px" }}>Add a review</p>
+                    </>)
+                  }
+                </div>
+
+                </div>
+                
 
                 <div className="RecipeHeaderText">
                   <h2 style={{ textAlign: "left", color: "black" }}>
@@ -286,26 +322,9 @@ export const RecipeDetail = () => {
                 </div>
               </div>
 
-              <div className="RecipeHeaderDetails">
-                <div className="Rating">
-                  {avgRating && (
-                    <>
-                      <Rating
-                        name="simple-controlled"
-                        defaultValue={Number(avgRating) || 0}
-                        precision={0.1}
-                        readOnly
-                        className="Ratings"
-                      />
-                      <p style={{ margin: "0px 0px 20px 25px" }}>
-                        {numReviews
-                          ? `${avgRating} from ${numReviews} reviews`
-                          : "0 from 0"}
-                      </p>
-                    </>
-                  )}
-                </div>
-              </div>
+              
+                
+             
 
               <div className="RecipeDetailTextBox">
                 <div className="Ingredients">
@@ -369,12 +388,12 @@ export const RecipeDetail = () => {
                         src={userData.profilePictureUrl}
                         width="50px"
                       ></img>
-                      <div className="Profile">
+                      <div className="UserAndStar">
                         <p style={{ margin: "5px" }}>@{eachReview.username}</p>
 
                         <Rating
-                          name="half-rating-read"
-                          defaultValue={eachReview.rating}
+                          name="simple-controlled"
+                          value={eachReview.rating}
                           precision={0.5}
                           readOnly
                           className="Ratings"

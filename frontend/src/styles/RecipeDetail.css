@@ -27,8 +27,20 @@
   }
 }
 
-.RecipeHeader, .HealthLabels, .Nutrition, .Ratings, .DietLabels, .ExpandedChat, .Comments{
+.HealthLabels, .Nutrition, .Ratings, .DietLabels, .ExpandedChat, .Comments{
   flex: 1;
+}
+
+.RecipeHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.Rating{
+  flex:1;
+  margin-right: 0px;
 }
 
 .HeaderButtons {
@@ -36,17 +48,15 @@
 }
 
 .RecipeImg {
-  width: 30%;
-  height: 30%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 10px;
   float: left;
+  aspect-ratio: 1/1;
 }
 
-.RecipeHeaderText {
-  margin-left: 35%;
-  line-height: 1;
-}
+
 
 .RecipeDetailTextBox {
   position: relative;
@@ -139,18 +149,31 @@
   border-radius: 25px;
   padding: 15px;
   margin: 10px;
-}
+} 
 
-.CommentHeader{
+.CommentHeader {
   display: flex;
   flex-direction: row;
 }
 
-.Profile{
+.UserAndStar{
   display: flex;
   flex-direction: column;
+}
+
+.PicAndStar{
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin-right:5%;
+  padding:10px;
+  text-align: center;
+}
+
+.RecipeHeaderText {
+  /* margin-left: 35%; */
   align-content: start;
-  justify-content: flex-start;
+  line-height: 1;
 }
 
 .ReviewButton{
