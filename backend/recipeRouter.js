@@ -15,7 +15,8 @@ import {
 dotenv.config();
 const router = express.Router();
 
-// Fetch all recipesrouter.get("/", async (req, res) => {
+// Fetch all recipes
+router.get("/", async (req, res) => {
   try {
     const ret = [];
 

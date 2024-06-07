@@ -64,6 +64,7 @@ const getDefaultRecipes = async () => {
     setSearchRequested(query);
   }
 
+
   return (
     <>
       <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit}/>

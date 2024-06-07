@@ -10,12 +10,15 @@ import { Navbar } from "./Navbar.jsx";
 import axios from "axios";
 import { RecipeContext } from "./RecipeContext.jsx";
 import { UserContext } from "../components/UserContext.jsx";
+import VerifyDeleteButton from "../components/VerifyDeleteButton.jsx";
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
   const [showReviewBox, setShowReviewBox] = useState(false);
   const [comment, setComment] = useState("");
   const [allReviews, setAllReviews] = useState([]);
+  const [numReviews, setNumReviews] = useState(0);
+  const [avgReview, setAvgReviews] = useState(0);
   const [rating, setRating] = useState(null);
   const { recipe } = useContext(RecipeContext);
   const [isRecipeSaved, setRecipeSaved] = useState(false);
@@ -25,6 +28,8 @@ export const RecipeDetail = () => {
 
   const { user } = useContext(UserContext);
   const [userData, setUserData] = useState(null);
+
+  const testid = "YOw23Mz104aya7OEouj34VqGanY2"; // Guy's docId for testing
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -50,24 +55,59 @@ export const RecipeDetail = () => {
     }
   };
 
+  // const fetchRating = () => {
+  //   console.log('numReviews', numReviews)
+  //   console.log('avgReviews', avgReview)
+  //   if(recipe.reviews.length > 0){
+  //     setNumReviews(recipe.reviews.length);
+  //     console.log('reviews num', recipe.reviews.length)
+
+  //     let sumReviews = 0;
+  //     (recipe.reviews).map((review) => sumReviews += review);
+  //     const avg = (sumReviews / numReviews).toFixed(2);
+  //     setAvgReviews('avg rating', avg);
+  //     console.log(avg);
+  //   }
+  // }
+
+
   const fetchReviews = async () => {
+    console.log('numReviews', numReviews)
+    console.log('avgReviews', avgReview)
     const response = await axios.get(
       `http://localhost:8000/recipe/${recipeId}`
     );
     if (response.data) {
-      console.log("response", response.data);
-      setAllReviews(response.data.reviews);
+      console.log("review response", response.data);
+      if (response.data.reviews) {
+        setAllReviews(response.data.reviews);
+        if(response.data.reviews.length > 0){
+          setNumReviews(recipe.reviews.length);
+          console.log('reviews num', recipe.reviews.length)
+    
+          let sumReviews = 0;
+          (recipe.reviews).map((review) => sumReviews += review);
+          const avg = (sumReviews / numReviews).toFixed(2);
+          setAvgReviews('avg rating', avg);
+          console.log(avg);
+        }
+      }
     }
   };
 
   useEffect(() => {
     fetchReviews();
-  }, []);
+  }, [recipe.id]);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
-    const newReview = { username: user.name, comment: comment, rating: rating };
+
+    const newReview = {
+      username: userData.name,
+      comment: comment,
+      rating: rating,
+    };
     const recipeDocRef = await axios.get("http://localhost:8000/recipe");
     const allRecipes = recipeDocRef.data;
 
@@ -92,7 +132,8 @@ export const RecipeDetail = () => {
       );
 
       setAllReviews(response.data.reviews);
-      fetchReviews();
+
+      
     } else {
       console.log("recipe.id", recipe.id);
 
@@ -102,11 +143,14 @@ export const RecipeDetail = () => {
           newReview
         );
         setAllReviews(postResponse.data);
+
       } catch (e) {
         console.error("can't post review on existing recipe", e.message);
       }
     }
 
+
+    fetchReviews();
     setRating(0);
     setComment("");
   };
@@ -116,9 +160,13 @@ export const RecipeDetail = () => {
   };
 
   const fetchUser = async () => {
+    // const response = await axios.get(
+    //   `http://localhost:8000/profile/user/${userData.uid}`
+    // );
     const response = await axios.get(
-      `http://localhost:8000/profile/user/${user.uid}`
+      `http://localhost:8000/profile/user/${testid}`
     );
+
     console.log("hello", response.data);
     setUserData(response.data);
     const savedRecipes = response.data.savedRecipes;
@@ -151,7 +199,7 @@ export const RecipeDetail = () => {
         recipeId: newRecipeId.data,
       };
       const response = await axios.put(
-        `http://localhost:8000/profile/user/${user.uid}`,
+        `http://localhost:8000/profile/user/${userData.uid}`,
         body
       );
       console.log("saved new recipe", response.data);
@@ -161,7 +209,7 @@ export const RecipeDetail = () => {
         recipeId: recipeId,
       };
       const response = await axios.put(
-        `http://localhost:8000/profile/user/${user.uid}`,
+        `http://localhost:8000/profile/user/${userData.uid}`,
         body
       );
       console.log("saved existing recipe", response.data);
@@ -174,29 +222,6 @@ export const RecipeDetail = () => {
     setSearchRequested(query);
   };
 
-  useEffect(() => {
-    const fetchRecipe = async () => {
-      try {
-        const recipeDoc = doc(db, "Recipe", recipeId);
-        const recipeData = await getDoc(recipeDoc);
-        if (recipeData.exists()) {
-          setRecipe(recipeData.data());
-        } else {
-          const response = await axios.post(
-            `http://localhost:8000/edamam/fetch/${recipeId}`
-          );
-          setRecipe(response.data);
-        }
-      } catch (error) {
-        console.log("Error fetching recipe: ", error);
-      }
-    };
-
-    if (recipeId) {
-      fetchRecipe();
-    }
-  }, [recipeId]);
-
   return (
     <div>
       <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit} />
@@ -205,10 +230,17 @@ export const RecipeDetail = () => {
         <button className="BackButton" onClick={onBackClick}>
           Back
         </button>
-
-        <button className="BackButton" onClick={onSaveRecipe}>
-          {isRecipeSaved ? <p>Saved</p> : <p>Save Recipe</p>}
-        </button>
+        {userData &&
+          (userData.isAdmin ? (
+            <>
+              <VerifyDeleteButton recipeId={recipeId} variant="verify" />
+              <VerifyDeleteButton recipeId={recipeId} variant="delete" />
+            </>
+          ) : (
+            <button className="BackButton" onClick={onSaveRecipe}>
+              {isRecipeSaved ? <p>Saved</p> : <p>Save Recipe</p>}
+            </button>
+          ))}
       </div>
 
       {recipe ? (
@@ -313,7 +345,7 @@ export const RecipeDetail = () => {
             </div>
             <div className="ReviewBox">
               <h2>Reviews</h2>
-              {allReviews &&
+              {allReviews.length > 0 &&
                 allReviews.map((eachReview, index) => (
                   <>
                     <div key={index} className="Comments">
@@ -362,12 +394,13 @@ export const RecipeDetail = () => {
                       />
                     </p>
                     <div className="CommentBox">
-                      <form>
+                      <form onSubmit={handleReviewSubmit}>
                         <label>
                           <b>Comment:</b>
                         </label>
                         <textarea
                           type="text"
+                          value={comment}
                           onChange={(e) => setComment(e.target.value)}
                         ></textarea>
                         <button type="submit" className="ReviewButton">
