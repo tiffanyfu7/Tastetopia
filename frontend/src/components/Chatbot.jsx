@@ -21,7 +21,7 @@ const Chatbot = () => {
       setReady(false);
     }
     if (ready) {
-      sendFirstMessage("Imagine you are a chat bot named Sue designed to assist users on a Recipe-finding platform called 'Tastetopia' , and a user is about to interact with you for the first time. From now on, you will be in conversation with the user. Welcome them to Tastetopia");
+      sendFirstMessage("Imagine you are a chat bot named Sue designed to assist users on a Recipe-finding platform called 'Tastetopia' , and a user is about to interact with you for the first time. From now on, you will be in conversation with the user. Welcome them to Tastetopia, and don't include 'Sue: ' at the beginning of your greeting.");
     }
   }, [ready]);
 
