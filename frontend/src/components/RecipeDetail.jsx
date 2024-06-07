@@ -318,7 +318,9 @@ export const RecipeDetail = () => {
                   )}
                   <div className="DietLabels">
                     <b>Diet labels: </b>
-                    {recipe.dietLabels}
+                    {recipe.dietLabels.map((label, index) => (
+                      <span key={index}>{label}{index < recipe.dietLabels.length - 1 ? ', ' : ''}</span>
+                    ))}
                   </div>
                 </div>
               </div>
