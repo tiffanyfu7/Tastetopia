@@ -19,7 +19,7 @@ export const YourCookbook = () => {
     const [savedRecipes, setSavedRecipes] = useState([]);
     const { currentUser } = useAuth()
     const [userData, setUserData] = useState(null);
-    const [done, setDone] = useState(false);
+    const [fetchedUser, setFetchedUser] = useState(false);
     const navigate = useNavigate();
 
     const fetchUser = async () => {
@@ -34,16 +34,25 @@ export const YourCookbook = () => {
             navigate('/');
         }
         fetchUser();
-        setDone(true);
+        setFetchedUser(true);
     }, [currentUser, navigate]);
 
     //add query in fetchCreatedRecipes to only get the ids that match userData.createdRecipes
     useEffect(() => {
-        if (done && userData) {
-            setCreatedRecipes(userData.createdRecipes);
-            setSavedRecipes(userData.savedRecipes);
+        if (fetchedUser && userData) {
+            const fetchRecipes = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:8000/cookbook/get-all/${currentUser.uid}`)   ;
+                    setCreatedRecipes(response.data.createdRecipes);
+                    setSavedRecipes(response.data.savedRecipes);
+                } catch (error) {
+                    console.log('Error fetching user created and saved: ', error);
+                }
+            }
+
+            fetchRecipes();
         }
-    }, [done, userData]);
+    }, [fetchedUser, userData]);
 
     const handleSearchSubmit = () => {
         setSearchRequested(true);

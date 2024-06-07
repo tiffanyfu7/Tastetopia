@@ -53,9 +53,9 @@ router.get('/get-all', async (req, res) => {
                     if (!error && response.statusCode === 200) {
                         const defaultAPIRecipes = JSON.parse(body);
                         const allRecipes = [...userRecipes, ...defaultAPIRecipes];
-                        const shuffledRecipes = shuffleArray(allRecipes);
+                        // const shuffledRecipes = shuffleArray(allRecipes);
 
-                        res.status(200).send(shuffledRecipes);
+                        res.status(200).send(allRecipes);
                     } else {
                         res.status(400).send(error);
                     }

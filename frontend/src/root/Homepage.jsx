@@ -12,13 +12,17 @@ export const Homepage = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  
+  useEffect(() => {
+    if (!currentUser) {
+        navigate('/');
+    }
+  }, [currentUser, navigate]);
+
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
   };
 
   const handleCardClick = (recipe) => {
-    setRecipe(recipe);
     navigate(`/Recipes/detail/${recipe.id}`);
   };
 
@@ -43,6 +47,15 @@ export const Homepage = () => {
     link: "/YourCookbook"
   };
 
+  const dailyDinner = {
+    category: "Dinner",
+    id:"3ca6b690ff1ac73c9950b2add2c755a0"
+  }
+
+  const dailyLunch = {
+    category: "Lunch",
+    id: "3bc095c814af01cfc5e12aa3c3bad9e6"
+  }
   return (
     <>
       <Navbar current="Home" onSearchSubmit={handleSearchSubmit} />
@@ -50,11 +63,11 @@ export const Homepage = () => {
         <h1>Welcome to Tastetopia!</h1>
 
         <div className="daily-cards-container">
-          <div onClick={() => handleCardClick(dailyLunchRecipe)}>
-            <HomepageCards cardInfo={{ category: "Lunch", id: "3bc095c814af01cfc5e12aa3c3bad9e6" }} variant="daily" />
+          <div onClick={() => handleCardClick(dailyLunch)}>
+            <HomepageCards cardInfo={dailyLunch} variant="daily" />
           </div>
-          <div onClick={() => handleCardClick(dailyDinnerRecipe)}>
-            <HomepageCards cardInfo={{ category: "Dinner", id: "3ca6b690ff1ac73c9950b2add2c755a0" }} variant="daily" />
+          <div onClick={() => handleCardClick(dailyDinner)}>
+            <HomepageCards cardInfo={dailyDinner} variant="daily" />
           </div>
         </div>
 
