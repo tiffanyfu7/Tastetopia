@@ -28,7 +28,7 @@
     font-size: 20px;
     font-weight: 600;
     color: #FF9800;
-    margin-top: 30px;
+    margin: 35px 0px 0px -15px;
 }
 
 .toggle-button {
@@ -47,6 +47,7 @@
     margin-top: 30px;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
+    width: 95vw;
 }
 @media (max-width: 1300px) {
     .list-recipes-container {

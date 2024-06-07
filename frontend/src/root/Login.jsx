@@ -51,7 +51,7 @@ export const Login = () => {
             <div className='login-body'>
                 <div className='login-main'>
                     <div className='login-main-header'>
-                        <h1>Login</h1>
+                        <h1>Enter Tastetopia</h1>
                     </div>
                     <div className='login-boxes'>
                         <input value={email} placeholder='Email' onChange={handleChangeEmail} />
