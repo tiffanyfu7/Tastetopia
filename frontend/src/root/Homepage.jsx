@@ -12,7 +12,12 @@ export const Homepage = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  
+  useEffect(() => {
+    if (!currentUser) {
+        navigate('/');
+    }
+  }, [currentUser, navigate]);
+
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
   };
