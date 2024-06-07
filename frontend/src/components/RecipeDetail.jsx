@@ -18,7 +18,7 @@ export const RecipeDetail = () => {
   const [comment, setComment] = useState("");
   const [allReviews, setAllReviews] = useState([]);
   const [numReviews, setNumReviews] = useState(0);
-  const [avgReview, setAvgReviews] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
   const [rating, setRating] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [isRecipeSaved, setRecipeSaved] = useState(false);
@@ -55,42 +55,19 @@ export const RecipeDetail = () => {
     }
   };
 
-  const fetchRating = () => {
-    console.log('numReviews', numReviews)
-    console.log('avgReviews', avgReview)
-    if(recipe.reviews.length > 0){
-      setNumReviews(recipe.reviews.length);
-      console.log('reviews num', recipe.reviews.length)
-
-      let sumReviews = 0;
-      (recipe.reviews).map((review) => sumReviews += review);
-      const avg = (sumReviews / numReviews).toFixed(2);
-      setAvgReviews('avg rating', avg);
-      console.log(avg);
-    }
-  }
-
 
   const fetchReviews = async () => {
-    console.log('numReviews', numReviews)
-    console.log('avgReviews', avgReview)
     const response = await axios.get(
       `http://localhost:8000/recipe/${recipeId}`
     );
     if (response.data) {
       console.log("review response", response.data);
-      if (response.data.reviews) {
-        setAllReviews(response.data.reviews);
-        if(response.data.reviews.length > 0){
-          setNumReviews(recipe.reviews.length);
-          console.log('reviews num', recipe.reviews.length)
-    
-          let sumReviews = 0;
-          (recipe.reviews).map((review) => sumReviews += review);
-          const avg = (sumReviews / numReviews).toFixed(2);
-          setAvgReviews('avg rating', avg);
-          console.log(avg);
-        }
+      setAllReviews(response.data.reviews);
+      setNumReviews(response.data.reviews.length);
+
+      if (response.data.rating) {
+        console.log("cur avg rating", response.data.rating);
+        setAvgRating(response.data.rating);
       }
     }
   };
@@ -99,23 +76,23 @@ export const RecipeDetail = () => {
     fetchReviews();
   }, [recipe]);
 
-
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const recipeDoc = doc(db, 'Recipe', recipeId);
+        const recipeDoc = doc(db, "Recipe", recipeId);
         const recipeData = await getDoc(recipeDoc);
         if (recipeData.exists()) {
           setRecipe(recipeData.data());
         } else {
-          const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+          const response = await axios.post(
+            `http://localhost:8000/edamam/fetch/${recipeId}`
+          );
           setRecipe(response.data);
         }
       } catch (error) {
-        console.log('Error fetching recipe: ', error);
+        console.log("Error fetching recipe: ", error);
       }
     };
-
 
     if (recipeId) {
       fetchRecipe();
@@ -124,7 +101,6 @@ export const RecipeDetail = () => {
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-
 
     const newReview = {
       username: userData.name,
@@ -155,8 +131,6 @@ export const RecipeDetail = () => {
       );
 
       setAllReviews(response.data.reviews);
-
-      
     } else {
       console.log("recipeId", recipeId);
 
@@ -166,16 +140,14 @@ export const RecipeDetail = () => {
           newReview
         );
         setAllReviews(postResponse.data);
-
       } catch (e) {
         console.error("can't post review on existing recipe", e.message);
       }
     }
 
-
     fetchReviews();
-    setRating(0);
     setComment("");
+    setRating(0);
   };
 
   const onBackClick = () => {
@@ -254,7 +226,8 @@ export const RecipeDetail = () => {
           Back
         </button>
         {userData &&
-          (userData.isAdmin ? (
+          recipe &&
+          (userData.isAdmin && recipe.verified == false ? (
             <>
               <VerifyDeleteButton recipeId={recipeId} variant="verify" />
               <VerifyDeleteButton recipeId={recipeId} variant="delete" />
@@ -302,16 +275,17 @@ export const RecipeDetail = () => {
               </div>
 
               <div className="RecipeHeaderDetails">
+                
                 <div className="Rating">
                   <Rating
                     name="half-rating-read"
-                    defaultValue={recipe.rating}
+                    defaultValue={avgRating || 0}
                     precision={0.5}
                     readOnly
                     className="Ratings"
                   />
                   <p style={{ margin: "0px 0px 20px 25px" }}>
-                    5 from 43 reviews
+                  {avgRating && numReviews ? `${avgRating} from ${numReviews} reviews` : '0 from 0'}          
                   </p>
                 </div>
               </div>

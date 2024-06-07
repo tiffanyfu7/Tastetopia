@@ -119,6 +119,7 @@
 
 .chatButton {
   background-color: #d9edbf;
+  color: black;
   border-radius: 10px;
   border:none;
 }
