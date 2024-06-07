@@ -1,6 +1,6 @@
 import express from 'express';
 import { db, storage } from './firebase.js';
-import { collection, doc, addDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, addDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,12 +31,21 @@ router.post('/uploadImage', async (req, res) => {
 router.post('/:id', async (req, res) => {
     try {
         const recipeData = req.body;
-        const id = req.params.id;
-        const recipeRef = await setDoc(doc(db, "Recipe"), recipeData);
-        const userRef = doc(db, "Users", id);
-        await updateDoc(userRef, {
-            createdRecipes: arrayUnion(recipeRef.id)
-        });
+        const uid = req.params.id;
+        const recipeRef = await addDoc(collection(db, "Recipe"), recipeData);
+        const userDocRef = doc(db, "Users", uid);
+        const userDoc = await getDoc(userDocRef);
+
+        const curCreated = userDoc.data().createdRecipes;
+        const newCreated = [...curCreated, recipeRef.id];
+
+        try{
+            await updateDoc(userDocRef, {
+                createdRecipes: newCreated
+            })
+        } catch(e) {
+            console.error('cant save recipe', e.message);
+        }
 
         res.status(200).json({ message: 'Recipe created successfully', recipeId: recipeRef.id });
     } catch (error) {

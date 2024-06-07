@@ -63,30 +63,31 @@ export const CreateRecipe = () => {
             }
         }
     
-        const recipeData = {
-            title,
-            author,
-            image: imageUrl,
-            totalTime: Number(totalTime),
-            yield: Number(yieldAmount),
-            cuisineType: cuisineType.split(',').map(type => type.trim()),
-            dietLabels: dietLabels.split(',').map(label => label.trim()),
-            healthLabels: healthLabels.split(',').map(label => label.trim()),
-            ingredients: ingredients.map(ingredient => `${ingredient.name}: ${ingredient.quantity}`),
-            instructions: instructions.split('.').map(instr => instr.trim()),
-            calories: Number(calories),
-            fat: Number(fat),
-            carbs: Number(carbs),
-            protein: Number(protein),
-            avgRating: 0,
-            reviews: {},
-            uri: null,
-            verified: false,
-        };
-    
         try {
-            const id = currentUser.uid;
-            const recipeResponse = await axios.post(`http://localhost:8000/createRecipe/${id}`, recipeData);
+
+            const recipeData = {
+                title,
+                author,
+                image: imageUrl,
+                totalTime: Number(totalTime),
+                yield: Number(yieldAmount),
+                cuisineType: cuisineType.split(',').map(type => type.trim()),
+                dietLabels: dietLabels.split(',').map(label => label.trim()),
+                healthLabels: healthLabels.split(',').map(label => label.trim()),
+                ingredients: ingredients.map(ingredient => `${ingredient.name}: ${ingredient.quantity}`),
+                instructions: instructions.split('.').map(instr => instr.trim()),
+                calories: Number(calories),
+                fat: Number(fat),
+                carbs: Number(carbs),
+                protein: Number(protein),
+                avgRating: 0,
+                reviews: {},
+                uri: null,
+                verified: false,
+            };
+
+            console.log(recipeData);
+            const recipeResponse = await axios.post(`http://localhost:8000/createRecipe/${currentUser.uid}`, recipeData);
     
             console.log('Recipe submitted:', recipeResponse.data);
     
@@ -110,56 +111,6 @@ export const CreateRecipe = () => {
             console.error('Error adding document: ', error);
         }
     };
-
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();
-
-    //     try {
-    //         const recipeData = {
-    //             title,
-    //             author,
-    //             image: image ? URL.createObjectURL(image) : null,
-    //             totalTime: Number(totalTime),
-    //             yield: Number(yieldAmount),
-    //             cuisineType: cuisineType.split(',').map(type => type.trim()),
-    //             dietLabels: dietLabels.split(',').map(label => label.trim()),
-    //             healthLabels: healthLabels.split(',').map(label => label.trim()),
-    //             ingredients: ingredients.map(ingredient => `${ingredient.name}: ${ingredient.quantity}`),
-    //             instructions: instructions.split('.').map(instr => instr.trim()),
-    //             calories: Number(calories),
-    //             fat: Number(fat),
-    //             carbs: Number(carbs),
-    //             protein: Number(protein),
-    //             avgRating: 0,
-    //             reviews: {},
-    //             uri: null,
-    //             verified: false,
-    //         };
-
-    //         const response = await axios.post('http://localhost:8000/api/recipe/create', recipeData);
-    //         console.log('Recipe submitted:', recipeData);
-
-    //         setTitle('');
-    //         setAuthor('');
-    //         setImage(null);
-    //         setTotalTime('');
-    //         setYieldAmount('');
-    //         setCuisineType('');
-    //         setDietLabels('');
-    //         setHealthLabels('');
-    //         setIngredients([{ name: '', quantity: '' }]);
-    //         setInstructions('');
-    //         setCalories('');
-    //         setFat('');
-    //         setCarbs('');
-    //         setProtein('');
-
-    //         navigate('/YourCookbook');
-    //     } catch (error) {
-    //         console.error('Error adding document: ', error);
-    //     }
-    // };
-
 
     return (
         <>
