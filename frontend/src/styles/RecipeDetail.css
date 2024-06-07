@@ -119,14 +119,13 @@
 
 .chatButton {
   background-color: #d9edbf;
+  color: black;
   border-radius: 10px;
   border:none;
 }
 
 .ReviewBox{
   background-color: #90d26d;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   border-radius: 25px;
   padding: 20px;
@@ -139,11 +138,19 @@
   background-color: #d9edbf;
   border-radius: 25px;
   padding: 15px;
+  margin: 10px;
+}
+
+.CommentHeader{
+  display: flex;
+  flex-direction: row;
 }
 
 .Profile{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-content: start;
+  justify-content: flex-start;
 }
 
 .ReviewButton{
@@ -156,9 +163,15 @@
   margin: 25px;
 }
 
+.ReviewButton:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .LeftSide {
   overflow-y: scroll;
-  height: 680px;
+  height: 75vh;
   width: 800px;
   margin-right: 20px;
   padding-right: 20px;

@@ -15,6 +15,8 @@ export const Recipes = () => {
   // const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [apiRecipes, setAPIRecipes] = useState([]);
   const [recipes, setRecipes] = useState([]);
+  const [numReviews, setNumReviews] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
   const navigate = useNavigate();
 
   const showTypes = ["All","Vegetarian","<15 Minutes", "Halal", "Mexican"]
@@ -44,6 +46,7 @@ const getDefaultRecipes = async () => {
   try {
     const response = await axios.get('http://localhost:8000/explore/get-all');
     setRecipes(response.data);
+    console.log('response.data', response.data);
   } catch (error) {
     console.log('Error fetching default recipes: ', error);
   }

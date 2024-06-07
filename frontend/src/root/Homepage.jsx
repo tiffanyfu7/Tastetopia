@@ -22,30 +22,6 @@ export const Homepage = () => {
     navigate(`/Recipes/detail/${recipe.id}`);
   };
 
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!currentUser) {
-        navigate('/');
-    }
-  }, [currentUser, navigate]);
-
-  const dailyLunchRecipe = {
-    id: "f21e59098088407c86c61077de24c6be",
-    image: "https://images.food52.com/EbkY_HsbxffSaNQJ7fnDxW9_P_Q=/2016x1344/filters:format(webp)/5ac51c26-7432-4c72-a0a0-69f7617c714a--dandelion_a.jpg",
-    title: "Pasta with Dandelion Greens",
-    author: "Food52",
-    rating: 4.5,
-    totalTime: "Total time not provided.",
-  };
-
-  const dailyDinnerRecipe = {
-    id: "b2c00994499f1db95fa5fe614468adf2",
-    image: "https://images.food52.com/DzCh8_7xfNX4HINmKseK0f0yQMI=/1200x900/1ace7759-fedd-42b6-99fd-d58c9b212b07--IMG_6095.jpg",
-    title: "Pink Walnut Pasta",
-    author: "Food52",
-    rating: 4.5,
-  };
-
   const exploreCard = {
     image: "https://richanddelish.com/wp-content/uploads/2022/03/marble-loaf-cake.png",
     title: "Go To Explore",
@@ -75,10 +51,10 @@ export const Homepage = () => {
 
         <div className="daily-cards-container">
           <div onClick={() => handleCardClick(dailyLunchRecipe)}>
-            <HomepageCards cardInfo={{ category: "Lunch", recipe: dailyLunchRecipe }} variant="daily" />
+            <HomepageCards cardInfo={{ category: "Lunch", id: "3bc095c814af01cfc5e12aa3c3bad9e6" }} variant="daily" />
           </div>
           <div onClick={() => handleCardClick(dailyDinnerRecipe)}>
-            <HomepageCards cardInfo={{ category: "Dinner", recipe: dailyDinnerRecipe }} variant="daily" />
+            <HomepageCards cardInfo={{ category: "Dinner", id: "3ca6b690ff1ac73c9950b2add2c755a0" }} variant="daily" />
           </div>
         </div>
 

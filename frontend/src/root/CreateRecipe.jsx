@@ -16,11 +16,27 @@ export const CreateRecipe = () => {
     const [dietLabels, setDietLabels] = useState('');
     const [healthLabels, setHealthLabels] = useState('');
     const [ingredients, setIngredients] = useState([{ name: '', quantity: '' }]);
-    const [instructions, setInstructions] = useState('');
+    const [instructions, setInstructions] = useState([{ text: '' }]);
     const [calories, setCalories] = useState('');
     const [fat, setFat] = useState('');
     const [carbs, setCarbs] = useState('');
     const [protein, setProtein] = useState('');
+
+    const handleInstructionChange = (index, event) => {
+        const values = [...instructions];
+        values[index][event.target.name] = event.target.value;
+        setInstructions(values);
+    }
+
+    const handleAddInstruction = () => {
+        setInstructions([...instructions, { text: '' }])
+    }
+
+    const handleDeleteInstruction = (index) => {
+        const values = [...instructions];
+        values.splice(index, 1);
+        setInstructions(values);
+    }
 
     const handleIngredientChange = (index, event) => {
         const values = [...ingredients];
@@ -100,7 +116,7 @@ export const CreateRecipe = () => {
             setDietLabels('');
             setHealthLabels('');
             setIngredients([{ name: '', quantity: '' }]);
-            setInstructions('');
+            setInstructions([{ text: '' }]);
             setCalories('');
             setFat('');
             setCarbs('');
@@ -145,6 +161,8 @@ export const CreateRecipe = () => {
                             <label>Yield</label>
                             <input type="number" placeholder="Ex. 4" value={yieldAmount} onChange={(e) => setYieldAmount(e.target.value)} />
                         </div>
+                    </div>
+                    <div className="form-section ingredients-instructions-section">
                         <div className="form-group">
                             <label>Cuisine Type (comma-separated)</label>
                             <input type="text" placeholder="Ex. Italian, Mexican" value={cuisineType} onChange={(e) => setCuisineType(e.target.value)} />
@@ -157,8 +175,6 @@ export const CreateRecipe = () => {
                             <label>Health Labels (comma-separated)</label>
                             <input type="text" placeholder="Ex. Gluten-Free, Dairy-Free" value={healthLabels} onChange={(e) => setHealthLabels(e.target.value)} />
                         </div>
-                    </div>
-                    <div className="form-section ingredients-instructions-section">
                         <div className="form-group">
                             <div className="additional-info">
                                 <div className="form-group">
@@ -178,39 +194,60 @@ export const CreateRecipe = () => {
                                     <input type="number" placeholder="Ex. 30" value={protein} onChange={(e) => setProtein(e.target.value)} />
                                 </div>
                             </div> 
-                            <label>Ingredients</label>
+                        </div>
+                        {/* <div className="form-group">
+                        </div> */}
+                    </div>
+                    <div className='form-section'>
+                        <label>Ingredients</label>
                             <div className="ingredients-list">
-                                {ingredients.map((ingredient, index) => (
-                                    <div key={index} className="ingredient-input">
-                                        <input
-                                            type="text"
-                                            placeholder="Ingredient"
-                                            name="name"
-                                            value={ingredient.name}
-                                            onChange={(e) => handleIngredientChange(index, e)}
-                                        required/>
-                                        <input
-                                            type="text"
-                                            placeholder="Quantity"
-                                            name="quantity"
-                                            value={ingredient.quantity}
-                                            onChange={(e) => handleIngredientChange(index, e)}
-                                        required/>
-                                        <button type="button" onClick={() => handleDeleteIngredient(index)} className="delete-button">Delete</button>
-                                    </div>
-                                ))}
-                                <button type="button" onClick={handleAddIngredient} className="add-ingredient-button">Add new ingredient</button>
+                                    {ingredients.map((ingredient, index) => (
+                                        <div key={index} className="ingredient-input">
+                                            <input
+                                                type="text"
+                                                placeholder="Ingredient"
+                                                name="name"
+                                                value={ingredient.name}
+                                                onChange={(e) => handleIngredientChange(index, e)}
+                                            required/>
+                                            <input
+                                                type="text"
+                                                placeholder="Quantity"
+                                                name="quantity"
+                                                value={ingredient.quantity}
+                                                onChange={(e) => handleIngredientChange(index, e)}
+                                            required/>
+                                            <button type="button" onClick={() => handleDeleteIngredient(index)} className="delete-button">Delete</button>
+                                        </div>
+                                    ))}
+                                    <button type="button" onClick={handleAddIngredient} className="add-ingredient-button">Add new ingredient</button>
                             </div>
                         </div>
-                        <div className="form-group">
-                            <label>Instructions (period-separated)</label>
-                            <textarea
-                                placeholder="Ex. Step 1. Step 2. Step 3."
-                                value={instructions}
-                                rows="9"    
-                                onChange={(e) => setInstructions(e.target.value)}
-                            ></textarea>
+                    <div className='form-section'>
+                        <label>Instructions</label>
+                        <div className='ingredients-list'>
+                            {instructions.map((instruction, index) => (
+                                <div key={index} className='ingredient-input'>
+                                    <input
+                                        type='text'
+                                        name='text'
+                                        value={instruction.text}
+                                        placeholder='Ex. Pan fry the veggies for two minutes'
+                                        onChange={(e) => handleInstructionChange(index, e)}
+                                        required
+                                    />
+                                    <button type="button" onClick={() => handleDeleteInstruction(index)} className="delete-button">Delete</button>
+                                </div>
+                            ))}
+                            <button type='button' onClick={handleAddInstruction} className='add-ingredient-button'>Add new step</button>
                         </div>
+                        {/* <label>Instructions (period-separated)</label>
+                        <textarea
+                            placeholder="Ex. Step 1. Step 2. Step 3."
+                            value={instructions}
+                            rows="9"    
+                            onChange={(e) => setInstructions(e.target.value)}
+                        ></textarea> */}
                     </div>
                 </div> 
                 <div style={{textAlign: "center"}}>  
