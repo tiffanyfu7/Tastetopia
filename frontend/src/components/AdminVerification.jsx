@@ -31,7 +31,7 @@ const AdminVerification = () => {
                             <RecipeCard
                                 key={i}
                                 recipe={recipe}
-                                variant="basic"
+                                variant="verify"
                                 onClick={() => handleCardClick(recipe)}
                             /> : null
                     ))

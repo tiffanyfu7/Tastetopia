@@ -51,6 +51,30 @@ router.get("/:id", async (req,res) => {
     }
 })
 
+// Verify a recipe
+router.put("/verify/:id", async (req,res) => {
+    try{
+        const recipeId = req.body.id;
+        const docRef = await setDoc(doc(db, "Recipe", recipeId), {
+            verified: true
+        })
+        res.status(200).json(docRef)  
+    } catch(e) {
+        res.status(400).json({error: "Error fetching recipe data"})  
+    }
+})
+
+// Delete a recipe
+router.put("/delete/:id", async (req,res) => {
+    try{
+        const recipeId = req.body.id;
+        const docRef = await deleteDoc(doc(db, "Recipe", recipeId))
+        res.status(200).json(docRef)
+    } catch(e) {
+        res.status(400).json({error: "Error fetching recipe data"})  
+    }
+})
+
 // Adding a recipe
 router.post("/", async (req,res) => {
     try{
