@@ -1,8 +1,10 @@
 import { Rating, Stack } from '@mui/material'
 import React from 'react'
 import { LIGHTGREEN, GREEN } from '../main'
+import VerifyDeleteButton from './VerifyDeleteButton';
 
-const RecipeCard = ({ recipe, onClick, variant}) => {
+const RecipeCard = ({ recipe, onClick, variant }) => {
+  // console.log(recipe);
   return (
     <>
       {/* Basic Card Display for Discover Page */}
@@ -10,11 +12,27 @@ const RecipeCard = ({ recipe, onClick, variant}) => {
         <div className="recipe-card card"
           style={{ backgroundColor: recipe.uri != null ? GREEN : LIGHTGREEN }}
           onClick={onClick}
-      >
+        >
           <img className="recipe-card-image" src={recipe.image} alt={recipe.title} />
           <p className="recipe-card-title">{recipe.title}</p>
           <p className="recipe-card-author">{recipe.author}</p>
           <Rating name="half-rating-read" defaultValue={recipe.rating} precision={0.5} readOnly />
+        </div>
+      }
+
+      {/* Variant with Quick Action Button */}
+      {variant == "verify" &&
+        <div className="recipe-card card"
+          style={{ backgroundColor: LIGHTGREEN, height: "320px"}}
+        >
+          <img className="recipe-card-image" src={recipe.image} alt={recipe.title} />
+          <p className="recipe-card-title">{recipe.title}</p>
+          <p className="recipe-card-author">{recipe.author}</p>
+          <button onClick={onClick} id="details-button">See Details</button>
+          <div style={{ display: "inline-flex", justifyContent: "space-evenly", margin: "-10px 0px 0px -10px" }}>
+            <VerifyDeleteButton recipeId={recipe.id} variant="verify" />
+            <VerifyDeleteButton recipeId={recipe.id} variant="delete"/>
+          </div>
         </div>
       }
     </>

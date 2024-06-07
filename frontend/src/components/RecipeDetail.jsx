@@ -3,10 +3,14 @@ import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
 import { QueryContext } from "./QueryContext.jsx";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { Navbar } from "./Navbar.jsx";
-import axios from "axios";
+import axios from 'axios';
+import { RecipeContext } from "./RecipeContext.jsx";
 import { UserContext } from "../components/UserContext.jsx";
+
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -14,11 +18,12 @@ export const RecipeDetail = () => {
   const [comment, setComment] = useState("");
   const [allReviews, setAllReviews] = useState([]);
   const [rating, setRating] = useState(null);
-  const [recipe, setRecipe] = useState(null);
+  const { recipe } = useContext(RecipeContext);
   const [isRecipeSaved, setRecipeSaved] = useState(false);
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
   const recipeId = useParams().id;
+
   const { user } = useContext(UserContext);
   const [userData, setUserData] = useState(null);
 
@@ -35,6 +40,7 @@ export const RecipeDetail = () => {
       return `${hours} ${hours > 1 ? "hrs" : "hr"} and ${minutes} mins`;
     }
   };
+
 
   const formatNutrient = (value) => {
     if (value === 0) {
@@ -108,6 +114,11 @@ export const RecipeDetail = () => {
   };
 
   const onBackClick = () => {
+    navigate(-1);
+  }
+
+
+
     navigate(`/Recipes/${searchRequested}`);
   };
 
@@ -170,20 +181,27 @@ export const RecipeDetail = () => {
   };
 
   useEffect(() => {
-    const fetchAPIRecipe = async () => {
+    const fetchRecipe = async () => {
       try {
-        const response = await axios.post(
-          `http://localhost:8000/edamam/fetch/${recipeId}`
-        );
-        setRecipe(response.data);
+        const recipeDoc = doc(db, 'Recipe', recipeId);
+        const recipeData = await getDoc(recipeDoc);
+        if (recipeData.exists()) {
+          setRecipe(recipeData.data());
+        } else {
+          const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+          setRecipe(response.data);
+        }
       } catch (error) {
-        console.log("Error fetching recipe from Edamam: ", error);
+        console.log('Error fetching recipe: ', error);
       }
     };
+
+
     if (recipeId) {
-      fetchAPIRecipe();
+      fetchRecipe();
     }
   }, [recipeId]);
+
 
   return (
     <>
@@ -210,22 +228,30 @@ export const RecipeDetail = () => {
                   className="RecipeImg"
                 ></img>
 
+
                 <div className="RecipeHeaderText">
-                  <h2>{recipe.title}</h2>
-                  <h4>{recipe.author}</h4>
+                  <h2 style={{textAlign: "left", color: "black"}}>{recipe.title}</h2>
+                  <h4>By {recipe.author}</h4>
                   <p>
                     <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
                   </p>
                   <p>
-                    <b>Yield:</b>
-                    {recipe.yield}
+                    <b>Yield:</b> {recipe.yield}
                   </p>
-                  <p>
-                    <b>Full Recipe:</b>
-                    <a href={recipe.sourceURL}>{recipe.author}</a>
-                  </p>
+                  {recipe.sourceURL && (
+                    <p>
+                      <b>Full Recipe:</b>
+                      <a href={recipe.sourceURL}>{recipe.author}</a>
+                    </p>
+                    
+                  )}
+                  <div className="DietLabels">
+                    <b>Diet labels: </b>
+                    {recipe.dietLabels}
+                  </div>
                 </div>
               </div>
+
 
               <div className="RecipeHeaderDetails">
                 <div className="Rating">
@@ -236,14 +262,13 @@ export const RecipeDetail = () => {
                     readOnly
                     className="Ratings"
                   />
-                  <p>5 from 43 reviews</p>
+                  <p style={{margin: "0px 0px 20px 25px"}}>5 from 43 reviews</p>
                 </div>
 
-                <div className="DietLabels">
-                  <b>Diet labels: </b>
-                  {recipe.dietLabels}
-                </div>
+
+                
               </div>
+
 
               <div className="RecipeDetailTextBox">
                 <div className="Ingredients">
@@ -254,9 +279,16 @@ export const RecipeDetail = () => {
                     ))}
                   </ul>
                 </div>
-                <p>
-                  <b>Preparation:</b>
-                </p>
+                {recipe.instructions && (
+                  <>
+                    <p><b>Preparation:</b></p>
+                    <ol>
+                      {recipe.instructions.map((instruction, index) => (
+                        <li key={index}>{instruction}</li>
+                      ))}
+                    </ol>
+                  </>
+                )}
                 <div className="HorizontalRecipeText">
                   <div className="HealthLabels">
                     <h4>Health Labels: </h4>
@@ -337,19 +369,22 @@ export const RecipeDetail = () => {
                       />
                     </p>
                     <div className="CommentBox">
-                      <form onSubmit={handleReviewSubmit}>
+
+
+                      <form>
                         <label>
                           <b>Comment:</b>
                         </label>
-                        <textarea
-                          type="text"
-                          value={comment}
-                          onChange={(e) => setComment(e.target.value)}
-                        ></textarea>
-                        <button type="submit" className="ReviewButton">
+                        <textarea type='text' onChange={(e) => setComment(e.target.value)}>
+
+
+                        </textarea>
+                        <button type='submit' className="ReviewButton">
                           Post
                         </button>
                       </form>
+
+
                     </div>
                   </div>
                 ) : (
@@ -363,6 +398,7 @@ export const RecipeDetail = () => {
               </div>
             </div>
           </div>
+
 
           <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
             <div className="ChatHeader">
@@ -385,9 +421,7 @@ export const RecipeDetail = () => {
             )}
           </div>
         </div>
-      ) : (
-        ""
-      )}
+        : ''}
     </>
   );
 };

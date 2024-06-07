@@ -15,7 +15,7 @@ import {
 dotenv.config();
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+// Fetch all recipesrouter.get("/", async (req, res) => {
   try {
     const ret = [];
 
@@ -39,6 +39,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Fetch specific recipe through docID
 router.get("/:id", async (req, res) => {
   try {
     const recipeId = req.params.id;
@@ -56,7 +57,31 @@ router.get("/:id", async (req, res) => {
     res.status(400).json({ error: "Error fetching recipe data" });
   }
 });
+// Verify a recipe
+router.put("/verify/:id", async (req,res) => {
+    try{
+        const recipeId = req.body.id;
+        const docRef = await setDoc(doc(db, "Recipe", recipeId), {
+            verified: true
+        })
+        res.status(200).json(docRef)  
+    } catch(e) {
+        res.status(400).json({error: "Error fetching recipe data"})  
+    }
+})
 
+// Delete a recipe
+router.put("/delete/:id", async (req,res) => {
+    try{
+        const recipeId = req.body.id;
+        const docRef = await deleteDoc(doc(db, "Recipe", recipeId))
+        res.status(200).json(docRef)
+    } catch(e) {
+        res.status(400).json({error: "Error fetching recipe data"})  
+    }
+})
+
+// Adding a recipe
 router.post("/", async (req, res) => {
   try {
     const recipeToAdd = req.body;
@@ -71,6 +96,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Adding a review?
 router.post("/:id", async (req, res) => {
   try {
     const docId = req.params.id;

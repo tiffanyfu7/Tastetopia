@@ -1,7 +1,5 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
   background-color: white;
   padding: 10px;
 }
@@ -21,6 +19,10 @@ h1 {
 }
 
 .page-container {
+  /* background-color: blue;
+  overflow-y: auto;
+  width: 1300px; */ 
+
   padding: 10px;
   margin: 65px 0px 20px 0px;
 }
@@ -43,6 +45,7 @@ button {
   color: white;
   height: 40px;
   border-radius: 20px;
+  padding: 5px 10px 5px 10px;
 }
 
 button:hover {

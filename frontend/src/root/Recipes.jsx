@@ -20,8 +20,10 @@ export const Recipes = () => {
   const showTypes = ["All","Vegetarian","<15 Minutes", "Halal", "Mexican"]
 
   useEffect(() => {
-    if (searchRequested) {
+    if (searchRequested !== 'q=') {
       searchEdamam();
+    } else {
+      getDefaultRecipes();
     }
   }, [searchRequested]);
 
@@ -36,6 +38,15 @@ export const Recipes = () => {
     } catch (error) {
         console.log('Error searching Edamam: ', error);
     }
+}
+
+const getDefaultRecipes = async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/explore/get-all');
+    setRecipes(response.data);
+  } catch (error) {
+    console.log('Error fetching default recipes: ', error);
+  }
 }
 
   const handleCardClick = (recipe) => {
