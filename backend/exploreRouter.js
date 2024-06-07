@@ -12,6 +12,36 @@ const shuffleArray = (array) => {
     return array;
   };
 
+router.post('/search-all', async (req, res) => {
+    try {
+        const q = req.body.q;
+
+        request.post({
+            url: 'http://localhost:8000/edamam/search',
+            json: true,
+            body: { q: q}
+        }, function (error, response, body) {  
+            if (!error && response.statusCode === 200) {
+                const apiResults = body;
+
+                request.get('http://localhost:8000/explore/get-user-recipes', function (error, response, body) {
+                    if (!error && response.statusCode === 200) {
+                        const filteredRecipes = JSON.parse(body).filter((recipe) => recipe.title.toLowerCase().includes(q.toLowerCase()));
+                        const allRecipes = [...filteredRecipes, ...apiResults];
+                        res.status(200).send(allRecipes);
+                    } else {
+                        res.status(400).send(error);
+                    }
+                });
+            } else {
+                res.status(400).send(error);
+            }
+        });
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
 router.get('/get-all', async (req, res) => {
     try {
         request.get('http://localhost:8000/explore/get-user-recipes', function (error, response, body) {
