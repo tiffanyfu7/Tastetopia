@@ -97,7 +97,7 @@ export const RecipeDetail = () => {
 
   useEffect(() => {
     fetchReviews();
-  }, [recipe.id]);
+  }, [recipe]);
 
 
   useEffect(() => {
@@ -136,7 +136,7 @@ export const RecipeDetail = () => {
 
     const ids = [];
     allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
-    const curRecipeExist = ids.includes(recipe.id);
+    const curRecipeExist = ids.includes(recipeId);
 
     // if api recipe not present in db
     if (!curRecipeExist) {
@@ -158,11 +158,11 @@ export const RecipeDetail = () => {
 
       
     } else {
-      console.log("recipe.id", recipe.id);
+      console.log("recipeId", recipeId);
 
       try {
         const postResponse = await axios.post(
-          `http://localhost:8000/recipe/${recipe.id}`,
+          `http://localhost:8000/recipe/${recipeId}`,
           newReview
         );
         setAllReviews(postResponse.data);
@@ -208,7 +208,7 @@ export const RecipeDetail = () => {
     const allRecipes = await axios.get(`http://localhost:8000/recipe/`);
     const ids = [];
     allRecipes.data.map((eachRecipe) => ids.push(eachRecipe.id));
-    const curRecipeExist = ids.includes(recipe.id);
+    const curRecipeExist = ids.includes(recipeId);
 
     // if api recipe not present in db
     if (!curRecipeExist) {
