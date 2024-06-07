@@ -21,6 +21,7 @@ export const RecipeDetail = () => {
   const [avgRating, setAvgRating] = useState(0);
   const [rating, setRating] = useState(null);
   const [recipe, setRecipe] = useState(null);
+  const [error, setError] = useState("");
   const [isRecipeSaved, setRecipeSaved] = useState(false);
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
@@ -54,7 +55,6 @@ export const RecipeDetail = () => {
       return `${value.toFixed(0)}g`;
     }
   };
-
 
   const fetchReviews = async () => {
     const response = await axios.get(
@@ -113,6 +113,18 @@ export const RecipeDetail = () => {
     const ids = [];
     allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
     const curRecipeExist = ids.includes(recipeId);
+
+    // Validation logic
+    if (rating === 0) {
+      setError("Rating cannot be 0.");
+      return;
+    }
+    if (comment.trim() === "") {
+      setError("Comment cannot be empty.");
+      return;
+    }
+    // Clear error if validation passes
+    setError("");
 
     // if api recipe not present in db
     if (!curRecipeExist) {
@@ -275,18 +287,23 @@ export const RecipeDetail = () => {
               </div>
 
               <div className="RecipeHeaderDetails">
-                
                 <div className="Rating">
-                  <Rating
-                    name="half-rating-read"
-                    defaultValue={avgRating || 0}
-                    precision={0.5}
-                    readOnly
-                    className="Ratings"
-                  />
-                  <p style={{ margin: "0px 0px 20px 25px" }}>
-                  {avgRating && numReviews ? `${avgRating} from ${numReviews} reviews` : '0 from 0'}          
-                  </p>
+                  {avgRating && (
+                    <>
+                      <Rating
+                        name="simple-controlled"
+                        defaultValue={Number(avgRating) || 0}
+                        precision={0.1}
+                        readOnly
+                        className="Ratings"
+                      />
+                      <p style={{ margin: "0px 0px 20px 25px" }}>
+                        {numReviews
+                          ? `${avgRating} from ${numReviews} reviews`
+                          : "0 from 0"}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -343,20 +360,18 @@ export const RecipeDetail = () => {
             <div className="ReviewBox">
               <h2>Reviews</h2>
               {allReviews.length > 0 &&
+                userData &&
                 allReviews.map((eachReview, index) => (
-                  <>
-                    <div key={index} className="Comments">
-                      <div className="CommentHeader">
-                        <div className="Profile">
-                          <img
-                            alt="profilepic"
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD2gT_WaagxlD08ouISiuXGA3Q5ggEc1ZVjg&s"
-                            width="50px"
-                          ></img>
-                          <p style={{ margin: "5px" }}>
-                            @{eachReview.username}
-                          </p>
-                        </div>
+                  <div key={index} className="Comments">
+                    <div className="CommentHeader">
+                      <img
+                        alt="profilepic"
+                        src={userData.profilePictureUrl}
+                        width="50px"
+                      ></img>
+                      <div className="Profile">
+                        <p style={{ margin: "5px" }}>@{eachReview.username}</p>
+
                         <Rating
                           name="half-rating-read"
                           defaultValue={eachReview.rating}
@@ -366,9 +381,9 @@ export const RecipeDetail = () => {
                           style={{ marginRight: "5px" }}
                         />
                       </div>
-                      <p>{eachReview.comment}</p>
                     </div>
-                  </>
+                    <p>{eachReview.comment}</p>
+                  </div>
                 ))}
 
               <div
@@ -400,7 +415,11 @@ export const RecipeDetail = () => {
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
                         ></textarea>
-                        <button type="submit" className="ReviewButton">
+                        <button
+                          type="submit"
+                          className="ReviewButton"
+                          disabled={rating === 0 || comment.trim() === ""}
+                        >
                           Post
                         </button>
                       </form>
