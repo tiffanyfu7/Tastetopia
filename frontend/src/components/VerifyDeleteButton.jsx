@@ -47,7 +47,7 @@ const VerifyDeleteButton = ({ recipeId, variant }) => {
                     <button style={{ backgroundColor: "green" }} disabled>Verified</button>
                 ) : (!clicked ?
                     <button onClick={() => handleDelete()}>Delete</button> :
-                    <button style={{ backgroundColor: "green" }} disabled>Deleted</button>
+                    <button style={{ backgroundColor: "red" }} disabled>Deleted</button>
                 )}
         </>
     )

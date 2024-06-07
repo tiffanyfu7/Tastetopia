@@ -97,7 +97,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Adding a review?
+// Adding a review to new recipe
 router.post("/:id", async (req, res) => {
   try {
     const docId = req.params.id;
@@ -110,12 +110,28 @@ router.post("/:id", async (req, res) => {
     };
 
     let newReviews = [];
+    let sumRatings = 0;
     if (curRecipe.data().reviews) {
       const curReviews = curRecipe.data().reviews;
+      console.log("curReviews", curReviews);
+
       newReviews = [...curReviews, review];
 
+   
+      const numRatings = newReviews.length;
+      console.log("numRatings", numRatings)
+
+      newReviews.map((review) => {
+        sumRatings += (review.rating)
+      })
+      console.log("sumRatings", sumRatings)
+
+      const avgRating = (sumRatings / numRatings).toFixed(2);
+      console.log("avgRating", avgRating);
+      
       await updateDoc(doc(db, "Recipe", docId), {
         reviews: newReviews,
+        rating: avgRating
       });
     } 
     
@@ -124,6 +140,7 @@ router.post("/:id", async (req, res) => {
       newReviews.push(review);
       await updateDoc(doc(db, "Recipe", docId), {
         reviews: newReviews,
+        rating: req.body.rating
       });
     }
 
