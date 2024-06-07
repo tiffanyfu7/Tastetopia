@@ -9,7 +9,7 @@ import { db } from "../firebase";
 import { Navbar } from "./Navbar.jsx";
 import axios from "axios";
 import { RecipeContext } from "./RecipeContext.jsx";
-import { UserContext } from "../components/UserContext.jsx";
+import { useAuth } from '../components/AuthContext.jsx';
 import VerifyDeleteButton from "../components/VerifyDeleteButton.jsx";
 
 export const RecipeDetail = () => {
@@ -27,7 +27,7 @@ export const RecipeDetail = () => {
   const navigate = useNavigate();
   const recipeId = useParams().id;
 
-  const { user } = useContext(UserContext);
+  const { currentUser } = useAuth();
   const [userData, setUserData] = useState(null);
 
   const testid = "YOw23Mz104aya7OEouj34VqGanY2"; // Guy's docId for testing

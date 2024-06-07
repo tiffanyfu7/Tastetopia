@@ -7,6 +7,8 @@ import openAIRouter from './openAIRouter.js';
 import recipeRouter from './recipeRouter.js';
 import profileRouter from './profileRouter.js';
 import exploreRouter from './exploreRouter.js';
+import cookbookRouter from './cookbookRouter.js';
+import createRecipeRouter from './createRecipeRouter.js';
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ app.use('/openai', openAIRouter);
 app.use('/recipe', recipeRouter);
 app.use('/profile', profileRouter);
 app.use('/explore', exploreRouter);
+app.use('/cookbook', cookbookRouter);
+app.use('/createRecipe', createRecipeRouter);
 
 app.get('/hello-world', async (req, res) => {
     try {
