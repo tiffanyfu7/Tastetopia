@@ -56,8 +56,6 @@
   aspect-ratio: 1/1;
 }
 
-
-
 .RecipeDetailTextBox {
   position: relative;
   flex: 1;
@@ -105,7 +103,7 @@
 }
 
 .CollapsedChat {
-  height: 180px;
+  height: 240px;
   flex: 1;
   background-color: #90d26d;
   border-radius: 25px;
@@ -140,6 +138,19 @@
   border-radius: 25px;
   padding: 20px;
   margin: 20px;
+}
+
+.PostingBox {
+  width: 80%;
+  background-color: #d9edbf;
+  padding: 20px;
+  border-radius: 20px;
+  display: block;
+}
+
+.CommentBox {
+  padding: 0px;
+  display: block;
 }
 
 .Comments{
@@ -179,11 +190,11 @@
 .ReviewButton{
   background-color: #ff9800;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 20px;
   border-width: 0px;
   font-size: 15px;
   color: white;
-  margin: 25px;
+  margin: 15px;
 }
 
 .ReviewButton:disabled {

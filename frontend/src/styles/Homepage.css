@@ -1,22 +1,26 @@
 .quick-link-container {
+    filter: drop-shadow(1px 1px 3px #808080);
     display: grid;
     grid-template-columns: auto auto auto;
     gap: 50px;
-    overflow-x: scroll;
-    padding: 5px 8px 20px 8px;
+    overflow-x: auto;
+    padding: 30px;
+    background-color: #D9EDBF;
+    border-radius: 50px;
+    
 }
 
 .quick-link-card {
     display: flex;
     background-color: #90D26D;
-    border-radius: 50px;
+    border-radius: 40px;
     min-width: 350px;
     height: 200px;
 }
 
 .quick-link-image {
-    border-top-left-radius: 50px; 
-    border-bottom-left-radius: 50px;
+    border-top-left-radius: 40px; 
+    border-bottom-left-radius: 40px;
     object-fit: cover;
     width: 150px;
     height: 200px;
