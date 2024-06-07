@@ -20,7 +20,7 @@ export const RecipeDetail = () => {
   const [numReviews, setNumReviews] = useState(0);
   const [avgReview, setAvgReviews] = useState(0);
   const [rating, setRating] = useState(null);
-  const { recipe } = useContext(RecipeContext);
+  const [recipe, setRecipe] = useState(null);
   const [isRecipeSaved, setRecipeSaved] = useState(false);
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
@@ -55,20 +55,20 @@ export const RecipeDetail = () => {
     }
   };
 
-  // const fetchRating = () => {
-  //   console.log('numReviews', numReviews)
-  //   console.log('avgReviews', avgReview)
-  //   if(recipe.reviews.length > 0){
-  //     setNumReviews(recipe.reviews.length);
-  //     console.log('reviews num', recipe.reviews.length)
+  const fetchRating = () => {
+    console.log('numReviews', numReviews)
+    console.log('avgReviews', avgReview)
+    if(recipe.reviews.length > 0){
+      setNumReviews(recipe.reviews.length);
+      console.log('reviews num', recipe.reviews.length)
 
-  //     let sumReviews = 0;
-  //     (recipe.reviews).map((review) => sumReviews += review);
-  //     const avg = (sumReviews / numReviews).toFixed(2);
-  //     setAvgReviews('avg rating', avg);
-  //     console.log(avg);
-  //   }
-  // }
+      let sumReviews = 0;
+      (recipe.reviews).map((review) => sumReviews += review);
+      const avg = (sumReviews / numReviews).toFixed(2);
+      setAvgReviews('avg rating', avg);
+      console.log(avg);
+    }
+  }
 
 
   const fetchReviews = async () => {
@@ -98,6 +98,29 @@ export const RecipeDetail = () => {
   useEffect(() => {
     fetchReviews();
   }, [recipe.id]);
+
+
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        const recipeDoc = doc(db, 'Recipe', recipeId);
+        const recipeData = await getDoc(recipeDoc);
+        if (recipeData.exists()) {
+          setRecipe(recipeData.data());
+        } else {
+          const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+          setRecipe(response.data);
+        }
+      } catch (error) {
+        console.log('Error fetching recipe: ', error);
+      }
+    };
+
+
+    if (recipeId) {
+      fetchRecipe();
+    }
+  }, [recipeId]);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
