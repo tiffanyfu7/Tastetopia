@@ -14,11 +14,11 @@ export const Profile = () => {
 
   //Guy's Doc ID for Testing
   //const testid = "YOw23Mz104aya7OEouj34VqGanY2";
-  const testid = "yfRjKT2zxebV8h8ZrrUD1ehhrsw2";
+  // const testid = "yfRjKT2zxebV8h8ZrrUD1ehhrsw2";
 
   const fetchUser = async () => {
-    const response = await axios.get(`http://localhost:8000/profile/user/${testid}`)
-    // const response = await axios.get(`http://localhost:8000/profile/user/${user.uid}`)
+    // const response = await axios.get(`http://localhost:8000/profile/user/${testid}`)
+    const response = await axios.get(`http://localhost:8000/profile/user/${user.uid}`)
     setUserData(response.data);
   }
 
