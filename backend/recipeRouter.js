@@ -34,17 +34,17 @@ router.get("/", async (req,res) => {
 
 // Fetch specific recipe through docID
 router.get("/:id", async (req,res) => {
-    try{
+    try {
         const recipeId = req.params.id
         let docToFetch = null;
-        try{
-           docToFetch = await getDoc(doc(db, "Recipe", recipeId));
+        try {
+            docToFetch = await getDoc(doc(db, "Recipe", recipeId));
         
         } catch (e) {
             console.log("can't get specific recipe", e.message)
         }
         
-        res.status(200).json(docToFetch)  
+        res.status(200).json(docToFetch.data())  
     } catch(e) {
         console.error(e.message)
         res.status(400).json({error: "Error fetching recipe data"})  

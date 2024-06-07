@@ -1,11 +1,24 @@
 import { Rating, Stack } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoSearch, IoAddOutline, IoBookOutline } from "react-icons/io5"
 import { Link } from 'react-router-dom'
 import { Card, CardBody, Image } from '@chakra-ui/react'
 import '../styles/Homepage.css'
+import axios from 'axios'
 
 const HomepageCards = ({ cardInfo, variant }) => {
+    const [recipe, setRecipe] = useState(null);
+
+    const fetchRecipe = async () => {
+        await axios.get(`http://localhost:8000/recipe/${cardInfo.id}`)
+            .then((r) => { console.log(r.data); setRecipe(r.data) });
+    }
+
+    useEffect(() => {
+        if (variant == "daily") {
+            fetchRecipe();
+        }
+    }, []);
     
     let icon;
     if (variant == "quickLink") {
@@ -23,7 +36,7 @@ const HomepageCards = ({ cardInfo, variant }) => {
             {variant == "quickLink" && icon &&
                 <Link className="link" to={cardInfo.link}>
                     <div className="quick-link-card card">
-                        <img className="quick-link-image"src={cardInfo.image} alt={cardInfo.title}/>
+                        <img className="quick-link-image" src={cardInfo.image} alt={cardInfo.title}/>
                         <div className="quick-link-info">
                             <p>{cardInfo.motto}</p>
                             {icon}
@@ -32,15 +45,15 @@ const HomepageCards = ({ cardInfo, variant }) => {
                 </Link>
             }
 
-            {variant == "daily" &&
+            {variant == "daily" && recipe &&
                 <div className="daily-card card">
-                    <img className="daily-card-image" src={cardInfo.recipe.image} alt={cardInfo.recipe.title} />
+                    <img className="daily-card-image" src={recipe.image} alt={recipe.title} />
                     <div className="daily-card-info">
-                        <p>{cardInfo.category}</p>    
+                        <p>{recipe.category}</p>    
                         <h4>Recipe of The Day</h4>
-                        <h2>{cardInfo.recipe.title}</h2>
-                        <p>By {cardInfo.recipe.author}</p>
-                        <Rating name="half-rating-read" defaultValue={cardInfo.recipe.rating} precision={0.5} readOnly />
+                        <h2>{recipe.title}</h2>
+                        <p>By {recipe.author}</p>
+                        <Rating name="half-rating-read" defaultValue={recipe.rating} precision={0.5} readOnly />
                     </div>
                 </div>
             }
