@@ -171,7 +171,7 @@ export const RecipeDetail = () => {
     //   `http://localhost:8000/profile/user/${userData.uid}`
     // );
     const response = await axios.get(
-      `http://localhost:8000/profile/user/${testid}`
+      `http://localhost:8000/profile/user/${currentUser.uid}`
     );
 
     console.log("hello", response.data);

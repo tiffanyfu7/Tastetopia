@@ -51,7 +51,7 @@ const HomepageCards = ({ cardInfo, variant }) => {
                     <div className="daily-card-info">
                         <p>{recipe.category}</p>    
                         <h4>Recipe of The Day</h4>
-                        <h2>{recipe.title}</h2>
+                        <h2 style={{textAlign: "left", lineHeight: "1.2"}}>{recipe.title}</h2>
                         <p>By {recipe.author}</p>
                         <Rating name="half-rating-read" defaultValue={recipe.rating} precision={0.5} readOnly />
                     </div>

@@ -18,8 +18,8 @@ export const Homepage = () => {
   };
 
   const handleCardClick = (recipe) => {
-    setRecipe(recipe);
-    navigate(`/Recipes/detail/${recipe.id}`);
+    //setRecipe(recipe);
+    navigate(`/RecipesDetail/${recipe.id}`);
   };
 
   const exploreCard = {

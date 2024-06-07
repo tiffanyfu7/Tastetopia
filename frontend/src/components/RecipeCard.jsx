@@ -23,9 +23,9 @@ const RecipeCard = ({ recipe, onClick, variant }) => {
       {/* Variant with Quick Action Button */}
       {variant == "verify" &&
         <div className="recipe-card card"
-          style={{ backgroundColor: LIGHTGREEN, height: "320px"}}
+          style={{ backgroundColor: LIGHTGREEN, height: "320px", width: "160"}}
         >
-          <img className="recipe-card-image" src={recipe.image} alt={recipe.title} />
+          <img className="recipe-card-image" src={recipe.image} alt={recipe.title}/>
           <p className="recipe-card-title">{recipe.title}</p>
           <p className="recipe-card-author">{recipe.author}</p>
           <button onClick={onClick} id="details-button">See Details</button>

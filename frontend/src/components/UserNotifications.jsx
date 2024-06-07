@@ -55,8 +55,13 @@ const UserNotifications = () => {
     return (
         <div>
             <h1 className="title">Notifications</h1>
-            {notifications.map((n) => (
-                <div onClick={() => handleClick(n.id)} style={styles.container} className="card">
+            {notifications.map((n, i) => (
+                <div
+                    key={i}
+                    onClick={() => handleClick(n.id)}
+                    style={styles.container}
+                    className="card"
+                >
                     <h5 style={styles.text}><span style={styles.dot}></span>{n.string} {n.author} "{n.title}"</h5>
                 </div>
             ))}
