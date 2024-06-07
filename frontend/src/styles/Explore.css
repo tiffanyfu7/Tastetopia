@@ -44,11 +44,19 @@
 }
 
 .recipe-card-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
     width: 180px;
-    max-height: 90px;
+    max-height: 58px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 10px 0px -10px 0px;
+}
+
+#details-button {
+    background-color: transparent;
+    color: black;
+    text-decoration: underline;
+    margin: -40px 0px 0px 0px;
+    padding: 0px;
 }

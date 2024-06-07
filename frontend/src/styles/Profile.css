@@ -30,7 +30,13 @@
 }
 
 .title {
-    margin-left: 10px;
+    margin: 25px 0px 25px 10px;
+    padding: 3px;
+    font-size: 30px;
+    background-color: white;
+    width: 220px;
+    text-align: center;
+    border-radius: 20px;
 }
 .verify-cards-container{
     display: grid;

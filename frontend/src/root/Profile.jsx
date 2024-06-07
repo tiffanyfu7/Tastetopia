@@ -21,6 +21,7 @@ export const Profile = () => {
     // const response = await axios.get(`http://localhost:8000/profile/user/${testid}`)
     const response = await axios.get(`http://localhost:8000/profile/user/${currentUser.uid}`)
     setUserData(response.data);
+    console.log('response.data', response.data)
   }
   
   useEffect(() => {

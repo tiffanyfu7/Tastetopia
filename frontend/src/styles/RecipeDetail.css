@@ -1,11 +1,8 @@
-body {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-}
-
 .PageContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 10px;
 }
 
 .RecipeBox {
@@ -16,30 +13,39 @@ body {
   justify-content: center;
   border-radius: 25px;
   padding: 20px;
-  margin: 20px;
 }
 
 @media screen and (max-width: 1000px) {
   .RecipeBox {
-    width: 100%;
+    width: 90%;
   }
   .PageContainer{
     flex-direction: column;
+    padding: 0px;
+    width: 90vw;
+    margin-bottom: 80px;
   }
 }
 
-.RecipeHeader {
+.RecipeHeader, .HealthLabels, .Nutrition, .Ratings, .DietLabels, .ExpandedChat, .Comments{
   flex: 1;
 }
 
+.HeaderButtons {
+  align-content: end;
+}
+
 .RecipeImg {
-  width: 250px;
+  width: 30%;
+  height: 30%;
+  object-fit: cover;
   border-radius: 10px;
   float: left;
 }
 
 .RecipeHeaderText {
-  margin-left: 270px;
+  margin-left: 35%;
+  line-height: 1;
 }
 
 .RecipeDetailTextBox {
@@ -56,23 +62,22 @@ body {
 }
 
 .HealthLabels {
-  flex: 1;
   margin-right: 10px;
   width: 40%;
 }
 
 .Nutrition {
-  flex: 1;
   display: inline-block;
 }
 
 .BackButton {
   background-color: #ff9800;
-  border-radius: 10px;
-  border-width: 0px;
-  font-size: 15px;
+  font-size: 14px;
+  padding: 0px 15px 0px 15px;
   color: white;
-  margin: 25px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 70px 0px 10px 10px;
 }
 
 .RecipeHeaderDetails {
@@ -86,11 +91,7 @@ body {
 }
 
 .Ratings {
-  flex: 1;
-}
-
-.DietLabels {
-  flex: 1;
+  margin: 20px 0px 0px 30px;
 }
 
 .CollapsedChat {
@@ -99,16 +100,15 @@ body {
   background-color: #90d26d;
   border-radius: 25px;
   padding: 20px;
-  margin: 20px 20px 20px 0px;
+  margin: 40px 20px 20px 0px;
 }
 
 .ExpandedChat {
-  flex: 1;
   height: 70%;
   background-color: #90d26d;
   border-radius: 25px;
   padding: 20px;
-  margin: 20px 20px 20px 0px;
+  margin: 40px 20px 20px 0px;
 }
 
 
@@ -135,7 +135,6 @@ body {
 
 .Comments{
   position: relative;
-  flex: 1;
   overflow: hidden;
   background-color: #d9edbf;
   border-radius: 25px;
@@ -155,4 +154,12 @@ body {
   font-size: 15px;
   color: white;
   margin: 25px;
+}
+
+.LeftSide {
+  overflow-y: scroll;
+  height: 680px;
+  width: 800px;
+  margin-right: 20px;
+  padding-right: 20px;
 }
