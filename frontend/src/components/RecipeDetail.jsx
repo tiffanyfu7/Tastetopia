@@ -3,14 +3,13 @@ import { Rating } from "@mui/material";
 import "../styles/RecipeDetail.css";
 import Chatbot from "./Chatbot.jsx";
 import { QueryContext } from "./QueryContext.jsx";
-import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { useNavigate, useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import { Navbar } from "./Navbar.jsx";
-import axios from 'axios';
+import axios from "axios";
 import { RecipeContext } from "./RecipeContext.jsx";
 import { UserContext } from "../components/UserContext.jsx";
-
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -40,7 +39,6 @@ export const RecipeDetail = () => {
       return `${hours} ${hours > 1 ? "hrs" : "hr"} and ${minutes} mins`;
     }
   };
-
 
   const formatNutrient = (value) => {
     if (value === 0) {
@@ -115,11 +113,6 @@ export const RecipeDetail = () => {
 
   const onBackClick = () => {
     navigate(-1);
-  }
-
-
-
-    navigate(`/Recipes/${searchRequested}`);
   };
 
   const fetchUser = async () => {
@@ -128,11 +121,11 @@ export const RecipeDetail = () => {
     );
     console.log("hello", response.data);
     setUserData(response.data);
-    const savedRecipes = response.data.savedRecipes
+    const savedRecipes = response.data.savedRecipes;
 
-    console.log(savedRecipes)
-    const saved = (savedRecipes).includes(recipeId);
-    console.log('recipe saved?', saved)
+    console.log(savedRecipes);
+    const saved = savedRecipes.includes(recipeId);
+    console.log("recipe saved?", saved);
     setRecipeSaved(saved);
   };
 
@@ -140,13 +133,11 @@ export const RecipeDetail = () => {
     fetchUser();
   }, []);
 
-
   const onSaveRecipe = async () => {
     const allRecipes = await axios.get(`http://localhost:8000/recipe/`);
     const ids = [];
-    (allRecipes.data).map((eachRecipe) => ids.push(eachRecipe.id));
+    allRecipes.data.map((eachRecipe) => ids.push(eachRecipe.id));
     const curRecipeExist = ids.includes(recipe.id);
-
 
     // if api recipe not present in db
     if (!curRecipeExist) {
@@ -158,22 +149,25 @@ export const RecipeDetail = () => {
 
       const body = {
         recipeId: newRecipeId.data,
-      }
-      const response = await axios.put(`http://localhost:8000/profile/user/${user.uid}`, body)
+      };
+      const response = await axios.put(
+        `http://localhost:8000/profile/user/${user.uid}`,
+        body
+      );
       console.log("saved new recipe", response.data);
-    }
-
-    else{
-      console.log(recipeId)
+    } else {
+      console.log(recipeId);
       const body = {
         recipeId: recipeId,
-      }
-      const response = await axios.put(`http://localhost:8000/profile/user/${user.uid}`, body)
+      };
+      const response = await axios.put(
+        `http://localhost:8000/profile/user/${user.uid}`,
+        body
+      );
       console.log("saved existing recipe", response.data);
     }
 
     fetchUser();
-
   };
 
   const handleSearchSubmit = (query) => {
@@ -183,28 +177,28 @@ export const RecipeDetail = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const recipeDoc = doc(db, 'Recipe', recipeId);
+        const recipeDoc = doc(db, "Recipe", recipeId);
         const recipeData = await getDoc(recipeDoc);
         if (recipeData.exists()) {
           setRecipe(recipeData.data());
         } else {
-          const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+          const response = await axios.post(
+            `http://localhost:8000/edamam/fetch/${recipeId}`
+          );
           setRecipe(response.data);
         }
       } catch (error) {
-        console.log('Error fetching recipe: ', error);
+        console.log("Error fetching recipe: ", error);
       }
     };
-
 
     if (recipeId) {
       fetchRecipe();
     }
   }, [recipeId]);
 
-
   return (
-    <>
+    <div>
       <Navbar current="Recipes" onSearchSubmit={handleSearchSubmit} />
       <br></br>
       <div className="HeaderButtons">
@@ -215,8 +209,8 @@ export const RecipeDetail = () => {
         <button className="BackButton" onClick={onSaveRecipe}>
           {isRecipeSaved ? <p>Saved</p> : <p>Save Recipe</p>}
         </button>
-
       </div>
+
       {recipe ? (
         <div className="PageContainer">
           <div className="LeftSide">
@@ -228,9 +222,10 @@ export const RecipeDetail = () => {
                   className="RecipeImg"
                 ></img>
 
-
                 <div className="RecipeHeaderText">
-                  <h2 style={{textAlign: "left", color: "black"}}>{recipe.title}</h2>
+                  <h2 style={{ textAlign: "left", color: "black" }}>
+                    {recipe.title}
+                  </h2>
                   <h4>By {recipe.author}</h4>
                   <p>
                     <b>Total time:</b> {formatTotalTime(recipe.totalTime)}
@@ -243,7 +238,6 @@ export const RecipeDetail = () => {
                       <b>Full Recipe:</b>
                       <a href={recipe.sourceURL}>{recipe.author}</a>
                     </p>
-                    
                   )}
                   <div className="DietLabels">
                     <b>Diet labels: </b>
@@ -251,7 +245,6 @@ export const RecipeDetail = () => {
                   </div>
                 </div>
               </div>
-
 
               <div className="RecipeHeaderDetails">
                 <div className="Rating">
@@ -262,13 +255,11 @@ export const RecipeDetail = () => {
                     readOnly
                     className="Ratings"
                   />
-                  <p style={{margin: "0px 0px 20px 25px"}}>5 from 43 reviews</p>
+                  <p style={{ margin: "0px 0px 20px 25px" }}>
+                    5 from 43 reviews
+                  </p>
                 </div>
-
-
-                
               </div>
-
 
               <div className="RecipeDetailTextBox">
                 <div className="Ingredients">
@@ -281,7 +272,9 @@ export const RecipeDetail = () => {
                 </div>
                 {recipe.instructions && (
                   <>
-                    <p><b>Preparation:</b></p>
+                    <p>
+                      <b>Preparation:</b>
+                    </p>
                     <ol>
                       {recipe.instructions.map((instruction, index) => (
                         <li key={index}>{instruction}</li>
@@ -369,22 +362,18 @@ export const RecipeDetail = () => {
                       />
                     </p>
                     <div className="CommentBox">
-
-
                       <form>
                         <label>
                           <b>Comment:</b>
                         </label>
-                        <textarea type='text' onChange={(e) => setComment(e.target.value)}>
-
-
-                        </textarea>
-                        <button type='submit' className="ReviewButton">
+                        <textarea
+                          type="text"
+                          onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
+                        <button type="submit" className="ReviewButton">
                           Post
                         </button>
                       </form>
-
-
                     </div>
                   </div>
                 ) : (
@@ -398,7 +387,6 @@ export const RecipeDetail = () => {
               </div>
             </div>
           </div>
-
 
           <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
             <div className="ChatHeader">
@@ -421,7 +409,9 @@ export const RecipeDetail = () => {
             )}
           </div>
         </div>
-        : ''}
-    </>
+      ) : (
+        ""
+      )}
+    </div>
   );
 };
