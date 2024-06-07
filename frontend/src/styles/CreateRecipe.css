@@ -1,7 +1,8 @@
 .create-recipe-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 100px;
+    column-gap: 75px;
+    row-gap: 25;
     padding: 40px 5% 20px 5%;
     background-color: #d9edbf;
     border-radius: 40px;
@@ -9,6 +10,12 @@
     width: 85vw;
     max-width: 1100px;
     margin: auto;
+}
+
+.divider {
+    grid-column: 1 / -1; /* Span the entire row */
+    height: 25px; /* Match the row-gap */
+    background-color: #ffffff; /* Adjust color as needed */
 }
 
 .additional-info {
