@@ -12,9 +12,10 @@ import { Recipes } from "./root/Recipes.jsx";
 import { YourCookbook } from "./root/YourCookbook.jsx";
 import { CreateRecipe } from "./root/CreateRecipe.jsx";
 import RecipeSearched from './components/RecipeSearched.jsx';
-import { RecipeDetail } from './components/RecipeDetail.jsx';import { Login } from './root/Login.jsx';
+import { RecipeDetail } from './components/RecipeDetail.jsx';
+import { Login } from './root/Login.jsx';
 import { CreateAccount } from './root/CreateAccount.jsx';
-import { UserProvider } from './components/UserContext.jsx';
+import { AuthProvider } from './components/AuthContext.jsx';
 
 export const ORANGE = "#FF9800";
 export const LIGHTGREEN = "#D9EDBF";
@@ -54,12 +55,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <UserProvider>
+    <AuthProvider>
       <QueryProvider>
         <RecipeProvider>
           <RouterProvider router={router} />
         </RecipeProvider>
       </QueryProvider>
-    </UserProvider>
+    </AuthProvider>
   </React.StrictMode>,
 )

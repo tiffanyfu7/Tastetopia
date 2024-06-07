@@ -1,6 +1,6 @@
 import express from 'express';
 import { db, storage } from './firebase.js';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, doc, addDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,19 +28,18 @@ router.post('/uploadImage', async (req, res) => {
 });
 
 // Endpoint to create a new recipe
-router.post('/new', async (req, res) => {
+router.post('/:id', async (req, res) => {
     try {
         const recipeData = req.body;
-        const recipeRef = await addDoc(collection(db, 'Recipe'), recipeData);
-
-        const userRef = userRef = doc(db, 'Users', 'currentUsername');
+        const id = req.params.id;
+        const recipeRef = await setDoc(doc(db, "Recipe"), recipeData);
+        const userRef = doc(db, "Users", id);
         await updateDoc(userRef, {
             createdRecipes: arrayUnion(recipeRef.id)
         });
 
         res.status(200).json({ message: 'Recipe created successfully', recipeId: recipeRef.id });
     } catch (error) {
-        console.error('Error creating recipe:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });

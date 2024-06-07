@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext.jsx';
 import axios from 'axios';
 import '../styles/CreateRecipe.css';
 
 export const CreateRecipe = () => {
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [image, setImage] = useState(null);
@@ -83,7 +85,8 @@ export const CreateRecipe = () => {
         };
     
         try {
-            const recipeResponse = await axios.post('http://localhost:8000/createRecipe/new', recipeData);
+            const id = currentUser.uid;
+            const recipeResponse = await axios.post(`http://localhost:8000/createRecipe/${id}`, recipeData);
     
             console.log('Recipe submitted:', recipeResponse.data);
     

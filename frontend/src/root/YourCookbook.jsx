@@ -6,9 +6,11 @@ import { IoAddOutline } from 'react-icons/io5';
 import RecipeCard from '../components/RecipeCard';
 import { QueryContext } from '../components/QueryContext';
 import { fetchCreatedRecipes } from '../components/fetchRecipes';
-import { UserContext } from '../components/UserContext';
+// import { UserContext } from '../components/UserContext';
+import { useAuth } from '../components/AuthContext.jsx';
 import { RecipeContext } from "../components/RecipeContext.jsx";
 import axios from 'axios';
+
 
 export const YourCookbook = () => {
     const [state, setState] = useState("Created");
@@ -16,12 +18,12 @@ export const YourCookbook = () => {
     const { setSearchRequested } = useContext(QueryContext);
     const [createdRecipes, setCreatedRecipes] = useState([]);
     const [savedRecipes, setSavedRecipes] = useState([]);
-    const { user } = useContext(UserContext);
+    const { currentUser } = useAuth()
     const [userData, setUserData] = useState(null);
     const navigate = useNavigate();
 
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8000/profile/user/${user.uid}`)
+        const response = await axios.get(`http://localhost:8000/profile/user/${currentUser.uid}`)
         console.log("hello", response.data);
         setUserData(response.data);
     }
