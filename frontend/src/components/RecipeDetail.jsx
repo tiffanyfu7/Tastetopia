@@ -104,6 +104,7 @@ export const RecipeDetail = () => {
 
     const newReview = {
       username: userData.name,
+      userPic: userData.profilePictureUrl,
       comment: comment,
       rating: rating,
     };
@@ -385,7 +386,7 @@ export const RecipeDetail = () => {
                     <div className="CommentHeader">
                       <img
                         alt="profilepic"
-                        src={userData.profilePictureUrl}
+                        src={eachReview.userPic}
                         width="50px"
                       ></img>
                       <div className="UserAndStar">
@@ -397,7 +398,7 @@ export const RecipeDetail = () => {
                           precision={0.5}
                           readOnly
                           className="Ratings"
-                          style={{ marginRight: "5px" }}
+                          style={{ marginLeft: "5px", marginTop: "0px", justifyContent:"start", alignContent:"start"}}
                         />
                       </div>
                     </div>

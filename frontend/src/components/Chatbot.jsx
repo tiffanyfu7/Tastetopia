@@ -1,16 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/Chatbot.css";
 
 const Chatbot = () => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      role: "system",
-      content:
-        "Imagine you are a chat bot named Sue designed to assist users on a Recipe-finding platform, and a user is about to interact with you for the first time. From now on, you will be in conversation with the user.",
-    },
-  ]);
+  // const [userSent, setUserSent] = useState(false);
+  const [ready, setReady] = useState(true);
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const sendFirstMessage = async(message) => {
+      let first = [];
+      first.push({ role: 'user', content: message });
+      const response = await axios.post('http://localhost:8000/openai/chat', {
+        messages: first,
+        model: 'gpt-3.5-turbo',
+      });
+      const assistantResponse = response.data;
+      setMessages((prevMessage) => [...prevMessage, assistantResponse]);
+      setReady(false);
+    }
+    if (ready) {
+      sendFirstMessage("Imagine you are a chat bot named Sue designed to assist users on a Recipe-finding platform called 'Tastetopia' , and a user is about to interact with you for the first time. From now on, you will be in conversation with the user. Welcome them to Tastetopia");
+    }
+  }, [ready]);
 
   const sendMessage = async (message) => {
     const newMessage = { role: "user", content: message };

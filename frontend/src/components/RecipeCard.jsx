@@ -16,7 +16,7 @@ const RecipeCard = ({ recipe, onClick, variant }) => {
           <img className="recipe-card-image" src={recipe.image} alt={recipe.title} />
           <p className="recipe-card-title">{recipe.title}</p>
           <p className="recipe-card-author">{recipe.author}</p>
-          <Rating name="half-rating-read" defaultValue={recipe.rating} precision={0.5} readOnly />
+          <Rating name="simple-controlled" value={Number(recipe.rating)} precision={0.1} readOnly />
         </div>
       }
 
