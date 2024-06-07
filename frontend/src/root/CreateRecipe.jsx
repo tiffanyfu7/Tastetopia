@@ -91,7 +91,7 @@ export const CreateRecipe = () => {
                 dietLabels: dietLabels.split(',').map(label => label.trim()),
                 healthLabels: healthLabels.split(',').map(label => label.trim()),
                 ingredients: ingredients.map(ingredient => `${ingredient.name}: ${ingredient.quantity}`),
-                instructions: instructions.split('.').map(instr => instr.trim()),
+                instructions: instructions.map(instruction => `${instruction.text}`),
                 calories: Number(calories),
                 fat: Number(fat),
                 carbs: Number(carbs),
@@ -205,16 +205,16 @@ export const CreateRecipe = () => {
                                         <div key={index} className="ingredient-input">
                                             <input
                                                 type="text"
-                                                placeholder="Ingredient"
-                                                name="name"
-                                                value={ingredient.name}
+                                                placeholder="Quantity"
+                                                name="quantity"
+                                                value={ingredient.quantity}
                                                 onChange={(e) => handleIngredientChange(index, e)}
                                             required/>
                                             <input
                                                 type="text"
-                                                placeholder="Quantity"
-                                                name="quantity"
-                                                value={ingredient.quantity}
+                                                placeholder="Ingredient"
+                                                name="name"
+                                                value={ingredient.name}
                                                 onChange={(e) => handleIngredientChange(index, e)}
                                             required/>
                                             <button type="button" onClick={() => handleDeleteIngredient(index)} className="delete-button">Delete</button>
