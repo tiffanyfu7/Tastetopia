@@ -29,7 +29,11 @@ const UserNotifications = () => {
             margin: "10px",
             height: "40px",
             borderRadius: "15px",
-            backgroundColor: "white"
+            backgroundColor: "white",
+
+            "&:hover": {
+                backgroundColor: "#b3b3b3",
+            }
         },
         dot: {
             backgroundColor: ORANGE,
@@ -51,7 +55,7 @@ const UserNotifications = () => {
         <div>
             <h1 className="title">Notifications</h1>
             {notifications.map((n) => (
-                <div onClick={() => handleClick(n.id)} style={styles.container}>
+                <div onClick={() => handleClick(n.id)} style={styles.container} className="card">
                     <h5 style={styles.text}><span style={styles.dot}></span>{n.string} {n.author} "{n.title}"</h5>
                 </div>
             ))}
