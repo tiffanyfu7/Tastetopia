@@ -1,6 +1,6 @@
 import express from 'express';
 import { db, storage } from './firebase.js';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const router = express.Router();
@@ -88,6 +88,43 @@ router.get('/user/:uid', async (req, res) => {
         res.status(200).json(userDoc.data());
     } catch (error) {
         console.error("Error getting user profile:", error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+// post save recipes to user
+router.put('/user/:uid', async (req, res) => {
+
+    const { uid } = req.params;
+    const recipeToSave = req.body.recipeId
+    console.log("recipeToSave", recipeToSave);
+    console.log("req.body", req.body);
+
+    try {
+        const userDocRef = doc(db, "Users", uid);
+        const userDoc = await getDoc(userDocRef);
+
+        const curSaved = userDoc.data().savedRecipes;
+        const newSaved = [...curSaved, recipeToSave]
+
+        console.log(newSaved)
+
+        try{
+            await updateDoc(userDocRef, {
+                savedRecipes: newSaved
+            })
+        } catch(e) {
+            console.error('cant save recipe', e.message);
+        }
+
+
+        if (!userDoc.exists()) {
+            return res.status(404).send('User not found');
+        }
+
+        res.status(200).json(userDoc.data());
+    } catch (error) {
+        console.error("Error updating saved field:", error);
         res.status(500).send('Internal server error');
     }
 });

@@ -18,7 +18,7 @@ export const Recipes = () => {
   const navigate = useNavigate();
 
   const showTypes = ["All","Vegetarian","<15 Minutes", "Halal", "Mexican"]
-
+  
   useEffect(() => {
     if (searchRequested !== 'q=') {
       search();
@@ -63,6 +63,7 @@ const getDefaultRecipes = async () => {
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
   }
+
 
   return (
     <>

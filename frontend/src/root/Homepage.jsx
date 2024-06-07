@@ -1,15 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import HomepageCards from "../components/HomepageCards";
 import { QueryContext } from "../components/QueryContext";
 import { RecipeContext } from "../components/RecipeContext";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext.jsx';
 
 export const Homepage = () => {
   const { setSearchRequested } = useContext(QueryContext);
   const { setRecipe } = useContext(RecipeContext);
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
+  
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
   };

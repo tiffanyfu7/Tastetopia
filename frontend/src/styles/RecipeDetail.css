@@ -22,7 +22,6 @@
   .PageContainer{
     flex-direction: column;
     padding: 0px;
-    background-color: blue;
     width: 90vw;
     margin-bottom: 80px;
   }
@@ -30,6 +29,10 @@
 
 .RecipeHeader, .HealthLabels, .Nutrition, .Ratings, .DietLabels, .ExpandedChat, .Comments{
   flex: 1;
+}
+
+.HeaderButtons {
+  align-content: end;
 }
 
 .RecipeImg {
