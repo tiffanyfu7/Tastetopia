@@ -6,6 +6,7 @@ import { QueryContext } from "./QueryContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { Navbar } from "./Navbar.jsx";
 import axios from "axios";
+import { UserContext } from "../components/UserContext.jsx";
 
 export const RecipeDetail = () => {
   const [chatClicked, setChatClicked] = useState(false);
@@ -14,9 +15,12 @@ export const RecipeDetail = () => {
   const [allReviews, setAllReviews] = useState([]);
   const [rating, setRating] = useState(null);
   const [recipe, setRecipe] = useState(null);
+  const [isRecipeSaved, setRecipeSaved] = useState(false);
   const { searchRequested, setSearchRequested } = useContext(QueryContext);
   const navigate = useNavigate();
   const recipeId = useParams().id;
+  const { user } = useContext(UserContext);
+  const [userData, setUserData] = useState(null);
 
   const formatTotalTime = (totalMinutes) => {
     if (totalMinutes <= 60) {
@@ -44,20 +48,22 @@ export const RecipeDetail = () => {
 
   const fetchReviews = async () => {
     const response = await axios.get(
-      `http://localhost:8000/recipe/${recipe.id}`
+      `http://localhost:8000/recipe/${recipeId}`
     );
-    console.log("response", response.data);
-    console.log("reviews", response.data.reviews);
-    setAllReviews(response.data.reviews);
+    if (response.data) {
+      console.log("response", response.data);
+      setAllReviews(response.data.reviews);
+    }
   };
 
-  // useEffect(() => {
-  //   fetchReviews();
-  // }, []);
+  useEffect(() => {
+    fetchReviews();
+  }, []);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    const newReview = { username: "user", comment: comment, rating: rating };
+
+    const newReview = { username: user.name, comment: comment, rating: rating };
     const recipeDocRef = await axios.get("http://localhost:8000/recipe");
     const allRecipes = recipeDocRef.data;
 
@@ -65,42 +71,36 @@ export const RecipeDetail = () => {
     allRecipes.map((eachRecipe) => ids.push(eachRecipe.id));
     const curRecipeExist = ids.includes(recipe.id);
 
-    console.log("allIds", ids);
-    console.log("curRecipeExists?", curRecipeExist);
-
     // if api recipe not present in db
     if (!curRecipeExist) {
       recipe["reviews"] = [newReview]; // add review field
       recipe["verified"] = true;
-      console.log("recipe", recipe);
+      const newRecipe = recipe;
 
       const newRecipeRef = await axios.post(
         `http://localhost:8000/recipe/`,
-        recipe
+        newRecipe
       );
-      console.log("recipe to post id", recipe.id);
       const newRecipeId = newRecipeRef.data;
-      console.log("post recipe response", newRecipeId);
 
       const response = await axios.get(
         `http://localhost:8000/recipe/${newRecipeId}`
       );
-      console.log("response", response.data);
-      console.log("reviews", response.data.reviews);
-      setAllReviews(response.data.reviews);
-    } else {
-      console.log("recipe.id", recipe.id)
 
-      try{
+      setAllReviews(response.data.reviews);
+      fetchReviews();
+    } else {
+      console.log("recipe.id", recipe.id);
+
+      try {
         const postResponse = await axios.post(
-          `http://localhost:8000/recipe/${recipe.id}`, newReview
+          `http://localhost:8000/recipe/${recipe.id}`,
+          newReview
         );
-        console.log("post review on existing recipe response", postResponse.data);
         setAllReviews(postResponse.data);
-      } catch(e) {
+      } catch (e) {
         console.error("can't post review on existing recipe", e.message);
       }
-      
     }
 
     setRating(0);
@@ -111,33 +111,75 @@ export const RecipeDetail = () => {
     navigate(`/Recipes/${searchRequested}`);
   };
 
+  const fetchUser = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/profile/user/${user.uid}`
+    );
+    console.log("hello", response.data);
+    setUserData(response.data);
+    const savedRecipes = response.data.savedRecipes
+
+    console.log(savedRecipes)
+    const saved = (savedRecipes).includes(recipeId);
+    console.log('recipe saved?', saved)
+    setRecipeSaved(saved);
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+
   const onSaveRecipe = async () => {
     const allRecipes = await axios.get(`http://localhost:8000/recipe/`);
-    const querySnapshot = allRecipes.where("id", "==", recipe.id);
+    const ids = [];
+    (allRecipes.data).map((eachRecipe) => ids.push(eachRecipe.id));
+    const curRecipeExist = ids.includes(recipe.id);
+
 
     // if api recipe not present in db
-    if (querySnapshot.isEmpty()) {
+    if (!curRecipeExist) {
       const newRecipeId = await axios.post(
         `http://localhost:8000/recipe/`,
         recipe
       );
-      console.log("post recipe response", newRecipeId);
+      console.log("post recipe response", newRecipeId.data);
+
+      const body = {
+        recipeId: newRecipeId.data,
+      }
+      const response = await axios.put(`http://localhost:8000/profile/user/${user.uid}`, body)
+      console.log("saved new recipe", response.data);
     }
+
+    else{
+      console.log(recipeId)
+      const body = {
+        recipeId: recipeId,
+      }
+      const response = await axios.put(`http://localhost:8000/profile/user/${user.uid}`, body)
+      console.log("saved existing recipe", response.data);
+    }
+
+    fetchUser();
+
   };
 
   const handleSearchSubmit = (query) => {
     setSearchRequested(query);
-  }
+  };
 
   useEffect(() => {
     const fetchAPIRecipe = async () => {
       try {
-        const response = await axios.post(`http://localhost:8000/edamam/fetch/${recipeId}`);
+        const response = await axios.post(
+          `http://localhost:8000/edamam/fetch/${recipeId}`
+        );
         setRecipe(response.data);
       } catch (error) {
-        console.log('Error fetching recipe from Edamam: ', error);
+        console.log("Error fetching recipe from Edamam: ", error);
       }
-    }
+    };
     if (recipeId) {
       fetchAPIRecipe();
     }
@@ -153,8 +195,9 @@ export const RecipeDetail = () => {
         </button>
 
         <button className="BackButton" onClick={onSaveRecipe}>
-          Save Recipe
+          {isRecipeSaved ? <p>Saved</p> : <p>Save Recipe</p>}
         </button>
+
       </div>
       {recipe ? (
         <div className="PageContainer">
@@ -248,7 +291,7 @@ export const RecipeDetail = () => {
               {allReviews &&
                 allReviews.map((eachReview, index) => (
                   <>
-                    <div className="Comments">
+                    <div key={index} className="Comments">
                       <div className="CommentHeader">
                         <div className="Profile">
                           <img
@@ -268,9 +311,8 @@ export const RecipeDetail = () => {
                           className="Ratings"
                           style={{ marginRight: "5px" }}
                         />
-                        <b>Love this recipe!</b>
                       </div>
-                      <p key={index}>{eachReview.comment}</p>
+                      <p>{eachReview.comment}</p>
                     </div>
                   </>
                 ))}
@@ -285,11 +327,11 @@ export const RecipeDetail = () => {
                 {showReviewBox ? (
                   <div className="ReviewBox">
                     <p>
-                      <b>Rating: </b>{" "}
+                      <b>Rating: </b>
                       <Rating
-                        name="half-rating-read"
-                        defaultValue={0}
-                        onChange={(newValue) => {
+                        name="simple-controlled"
+                        value={rating}
+                        onChange={(event, newValue) => {
                           setRating(newValue);
                         }}
                       />
@@ -301,6 +343,7 @@ export const RecipeDetail = () => {
                         </label>
                         <textarea
                           type="text"
+                          value={comment}
                           onChange={(e) => setComment(e.target.value)}
                         ></textarea>
                         <button type="submit" className="ReviewButton">
