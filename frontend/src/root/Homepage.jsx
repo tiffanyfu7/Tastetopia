@@ -22,9 +22,10 @@ export const Homepage = () => {
     navigate(`/Recipes/detail/${recipe.id}`);
   };
 
+  // Redirect to login if not authenticated
   useEffect(() => {
     if (!currentUser) {
-        navigate('/'); // Redirect to login if not authenticated
+        navigate('/');
     }
   }, [currentUser, navigate]);
 

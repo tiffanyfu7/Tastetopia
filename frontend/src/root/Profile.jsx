@@ -4,7 +4,6 @@ import { QueryContext } from '../components/QueryContext';
 import '../styles/Profile.css'
 import AdminVerification from '../components/AdminVerification';
 import UserNotifications from '../components/UserNotifications';
-import { UserContext } from '../components/UserContext.jsx';
 import { useAuth } from '../components/AuthContext.jsx';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -24,12 +23,13 @@ export const Profile = () => {
     console.log('response.data', response.data)
   }
   
+  // Redirect to login if not authenticated
   useEffect(() => {
     if (!currentUser) {
-        navigate('/'); // Redirect to login if not authenticated
+        navigate('/');
     }
     fetchUser();
-}, [currentUser, navigate]);
+  }, [currentUser, navigate]);
 
   // useEffect(() => {
   //   fetchUser();
