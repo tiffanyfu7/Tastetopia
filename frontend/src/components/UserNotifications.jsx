@@ -15,9 +15,9 @@ const UserNotifications = () => {
     // },
         {
         string: "New Recipe From ",
-        author: "Omar Hashi ",
-        title: "Chicken Alfredo",
-        id: "eqdaRU2sTcClcrrGgvWA",
+        author: "Vivi Thai ",
+        title: "One-Pot Rice",
+        id: "fUv1OwBgTok3vABt3O7O",
     }]
     
     const handleClick = (recipeId) => {
