@@ -21,15 +21,15 @@ export const Recipes = () => {
 
   useEffect(() => {
     if (searchRequested !== 'q=') {
-      searchEdamam();
+      search();
     } else {
       getDefaultRecipes();
     }
   }, [searchRequested]);
 
-  const searchEdamam = async () => {
+  const search = async () => {
     try {
-        const response = await axios.post('http://localhost:8000/edamam/search', {
+        const response = await axios.post('http://localhost:8000/explore/search-all', {
             q: searchRequested
         });
         console.log(response.data);
