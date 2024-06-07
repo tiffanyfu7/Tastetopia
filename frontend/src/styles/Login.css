@@ -1,13 +1,4 @@
 .login-wrapper {
-    background-color: #D9EDBF;
-    height: 95vh;
-    /* margin: 150px;
-    display: flex; */
-    justify-content: center;
-    align-items: center;
-}
-
-.login-wrapper {
     border-radius: 20px;
     background: linear-gradient(-45deg, #FF9800, #D9EDBF, #4caf50,#dedd9e);
     background-size: 400% 400%;
@@ -45,7 +36,7 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: 370px;
     text-align: center;
 }
 
