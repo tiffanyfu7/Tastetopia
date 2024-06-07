@@ -388,6 +388,7 @@ export const RecipeDetail = () => {
                         alt="profilepic"
                         src={eachReview.userPic}
                         width="50px"
+                        className="ReplyProfile"
                       ></img>
                       <div className="UserAndStar">
                         <p style={{ margin: "5px" }}>@{eachReview.username}</p>
