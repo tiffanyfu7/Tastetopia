@@ -105,6 +105,7 @@ router.post("/:id", async (req, res) => {
 
     const review = {
       username: req.body.username,
+      userPic: req.body.userPic,
       rating: req.body.rating,
       comment: req.body.comment,
     };
