@@ -48,6 +48,7 @@ const UserNotifications = () => {
             margin: "0px",
             paddingTop: "0px",
             verticalAlign: "middle",
+            fontWeight: "400"
         }
     }
 
