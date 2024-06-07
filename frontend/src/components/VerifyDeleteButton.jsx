@@ -40,7 +40,7 @@ const VerifyDeleteButton = ({ recipeId, variant }) => {
     }
 
     return (
-        <div>
+        <>
             {variant == "verify" ?
                 (!clicked ?
                     <button onClick={() => handleVerify()}>Verify</button> :
@@ -49,7 +49,7 @@ const VerifyDeleteButton = ({ recipeId, variant }) => {
                     <button onClick={() => handleDelete()}>Delete</button> :
                     <button style={{ backgroundColor: "green" }} disabled>Deleted</button>
                 )}
-        </div>
+        </>
     )
 }
 
