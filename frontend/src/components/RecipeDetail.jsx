@@ -413,7 +413,7 @@ export const RecipeDetail = () => {
                 }}
               >
                 {showReviewBox ? (
-                  <div className="ReviewBox">
+                  <div className="PostingBox">
                     <p>
                       <b>Rating: </b>
                       <Rating
@@ -425,14 +425,16 @@ export const RecipeDetail = () => {
                       />
                     </p>
                     <div className="CommentBox">
+                      <b>Comment: </b>
                       <form onSubmit={handleReviewSubmit}>
-                        <label>
+                        {/* <label>
                           <b>Comment:</b>
-                        </label>
+                        </label> */}
                         <textarea
                           type="text"
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
+                          style={{ padding: "15px"}}
                         ></textarea>
                         <button
                           type="submit"
@@ -458,7 +460,8 @@ export const RecipeDetail = () => {
 
           <div className={chatClicked ? "ExpandedChat" : "CollapsedChat"}>
             <div className="ChatHeader">
-              <h2>Ask Sous Chef Sue!</h2>
+              <img src="/sue.jpg" style={{width:"50px", height: "50px", borderRadius: "25px", margin: "20px 250px 0px 250px"}} />
+              <h2 style={{marginTop: "5px"}}>Ask Sous Chef Sue!</h2>
               <p>
                 Have any questions about the ingredients, recipe, or more? Ask
                 Sue, our OpenAI Chatbot.

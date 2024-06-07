@@ -52,6 +52,9 @@ button:hover {
   background-color: #b17144;
 }
 
+textarea {
+  font-family: Helvetica, Inter, system-ui, Avenir,;
+}
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
