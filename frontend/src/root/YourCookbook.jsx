@@ -19,11 +19,12 @@ export const YourCookbook = () => {
     const [savedRecipes, setSavedRecipes] = useState([]);
     const { currentUser } = useAuth()
     const [userData, setUserData] = useState(null);
+    const [done, setDone] = useState(false);
     const navigate = useNavigate();
 
     const fetchUser = async () => {
         const response = await axios.get(`http://localhost:8000/profile/user/${currentUser.uid}`)
-        console.log("hello", response.data);
+        // console.log("hello", response.data);
         setUserData(response.data);
     }
 
@@ -33,16 +34,16 @@ export const YourCookbook = () => {
             navigate('/');
         }
         fetchUser();
+        setDone(true);
     }, [currentUser, navigate]);
 
     //add query in fetchCreatedRecipes to only get the ids that match userData.createdRecipes
     useEffect(() => {
-        const getCreatedRecipes = async () => {
-            const recipes = await fetchCreatedRecipes();
-            setCreatedRecipes(recipes);
-        };
-        getCreatedRecipes();
-    }, []);
+        if (done && userData) {
+            setCreatedRecipes(userData.createdRecipes);
+            setSavedRecipes(userData.savedRecipes);
+        }
+    }, [done, userData]);
 
     const handleSearchSubmit = () => {
         setSearchRequested(true);
