@@ -1,11 +1,10 @@
-/* Login.css */
-/* body, html {
+.login-wrapper {
     height: 100%;
-    margin: 0;
+    margin: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
-} */
+}
 
 .login-body {
     display: flex;
@@ -89,7 +88,7 @@
 
 }
 
-/* p {
+.login-text {
     margin: 10px 0;
     font-size: 16px;
-} */
+}
