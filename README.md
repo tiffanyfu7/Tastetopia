@@ -1,12 +1,13 @@
 # Tastetopia 🥘
-Description: A recipe app that allows users to search for recipes and post them to share. <br>
+Description: A recipe app that allows users to search for recipes and post them to share! <br>
 Authors: Tiffany Fu, Pine Netcharussaeng, Patrick Yuson, Omar Hashi, Vivi Thai
 
 ## Table of Contents
 1. Installation
 2. Features
 3. Tutorial
-4. Credits
+4. Additional Media
+5. Credits
 
 ### Installation
 To run our app follow these steps
@@ -47,6 +48,11 @@ npm start
    - Users can create a recipe by clicking on the green button. Add a recipe and wait for administration approval to see it published on the website.
    - View your created and saved recipes.
 5. On your profile, view notifications about newly posted recipes from other users. Click to view the recipe.
+
+### Additional Media
+<img width="1293" alt="Screenshot 2024-06-25 at 6 52 00 PM" src="https://github.com/tiffanyfu7/launch-swe-week3-team-2/assets/71473099/47c77feb-90a2-4f5d-a9ad-0de123a43256">
+
+![1](https://github.com/tiffanyfu7/launch-swe-week3-team-2/assets/71473099/081ded39-0f88-408a-b980-0b7a07c07ae2)
 
 
 ### Credits
